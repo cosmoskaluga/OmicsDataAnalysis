@@ -4,13 +4,13 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 5 Gene annotation | Omics Data Analysis course</title>
+  <title>Chapter 5 Gene annotation | Omics Data Analysis</title>
   <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
   <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 5 Gene annotation | Omics Data Analysis course" />
+  <meta property="og:title" content="Chapter 5 Gene annotation | Omics Data Analysis" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
@@ -19,7 +19,7 @@ set in the _output.yml file.</p>" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 Gene annotation | Omics Data Analysis course" />
+  <meta name="twitter:title" content="Chapter 5 Gene annotation | Omics Data Analysis" />
   
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
@@ -143,7 +143,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Omics Data Anlysis course</a></li>
+<li><a href="./">Omics Data Analysis course</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
@@ -169,7 +169,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="6.1" data-path="visualization.html"><a href="visualization.html#volcano-plot"><i class="fa fa-check"></i><b>6.1</b> Volcano plot</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="functional-analysis.html"><a href="functional-analysis.html"><i class="fa fa-check"></i><b>7</b> Functional analysis</a></li>
+<li class="chapter" data-level="7" data-path="functional-analysis.html"><a href="functional-analysis.html"><i class="fa fa-check"></i><b>7</b> Functional analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-ontology-go-analysis"><i class="fa fa-check"></i><b>7.1</b> Gene Ontology (GO) analysis</a></li>
+<li class="chapter" data-level="7.2" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-set-enrichment-analysis-gsea"><i class="fa fa-check"></i><b>7.2</b> Gene-Set Enrichment Analysis (GSEA)</a></li>
+<li class="chapter" data-level="7.3" data-path="functional-analysis.html"><a href="functional-analysis.html#pathway-analysis"><i class="fa fa-check"></i><b>7.3</b> Pathway analysis</a></li>
+<li class="chapter" data-level="7.4" data-path="functional-analysis.html"><a href="functional-analysis.html#msigdb-enrichment-analysis"><i class="fa fa-check"></i><b>7.4</b> mSigDb enrichment analysis</a></li>
+</ul></li>
+<li class="part"><span><b>Lecture 9: Transcriptome</b></span></li>
+<li class="chapter" data-level="8" data-path="transcriptome-de-novo-assembly.html"><a href="transcriptome-de-novo-assembly.html"><i class="fa fa-check"></i><b>8</b> Transcriptome de novo assembly</a></li>
+<li class="part"><span><b>Lecture 13: Lipidomics</b></span></li>
+<li class="chapter" data-level="9" data-path="lipidomics-data-analysis.html"><a href="lipidomics-data-analysis.html"><i class="fa fa-check"></i><b>9</b> Lipidomics Data Analysis</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -183,7 +193,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Omics Data Analysis course</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Omics Data Analysis</a>
           </h1>
         </div>
 
@@ -193,6 +203,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="gene-annotation" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Gene annotation<a href="gene-annotation.html#gene-annotation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="gene-annotation.html#cb51-1" tabindex="-1"></a><span class="fu">library</span>(org.Mm.eg.db)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="gene-annotation.html#cb52-1" tabindex="-1"></a>mm <span class="ot">&lt;-</span> org.Mm.eg.db</span>
+<span id="cb52-2"><a href="gene-annotation.html#cb52-2" tabindex="-1"></a>my.symbols <span class="ot">&lt;-</span> res_pbs_tb<span class="sc">$</span>gene</span>
+<span id="cb52-3"><a href="gene-annotation.html#cb52-3" tabindex="-1"></a>map <span class="ot">&lt;-</span> <span class="fu">select</span>(mm, </span>
+<span id="cb52-4"><a href="gene-annotation.html#cb52-4" tabindex="-1"></a>              <span class="at">keys =</span> my.symbols,</span>
+<span id="cb52-5"><a href="gene-annotation.html#cb52-5" tabindex="-1"></a>              <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;ENTREZID&quot;</span>, <span class="st">&quot;SYMBOL&quot;</span>, <span class="st">&quot;ENSEMBL&quot;</span>),</span>
+<span id="cb52-6"><a href="gene-annotation.html#cb52-6" tabindex="-1"></a>              <span class="at">keytype =</span> <span class="st">&quot;ENSEMBL&quot;</span>)</span></code></pre></div>
+<pre><code>## &#39;select()&#39; returned 1:many mapping between keys and columns</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="gene-annotation.html#cb54-1" tabindex="-1"></a>ad.df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(res_pbs_tb, map, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;gene&quot;</span> <span class="ot">=</span> <span class="st">&quot;ENSEMBL&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="gene-annotation.html#cb55-1" tabindex="-1"></a>ad.df <span class="ot">&lt;-</span> ad.df[<span class="sc">!</span><span class="fu">duplicated</span>(ad.df<span class="sc">$</span>gene),]</span></code></pre></div>
 
 </div>
             </section>

@@ -1,5 +1,5 @@
 ---
-title: "Omics Data Analysis course"
+title: "Omics Data Analysis"
 author: "Dmitrii Smirnov"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -21,7 +21,7 @@ This bookdown will consist of three seminars for the following lectures deliveri
 
 -   Lecture 4: Differential Expression Analysis
 
--   Lecture 8: Transcriptome Assembly
+-   Lecture 9: Transcriptome Assembly
 
 -   Lecture 13: Lipidomics Data Analysis
 

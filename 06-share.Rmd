@@ -1,4 +1,25 @@
 # Functional analysis
 
 
+## Gene Ontology (GO) analysis
+```{r}
+
+```
+
+## Gene-Set Enrichment Analysis (GSEA)
+```{r}
+
+```
+
+## Pathway analysis
+```{r}
+
+```
+
+## mSigDb enrichment analysis
+```{r}
+library(msigdbr)
+```
+
+
 

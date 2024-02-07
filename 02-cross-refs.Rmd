@@ -45,8 +45,22 @@ plotPCA.mystyle <- function (object, ntop = 2400, returnData = FALSE)
 } 
 ```
 
-```{r, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
+```{r pca, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
 plotPCA.mystyle(rld)
 ```
 
 ## Correlation Heatmap (PCA)
+
+```{r}
+rld_mat <- assay(rld)
+```
+
+
+```{r}
+rld_cor <- cor(rld_mat)
+```
+
+
+```{r heatmap1, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
+pheatmap(rld_cor, annotation = meta[,c(1,2)])
+```

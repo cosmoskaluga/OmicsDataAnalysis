@@ -14,3 +14,8 @@ DOSE
 pheatmap
 tibble
 clusterProfiler
+AnnotationDbi
+org.Mm.eg.db
+ggrepel
+EnhancedVolcano
+msigdbr

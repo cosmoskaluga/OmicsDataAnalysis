@@ -2,3 +2,28 @@
 
 ## Volcano plot
 
+```{r}
+library(EnhancedVolcano)
+```
+
+```{r volcano, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
+EnhancedVolcano(ad.df,
+        lab = ad.df$SYMBOL, 
+        x = 'log2FoldChange',
+        y = 'padj', 
+        title = 'KO vs Control, PBS',
+        subtitle = NULL,
+        pCutoff = 0.05, 
+        FCcutoff = 0.58)
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+

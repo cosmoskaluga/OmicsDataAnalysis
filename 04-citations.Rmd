@@ -1,2 +1,23 @@
 # Gene annotation 
 
+```{r}
+library(org.Mm.eg.db)
+```
+
+```{r}
+mm <- org.Mm.eg.db
+my.symbols <- res_pbs_tb$gene
+map <- select(mm, 
+              keys = my.symbols,
+              columns = c("ENTREZID", "SYMBOL", "ENSEMBL"),
+              keytype = "ENSEMBL")
+```
+
+```{r}
+ad.df <- left_join(res_pbs_tb, map, by = c("gene" = "ENSEMBL"))
+```
+
+```{r}
+ad.df <- ad.df[!duplicated(ad.df$gene),]
+```
+

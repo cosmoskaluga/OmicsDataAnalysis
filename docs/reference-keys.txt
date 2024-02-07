@@ -13,3 +13,9 @@ gene-annotation
 visualization
 volcano-plot
 functional-analysis
+gene-ontology-go-analysis
+gene-set-enrichment-analysis-gsea
+pathway-analysis
+msigdb-enrichment-analysis
+transcriptome-de-novo-assembly
+lipidomics-data-analysis
