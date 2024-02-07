@@ -1,9 +1,13 @@
 introduction
-usage
-render-book
+how-to-deal-with-r
+assignment-and-grading
 input-dataset
-a-section
+count-importing
+deseq2-object
 cross
+normalization
+principal-component-analysis-pca
+correlation-heatmap-pca
 differential-testing
 gene-annotation
 visualization

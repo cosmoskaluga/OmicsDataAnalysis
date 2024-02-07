@@ -1,0 +1,45 @@
+# (PART\*) Lecture 4: DE analysis {-}
+
+# Input dataset  
+Today we will focus on the differential gene expression analysis to study the molecular signatures of Amyloid-β toxicity in yeast using the data obtained from GEO database (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE128905). There are 2 experimental groups of replicates: Control and Aβ42 (yeasts expressing Aβ42 peptide) with 3 replicates per group. Raw reads were already preprocessed and Salmon pseudocounts are accessible here: /home/d.smirnov/homework4/SalmonOutput
+
+## Count importing
+Import libraries:
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(DESeq2)
+library(DOSE)
+library(pheatmap)
+library(tibble)
+library(clusterProfiler)
+```
+
+```{r}
+data <- read.csv("../../Data.csv", row.names = 1)
+```
+
+We need a file which maps our samples to the corresponding sample groups that we are investigating. We will use the columns headers from the counts matrix as the row names of our metadata file and have single column to identify each sample.
+
+```{r}
+meta <- colnames(data) %>% .[-c(1)] %>% strsplit(split = '_') %>% as.data.frame() %>% t() 
+rownames(meta) <- colnames(data)[-c(1)]
+colnames(meta) <- c("Genotype", "Treatment", "SampleID")
+meta <- as.data.frame(meta)
+```
+
+```{r}
+data <- data[rowSums(data[,-c(1)]) > 10, ]
+```
+
+## DESeq2 object 
+Let’s start by creating the `DESeqDataSet` object. To create the object we will need the count matrix and the metadata table as input. We will also need to specify a design formula. The design formula specifies the column(s) in the metadata table and how they should be used in the analysis. For our dataset we only have one column we are interested in, that is $~genotype$. This column has two factor levels, which tells DESeq2 that for each gene we want to evaluate gene expression change with respect to two different levels.
+
+Create DESeq2Dataset object:
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = round(data[,-c(1)]), colData = meta, design = ~ Genotype + Treatment)
+dds
+```
+
+
+

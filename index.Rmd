@@ -17,10 +17,34 @@ github-repo: rstudio/bookdown-demo
 
 # Introduction
 
-Today we will focus on the differential gene expression analysis to study the molecular signatures of Amyloid-β toxicity in yeast using the data obtained from GEO database (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE128905). There are 2 experimental groups of replicates: Control and Aβ42 (yeasts expressing Aβ42 peptide) with 3 replicates per group. Raw reads were already preprocessed and Salmon pseudocounts are accessible here: /home/d.smirnov/homework4/SalmonOutput
+This bookdown will consist of three seminars for the following lectures delivering at "Omics Data Analysis" course at Skolkovo Institute of Science and Technology:
 
-## Usage
+-   Lecture 4: Differential Expression Analysis
 
+-   Lecture 8: Transcriptome Assembly
 
-## Render book
+-   Lecture 13: Lipidomics Data Analysis
 
+## How to deal with R
+
+Use the instruction: <https://docs.google.com/document/d/1vyR7T7nHnWgRfQPntLU3U2jaZFJia8zH/edit?usp=sharing&ouid=118110925940360211775&rtpof=true&sd=true>
+
+## Assignment and grading
+
+When you complete all the tasks please upload to Canvas:
+
+Report with plots, pictures, answers and explanations.
+
+Your code (txt/pdf/R markdown or something else readable)
+
+How it will be graded: \* The maximum is 7 points.
+
+For missing step - minus 5 points.
+
+If the report/code is missing - 0 points.
+
+For each missing figure/plot - minus 2 points.
+
+For each missing answer to ❓ - minus 2 points.
+
+For any other mistake - minus 0.2 point.

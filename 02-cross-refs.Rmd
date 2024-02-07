@@ -1,5 +1,52 @@
 # Quality control {#cross}
 
-.
+## Normalization
+```{r}
+dds <- estimateSizeFactors(dds)
+```
 
+```{r}
+rld <- rlog(dds, blind = TRUE)
+```
 
+## Principal Component Analysis (PCA)
+
+```{r}
+plotPCA.mystyle <- function (object, ntop = 2400, returnData = FALSE)
+{
+    font.size <- 18
+    rv <- rowVars(assay(object))
+    r <- assay(object)
+    select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,
+        length(rv)))]
+    pca <- prcomp(t(assay(object)[select, ]))
+    percentVar <- pca$sdev^2/sum(pca$sdev^2)
+    
+    d1 <- data.frame(PC1 = pca$x[, 1], PC2 = pca$x[, 2], 
+                     Genotype = meta$Genotype, 
+                     Treatment = meta$Treatment,  
+                     name = colnames(object))
+
+    if (returnData) {
+        attr(d, "percentVar") <- percentVar[1:2]
+        return(d)
+    }
+    
+    ggplot(data = d1, aes_string(x = "PC1", y = "PC2")) +
+        geom_point(aes_string(color = "Genotype", shape = "Treatment"), size = 6) + 
+        xlab(paste0("PC1: ", round(percentVar[1] * 100), "% variance")) + 
+        ylab(paste0("PC2: ", round(percentVar[2] * 100), "% variance")) +
+        theme_dose(font.size = font.size)+ #+ geom_label_repel(aes(label = colnames(data)), label.size = 0.1, box.padding = 0.2)
+        theme(
+              legend.key = element_rect(colour = NA, fill = NA), 
+              legend.title= element_blank(), 
+              legend.text=element_text(size=font.size-2)
+        )
+} 
+```
+
+```{r, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
+plotPCA.mystyle(rld)
+```
+
+## Correlation Heatmap (PCA)

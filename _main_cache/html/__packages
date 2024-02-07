@@ -1,0 +1,16 @@
+dplyr
+ggplot2
+BiocGenerics
+S4Vectors
+IRanges
+GenomeInfoDb
+GenomicRanges
+matrixStats
+MatrixGenerics
+Biobase
+SummarizedExperiment
+DESeq2
+DOSE
+pheatmap
+tibble
+clusterProfiler
