@@ -154,13 +154,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Lecture 4: DE analysis</b></span></li>
 <li class="chapter" data-level="2" data-path="input-dataset.html"><a href="input-dataset.html"><i class="fa fa-check"></i><b>2</b> Input dataset</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-importing"><i class="fa fa-check"></i><b>2.1</b> Count importing</a></li>
+<li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-table-importing"><i class="fa fa-check"></i><b>2.1</b> Count table importing</a></li>
 <li class="chapter" data-level="2.2" data-path="input-dataset.html"><a href="input-dataset.html#deseq2-object"><i class="fa fa-check"></i><b>2.2</b> DESeq2 object</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Quality control</a>
+<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Noramlization and Quality control</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="cross.html"><a href="cross.html#normalization"><i class="fa fa-check"></i><b>3.1</b> Normalization</a></li>
-<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2</b> Principal Component Analysis (PCA)</a></li>
+<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#quality-control"><i class="fa fa-check"></i><b>3.2</b> Quality control</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2.1</b> Principal Component Analysis (PCA)</a></li>
+</ul></li>
 <li class="chapter" data-level="3.3" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.3</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a></li>
@@ -205,15 +208,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 6</span> Visualization<a href="visualization.html#visualization" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="volcano-plot" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> Volcano plot<a href="visualization.html#volcano-plot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="visualization.html#cb56-1" tabindex="-1"></a><span class="fu">library</span>(EnhancedVolcano)</span></code></pre></div>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="visualization.html#cb57-1" tabindex="-1"></a><span class="fu">EnhancedVolcano</span>(ad.df,</span>
-<span id="cb57-2"><a href="visualization.html#cb57-2" tabindex="-1"></a>        <span class="at">lab =</span> ad.df<span class="sc">$</span>SYMBOL, </span>
-<span id="cb57-3"><a href="visualization.html#cb57-3" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&#39;log2FoldChange&#39;</span>,</span>
-<span id="cb57-4"><a href="visualization.html#cb57-4" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">&#39;padj&#39;</span>, </span>
-<span id="cb57-5"><a href="visualization.html#cb57-5" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&#39;KO vs Control, PBS&#39;</span>,</span>
-<span id="cb57-6"><a href="visualization.html#cb57-6" tabindex="-1"></a>        <span class="at">subtitle =</span> <span class="cn">NULL</span>,</span>
-<span id="cb57-7"><a href="visualization.html#cb57-7" tabindex="-1"></a>        <span class="at">pCutoff =</span> <span class="fl">0.05</span>, </span>
-<span id="cb57-8"><a href="visualization.html#cb57-8" tabindex="-1"></a>        <span class="at">FCcutoff =</span> <span class="fl">0.58</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="visualization.html#cb57-1" tabindex="-1"></a><span class="fu">library</span>(EnhancedVolcano)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="visualization.html#cb58-1" tabindex="-1"></a><span class="fu">EnhancedVolcano</span>(ad.df,</span>
+<span id="cb58-2"><a href="visualization.html#cb58-2" tabindex="-1"></a>        <span class="at">lab =</span> ad.df<span class="sc">$</span>SYMBOL, </span>
+<span id="cb58-3"><a href="visualization.html#cb58-3" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&#39;log2FoldChange&#39;</span>,</span>
+<span id="cb58-4"><a href="visualization.html#cb58-4" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">&#39;padj&#39;</span>, </span>
+<span id="cb58-5"><a href="visualization.html#cb58-5" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&#39;KO vs Control, PBS&#39;</span>,</span>
+<span id="cb58-6"><a href="visualization.html#cb58-6" tabindex="-1"></a>        <span class="at">subtitle =</span> <span class="cn">NULL</span>,</span>
+<span id="cb58-7"><a href="visualization.html#cb58-7" tabindex="-1"></a>        <span class="at">pCutoff =</span> <span class="fl">0.05</span>, </span>
+<span id="cb58-8"><a href="visualization.html#cb58-8" tabindex="-1"></a>        <span class="at">FCcutoff =</span> <span class="fl">0.58</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/volcano-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>

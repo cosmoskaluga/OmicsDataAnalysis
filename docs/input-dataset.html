@@ -154,13 +154,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Lecture 4: DE analysis</b></span></li>
 <li class="chapter" data-level="2" data-path="input-dataset.html"><a href="input-dataset.html"><i class="fa fa-check"></i><b>2</b> Input dataset</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-importing"><i class="fa fa-check"></i><b>2.1</b> Count importing</a></li>
+<li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-table-importing"><i class="fa fa-check"></i><b>2.1</b> Count table importing</a></li>
 <li class="chapter" data-level="2.2" data-path="input-dataset.html"><a href="input-dataset.html#deseq2-object"><i class="fa fa-check"></i><b>2.2</b> DESeq2 object</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Quality control</a>
+<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Noramlization and Quality control</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="cross.html"><a href="cross.html#normalization"><i class="fa fa-check"></i><b>3.1</b> Normalization</a></li>
-<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2</b> Principal Component Analysis (PCA)</a></li>
+<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#quality-control"><i class="fa fa-check"></i><b>3.2</b> Quality control</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2.1</b> Principal Component Analysis (PCA)</a></li>
+</ul></li>
 <li class="chapter" data-level="3.3" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.3</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a></li>
@@ -204,8 +207,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="input-dataset" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Input dataset<a href="input-dataset.html#input-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Today we will focus on the differential gene expression analysis to study the molecular signatures of Amyloid-β toxicity in yeast using the data obtained from GEO database (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE128905" class="uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE128905</a>). There are 2 experimental groups of replicates: Control and Aβ42 (yeasts expressing Aβ42 peptide) with 3 replicates per group. Raw reads were already preprocessed and Salmon pseudocounts are accessible here: /home/d.smirnov/homework4/SalmonOutput</p>
-<div id="count-importing" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> Count importing<a href="input-dataset.html#count-importing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Import libraries:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="input-dataset.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-2"><a href="input-dataset.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -214,22 +215,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-5"><a href="input-dataset.html#cb1-5" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span>
 <span id="cb1-6"><a href="input-dataset.html#cb1-6" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
 <span id="cb1-7"><a href="input-dataset.html#cb1-7" tabindex="-1"></a><span class="fu">library</span>(clusterProfiler)</span></code></pre></div>
+<div id="count-table-importing" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Count table importing<a href="input-dataset.html#count-table-importing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will start the analysis with uploading <strong>raw</strong> count data to the R workspace.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="input-dataset.html#cb2-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../../Data.csv&quot;</span>, <span class="at">row.names =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p>We need a file which maps our samples to the corresponding sample groups that we are investigating. We will use the columns headers from the counts matrix as the row names of our metadata file and have single column to identify each sample.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="input-dataset.html#cb3-1" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data) <span class="sc">%&gt;%</span> .[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)] <span class="sc">%&gt;%</span> <span class="fu">strsplit</span>(<span class="at">split =</span> <span class="st">&#39;_&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="fu">t</span>() </span>
-<span id="cb3-2"><a href="input-dataset.html#cb3-2" tabindex="-1"></a><span class="fu">rownames</span>(meta) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data)[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]</span>
-<span id="cb3-3"><a href="input-dataset.html#cb3-3" tabindex="-1"></a><span class="fu">colnames</span>(meta) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Genotype&quot;</span>, <span class="st">&quot;Treatment&quot;</span>, <span class="st">&quot;SampleID&quot;</span>)</span>
-<span id="cb3-4"><a href="input-dataset.html#cb3-4" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(meta)</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="input-dataset.html#cb4-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="fu">rowSums</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]) <span class="sc">&gt;</span> <span class="dv">10</span>, ]</span></code></pre></div>
+<p>The gene expression table has gene names in the rows and samples names in the columns. ‘Length’ column denotes a length of each annotated gene:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="input-dataset.html#cb3-1" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
+<pre><code>##                    Length KO_PBS_642 KO_PBS_641 KO_PBS_638 KO_LPS_600 KO_LPS_194 KO_LPS_193 Control_PBS_175 Control_PBS_171 Control_PBS_170 Control_LPS_185
+## ENSMUSG00000102693   1070          0          0          0          0          0          0               0               0               0               0
+## ENSMUSG00000064842    110          0          0          0          0          0          0               0               0               0               0
+## ENSMUSG00000051951   6094          4          0          0          0          0          0               0               0               0               1
+## ENSMUSG00000102851    480          0          0          0          0          0          0               0               0               0               0
+## ENSMUSG00000103377   2819          0          0          0          4          0          0               0               0               0              12
+## ENSMUSG00000104017   2233          0          0          0          0          1          0               0               0               0               0
+##                    Control_LPS_184 Control_LPS_149
+## ENSMUSG00000102693               0               0
+## ENSMUSG00000064842               0               0
+## ENSMUSG00000051951              10              12
+## ENSMUSG00000102851               0               0
+## ENSMUSG00000103377               0               2
+## ENSMUSG00000104017               0               5</code></pre>
+<p>Further we will need a meta table which maps our samples to the corresponding sample groups that we are investigating. Our metadata will include three columns of interest: “Genotype”, “Treatment” and “SampleID”.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="input-dataset.html#cb5-1" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data) <span class="sc">%&gt;%</span> .[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)] <span class="sc">%&gt;%</span> <span class="fu">strsplit</span>(<span class="at">split =</span> <span class="st">&#39;_&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="fu">t</span>() </span>
+<span id="cb5-2"><a href="input-dataset.html#cb5-2" tabindex="-1"></a><span class="fu">rownames</span>(meta) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data)[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]</span>
+<span id="cb5-3"><a href="input-dataset.html#cb5-3" tabindex="-1"></a><span class="fu">colnames</span>(meta) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Genotype&quot;</span>, <span class="st">&quot;Treatment&quot;</span>, <span class="st">&quot;SampleID&quot;</span>)</span>
+<span id="cb5-4"><a href="input-dataset.html#cb5-4" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(meta)</span></code></pre></div>
+<p>Another important step is a filtering of the low- and non-expressed genes prior statistical analysis. Such genes contributes to the False Discovery Rate. We will keep only those genes having at least 10 counts in total across experimental replicates.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="input-dataset.html#cb6-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="fu">rowSums</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]) <span class="sc">&gt;</span> <span class="dv">10</span>, ]</span></code></pre></div>
 </div>
 <div id="deseq2-object" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> DESeq2 object<a href="input-dataset.html#deseq2-object" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Let’s start by creating the <code>DESeqDataSet</code> object. To create the object we will need the count matrix and the metadata table as input. We will also need to specify a design formula. The design formula specifies the column(s) in the metadata table and how they should be used in the analysis. For our dataset we only have one column we are interested in, that is <span class="math inline">\(~genotype\)</span>. This column has two factor levels, which tells DESeq2 that for each gene we want to evaluate gene expression change with respect to two different levels.</p>
+<p>Let’s start the main part of the analysis with creating the <code>DESeqDataSet</code> object. To create this object we will need the count matrix and the metadata table as input. We will also need to specify a design formula. The design formula specifies the column(s) in the metadata table and how they should be used in the analysis. For our dataset we only have two column we are interested in, that is <span class="math inline">\(\sim Treatment + Genotype\)</span>. The <span class="math inline">\(Genotype\)</span> is the main factor of interest, therefore it is in the end of the design formula.</p>
 <p>Create DESeq2Dataset object:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="input-dataset.html#cb5-1" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> <span class="fu">round</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]), <span class="at">colData =</span> meta, <span class="at">design =</span> <span class="sc">~</span> Genotype <span class="sc">+</span> Treatment)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="input-dataset.html#cb7-1" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> <span class="fu">round</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]), <span class="at">colData =</span> meta, <span class="at">design =</span> <span class="sc">~</span> Genotype <span class="sc">+</span> Treatment)</span></code></pre></div>
 <pre><code>## converting counts to integer mode</code></pre>
 <pre><code>## Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in design formula are characters, converting to factors</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="input-dataset.html#cb8-1" tabindex="-1"></a>dds</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="input-dataset.html#cb10-1" tabindex="-1"></a>dds</span></code></pre></div>
 <pre><code>## class: DESeqDataSet 
 ## dim: 22783 12 
 ## metadata(1): version

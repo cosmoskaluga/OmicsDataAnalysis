@@ -15,6 +15,10 @@ link-citations: yes
 github-repo: rstudio/bookdown-demo
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 # Introduction
 
 This bookdown will consist of three seminars for the following lectures delivering at "Omics Data Analysis" course at Skolkovo Institute of Science and Technology:
@@ -27,7 +31,13 @@ This bookdown will consist of three seminars for the following lectures deliveri
 
 ## How to deal with R
 
-Use the instruction: <https://docs.google.com/document/d/1vyR7T7nHnWgRfQPntLU3U2jaZFJia8zH/edit?usp=sharing&ouid=118110925940360211775&rtpof=true&sd=true>
+Here is an brief guideline how to work with R on the course computational cluster or your own computer: <https://docs.google.com/document/d/1vyR7T7nHnWgRfQPntLU3U2jaZFJia8zH/edit?usp=sharing&ouid=118110925940360211775&rtpof=true&sd=true>
+
+If your are not familiar with R programming language, you may find the following links useful:
+
+-   R-intro: <https://cran.r-project.org/doc/manuals/r-release/R-intro.html>
+-   Learning Statistics with R: <https://learningstatisticswithr.com/book/introR.html>
+-   Stepik course (in Russian): <https://stepik.org/course/497/promo>
 
 ## Assignment and grading
 

@@ -21,5 +21,24 @@
 library(msigdbr)
 ```
 
+```{r}
+all_gene_sets = msigdbr(species = "Mus musculus")
+```
 
+```{r}
+msig_h <- msigdbr(species = "mouse", category = "H")
+```
 
+```{r}
+msigdbr_t2g <- msig_h %>%
+  dplyr::distinct(gs_name, ensembl_gene) %>%
+  as.data.frame()
+```
+
+```{r hallmarks_pbs, cache = TRUE, fig.width = 7, fig.height = 5.5, fig.align = "center"}
+dotplot(hallmarks.pbs)
+```
+
+```{r hallmarks_lps, cache = TRUE, fig.width = 7, fig.height = 5.5, fig.align = "center"}
+dotplot(hallmarks.lps)
+```

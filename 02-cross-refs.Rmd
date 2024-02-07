@@ -1,15 +1,50 @@
-# Quality control {#cross}
+# Noramlization and Quality control {#cross}
 
 ## Normalization
+The next step is to normalize the count data in order to be able to make fair gene comparisons between samples.
+
+To perform the median of ratios method of normalization, `DESeq2` has a single `estimateSizeFactors()` function that will generate size factors for us. We will use the function in the example below, but in a typical RNA-seq analysis this step is automatically performed by the `DESeq()` function, which we will see later.
+
+Perform normalization:
 ```{r}
 dds <- estimateSizeFactors(dds)
 ```
+
+We can take a look at the normalization factor applied to each sample:
+```{r}
+sizeFactors(dds)
+```
+
+Now, to retrieve the normalized counts matrix from dds, use the `counts()` function and add the argument `normalized=TRUE`.
+```{r}
+normalized_counts <- counts(dds, normalized=TRUE)
+```
+
+## Quality control
+
+Next, we perform QC checks on the count data to help us ensure that the samples/replicates look good.
+
+To explore the similarity of our samples, we will be performing sample-level QC using Principal Component Analysis (PCA) and hierarchical clustering methods.
+
+When using these unsupervised clustering methods, log2-transformation of the normalized counts improves the distances/clustering for visualization. `DESeq2` uses a regularized log transform (rlog) of the normalized counts for sample-level QC as it moderates the variance across the mean, improving the clustering.
+
+Perform rlog-transformation:
 
 ```{r}
 rld <- rlog(dds, blind = TRUE)
 ```
 
-## Principal Component Analysis (PCA)
+### Principal Component Analysis (PCA)
+
+PCA is a technique used to emphasize variation and bring out strong patterns in a dataset (dimensionality reduction).
+
+We would expect that biological replicates cluster together on PC1 and/or PC2, and the samples from different treatment groups cluster separately.
+
+DESeq2 has a built-in function for plotting PCA plots, that uses ggplot2. It takes the rlog object as an input directly.
+
+The function `plotPCA` requires two arguments as input: an rlog object and the intgroup (the column in our metadata that we are interested in).
+
+Below we will create a custom function to plot PCA:
 
 ```{r}
 plotPCA.mystyle <- function (object, ntop = 2400, returnData = FALSE)
@@ -45,22 +80,30 @@ plotPCA.mystyle <- function (object, ntop = 2400, returnData = FALSE)
 } 
 ```
 
+Plot PCA graph:
+
 ```{r pca, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
 plotPCA.mystyle(rld)
 ```
 
-## Correlation Heatmap (PCA)
+By default the function `plotPCA.custom` uses the top 500 most variable genes. You can change this by adding the ntop argument and specifying how many genes you want to use to draw the plot.
 
+## Correlation Heatmap (PCA)
+The heatmap displays the correlation of gene expression for all pairwise combinations of samples in the dataset. Since the majority of genes are not differentially expressed, samples generally have high correlations with each other (values higher than 0.80). Samples below 0.80 may indicate an outlier in your data and/or sample contamination.
+
+Extract the rlog matrix from the object:
 ```{r}
 rld_mat <- assay(rld)
 ```
 
+Since there is no built-in function for heatmaps in `DESeq2` we will be using the `pheatmap()` function from the `pheatmap` package. This function requires a matrix/dataframe of numeric values as input, and so the first thing we need to is retrieve that information from the rld object:
 
+Then we need to compute the pairwise correlation values for samples. We can do this using the cor() function:
 ```{r}
 rld_cor <- cor(rld_mat)
 ```
 
-
+Plot the correlation values as a heatmap:
 ```{r heatmap1, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
 pheatmap(rld_cor, annotation = meta[,c(1,2)])
 ```

@@ -154,13 +154,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Lecture 4: DE analysis</b></span></li>
 <li class="chapter" data-level="2" data-path="input-dataset.html"><a href="input-dataset.html"><i class="fa fa-check"></i><b>2</b> Input dataset</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-importing"><i class="fa fa-check"></i><b>2.1</b> Count importing</a></li>
+<li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-table-importing"><i class="fa fa-check"></i><b>2.1</b> Count table importing</a></li>
 <li class="chapter" data-level="2.2" data-path="input-dataset.html"><a href="input-dataset.html#deseq2-object"><i class="fa fa-check"></i><b>2.2</b> DESeq2 object</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Quality control</a>
+<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Noramlization and Quality control</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="cross.html"><a href="cross.html#normalization"><i class="fa fa-check"></i><b>3.1</b> Normalization</a></li>
-<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2</b> Principal Component Analysis (PCA)</a></li>
+<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#quality-control"><i class="fa fa-check"></i><b>3.2</b> Quality control</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2.1</b> Principal Component Analysis (PCA)</a></li>
+</ul></li>
 <li class="chapter" data-level="3.3" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.3</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a></li>
@@ -214,7 +217,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="msigdb-enrichment-analysis" class="section level2 hasAnchor" number="7.4">
 <h2><span class="header-section-number">7.4</span> mSigDb enrichment analysis<a href="functional-analysis.html#msigdb-enrichment-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="functional-analysis.html#cb58-1" tabindex="-1"></a><span class="fu">library</span>(msigdbr)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="functional-analysis.html#cb59-1" tabindex="-1"></a><span class="fu">library</span>(msigdbr)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="functional-analysis.html#cb60-1" tabindex="-1"></a>all_gene_sets <span class="ot">=</span> <span class="fu">msigdbr</span>(<span class="at">species =</span> <span class="st">&quot;Mus musculus&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="functional-analysis.html#cb61-1" tabindex="-1"></a>msig_h <span class="ot">&lt;-</span> <span class="fu">msigdbr</span>(<span class="at">species =</span> <span class="st">&quot;mouse&quot;</span>, <span class="at">category =</span> <span class="st">&quot;H&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="functional-analysis.html#cb62-1" tabindex="-1"></a>msigdbr_t2g <span class="ot">&lt;-</span> msig_h <span class="sc">%&gt;%</span></span>
+<span id="cb62-2"><a href="functional-analysis.html#cb62-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>(gs_name, ensembl_gene) <span class="sc">%&gt;%</span></span>
+<span id="cb62-3"><a href="functional-analysis.html#cb62-3" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="functional-analysis.html#cb63-1" tabindex="-1"></a><span class="fu">dotplot</span>(hallmarks.pbs)</span></code></pre></div>
+<p><img src="_main_files/figure-html/hallmarks_pbs-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="functional-analysis.html#cb64-1" tabindex="-1"></a><span class="fu">dotplot</span>(hallmarks.lps)</span></code></pre></div>
+<p><img src="_main_files/figure-html/hallmarks_lps-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

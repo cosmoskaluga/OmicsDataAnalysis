@@ -20,4 +20,3 @@ ad.df <- left_join(res_pbs_tb, map, by = c("gene" = "ENSEMBL"))
 ```{r}
 ad.df <- ad.df[!duplicated(ad.df$gene),]
 ```
-

@@ -154,13 +154,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Lecture 4: DE analysis</b></span></li>
 <li class="chapter" data-level="2" data-path="input-dataset.html"><a href="input-dataset.html"><i class="fa fa-check"></i><b>2</b> Input dataset</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-importing"><i class="fa fa-check"></i><b>2.1</b> Count importing</a></li>
+<li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-table-importing"><i class="fa fa-check"></i><b>2.1</b> Count table importing</a></li>
 <li class="chapter" data-level="2.2" data-path="input-dataset.html"><a href="input-dataset.html#deseq2-object"><i class="fa fa-check"></i><b>2.2</b> DESeq2 object</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Quality control</a>
+<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Noramlization and Quality control</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="cross.html"><a href="cross.html#normalization"><i class="fa fa-check"></i><b>3.1</b> Normalization</a></li>
-<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2</b> Principal Component Analysis (PCA)</a></li>
+<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#quality-control"><i class="fa fa-check"></i><b>3.2</b> Quality control</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2.1</b> Principal Component Analysis (PCA)</a></li>
+</ul></li>
 <li class="chapter" data-level="3.3" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.3</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a></li>
@@ -203,16 +206,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="gene-annotation" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Gene annotation<a href="gene-annotation.html#gene-annotation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="gene-annotation.html#cb51-1" tabindex="-1"></a><span class="fu">library</span>(org.Mm.eg.db)</span></code></pre></div>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="gene-annotation.html#cb52-1" tabindex="-1"></a>mm <span class="ot">&lt;-</span> org.Mm.eg.db</span>
-<span id="cb52-2"><a href="gene-annotation.html#cb52-2" tabindex="-1"></a>my.symbols <span class="ot">&lt;-</span> res_pbs_tb<span class="sc">$</span>gene</span>
-<span id="cb52-3"><a href="gene-annotation.html#cb52-3" tabindex="-1"></a>map <span class="ot">&lt;-</span> <span class="fu">select</span>(mm, </span>
-<span id="cb52-4"><a href="gene-annotation.html#cb52-4" tabindex="-1"></a>              <span class="at">keys =</span> my.symbols,</span>
-<span id="cb52-5"><a href="gene-annotation.html#cb52-5" tabindex="-1"></a>              <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;ENTREZID&quot;</span>, <span class="st">&quot;SYMBOL&quot;</span>, <span class="st">&quot;ENSEMBL&quot;</span>),</span>
-<span id="cb52-6"><a href="gene-annotation.html#cb52-6" tabindex="-1"></a>              <span class="at">keytype =</span> <span class="st">&quot;ENSEMBL&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="gene-annotation.html#cb52-1" tabindex="-1"></a><span class="fu">library</span>(org.Mm.eg.db)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="gene-annotation.html#cb53-1" tabindex="-1"></a>mm <span class="ot">&lt;-</span> org.Mm.eg.db</span>
+<span id="cb53-2"><a href="gene-annotation.html#cb53-2" tabindex="-1"></a>my.symbols <span class="ot">&lt;-</span> res_pbs_tb<span class="sc">$</span>gene</span>
+<span id="cb53-3"><a href="gene-annotation.html#cb53-3" tabindex="-1"></a>map <span class="ot">&lt;-</span> <span class="fu">select</span>(mm, </span>
+<span id="cb53-4"><a href="gene-annotation.html#cb53-4" tabindex="-1"></a>              <span class="at">keys =</span> my.symbols,</span>
+<span id="cb53-5"><a href="gene-annotation.html#cb53-5" tabindex="-1"></a>              <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;ENTREZID&quot;</span>, <span class="st">&quot;SYMBOL&quot;</span>, <span class="st">&quot;ENSEMBL&quot;</span>),</span>
+<span id="cb53-6"><a href="gene-annotation.html#cb53-6" tabindex="-1"></a>              <span class="at">keytype =</span> <span class="st">&quot;ENSEMBL&quot;</span>)</span></code></pre></div>
 <pre><code>## &#39;select()&#39; returned 1:many mapping between keys and columns</code></pre>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="gene-annotation.html#cb54-1" tabindex="-1"></a>ad.df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(res_pbs_tb, map, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;gene&quot;</span> <span class="ot">=</span> <span class="st">&quot;ENSEMBL&quot;</span>))</span></code></pre></div>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="gene-annotation.html#cb55-1" tabindex="-1"></a>ad.df <span class="ot">&lt;-</span> ad.df[<span class="sc">!</span><span class="fu">duplicated</span>(ad.df<span class="sc">$</span>gene),]</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="gene-annotation.html#cb55-1" tabindex="-1"></a>ad.df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(res_pbs_tb, map, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;gene&quot;</span> <span class="ot">=</span> <span class="st">&quot;ENSEMBL&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="gene-annotation.html#cb56-1" tabindex="-1"></a>ad.df <span class="ot">&lt;-</span> ad.df[<span class="sc">!</span><span class="fu">duplicated</span>(ad.df<span class="sc">$</span>gene),]</span></code></pre></div>
 
 </div>
             </section>

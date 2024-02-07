@@ -3,7 +3,6 @@
 # Input dataset  
 Today we will focus on the differential gene expression analysis to study the molecular signatures of Amyloid-β toxicity in yeast using the data obtained from GEO database (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE128905). There are 2 experimental groups of replicates: Control and Aβ42 (yeasts expressing Aβ42 peptide) with 3 replicates per group. Raw reads were already preprocessed and Salmon pseudocounts are accessible here: /home/d.smirnov/homework4/SalmonOutput
 
-## Count importing
 Import libraries:
 ```{r, results='hide', message=FALSE, warning=FALSE}
 library(dplyr)
@@ -15,11 +14,18 @@ library(tibble)
 library(clusterProfiler)
 ```
 
+## Count table importing
+We will start the analysis with uploading **raw** count data to the R workspace. 
 ```{r}
 data <- read.csv("../../Data.csv", row.names = 1)
 ```
 
-We need a file which maps our samples to the corresponding sample groups that we are investigating. We will use the columns headers from the counts matrix as the row names of our metadata file and have single column to identify each sample.
+The gene expression table has gene names in the rows and samples names in the columns. 'Length' column denotes a length of each annotated gene:
+```{r}
+head(data)
+```
+
+Further we will need a meta table which maps our samples to the corresponding sample groups that we are investigating. Our metadata will include three columns of interest: "Genotype", "Treatment" and "SampleID".
 
 ```{r}
 meta <- colnames(data) %>% .[-c(1)] %>% strsplit(split = '_') %>% as.data.frame() %>% t() 
@@ -28,12 +34,14 @@ colnames(meta) <- c("Genotype", "Treatment", "SampleID")
 meta <- as.data.frame(meta)
 ```
 
+Another important step is a filtering of the low- and non-expressed genes prior statistical analysis. Such genes contributes to the False Discovery Rate. We will keep only those genes having at least 10 counts in total across experimental replicates. 
+
 ```{r}
 data <- data[rowSums(data[,-c(1)]) > 10, ]
 ```
 
 ## DESeq2 object 
-Let’s start by creating the `DESeqDataSet` object. To create the object we will need the count matrix and the metadata table as input. We will also need to specify a design formula. The design formula specifies the column(s) in the metadata table and how they should be used in the analysis. For our dataset we only have one column we are interested in, that is $~genotype$. This column has two factor levels, which tells DESeq2 that for each gene we want to evaluate gene expression change with respect to two different levels.
+Let’s start the main part of the analysis with creating the `DESeqDataSet` object. To create this object we will need the count matrix and the metadata table as input. We will also need to specify a design formula. The design formula specifies the column(s) in the metadata table and how they should be used in the analysis. For our dataset we only have two column we are interested in, that is $\sim Treatment + Genotype$. The $Genotype$ is the main factor of interest, therefore it is in the end of the design formula. 
 
 Create DESeq2Dataset object:
 ```{r}
