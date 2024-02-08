@@ -21,8 +21,8 @@ ego_lps <- enrichGO(gene = sig_lps$gene,
 ```
 
 ```{r}
-barplot(ego_pbs)
-barplot(ego_lps)
+print(barplot(ego_pbs))
+print(barplot(ego_lps))
 ```
 
 ## Pathway analysis
@@ -56,7 +56,7 @@ ups_lps <- upsetplot(ekegg_lps)
 ```
 
 ```{r upset1, cache = TRUE, fig.width = 10, fig.height = 4.5, fig.align = "center"}
-ups_pbs
+print(ups_pbs)
 ```
 
 ```{r upset2, cache = TRUE, fig.width = 10, fig.height = 4.5, fig.align = "center"}
