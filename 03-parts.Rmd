@@ -6,7 +6,9 @@ meta$Factors <- paste(meta$Genotype, meta$Treatment, sep = '_')
 ```
 
 ```{r}
-dds_factors <- DESeqDataSetFromMatrix(countData = round(data[,-c(1)]), colData = meta, design = ~ Factors)
+dds_factors <- DESeqDataSetFromMatrix(countData = round(data[,-c(1)]), 
+                                      colData = meta, 
+                                      design = ~ Factors)
 ```
 
 ```{r}
@@ -30,8 +32,14 @@ res_unshrunken_lps <- results(dds_analysis, contrast=contrast_lps, alpha = 0.05)
 
 To generate more accurate log2 fold change estimates, DESeq2 allows for the shrinkage of the log2 fold changes estimates toward zero when the information for a gene is low.
 ```{r}
-res_pbs <- lfcShrink(dds_analysis, contrast=contrast_pbs, res=res_unshrunken_pbs, type='normal')
-res_lps <- lfcShrink(dds_analysis, contrast=contrast_lps, res=res_unshrunken_lps, type='normal')
+res_pbs <- lfcShrink(dds_analysis, 
+                     contrast=contrast_pbs, 
+                     res=res_unshrunken_pbs, 
+                     type='normal')
+res_lps <- lfcShrink(dds_analysis, 
+                     contrast=contrast_lps, 
+                     res=res_unshrunken_lps, 
+                     type='normal')
 ```
 To illustrate the effect of log2 foldchange shrinkage we will use the MA plot. The MA plot shows the mean of the normalized counts versus the log2 foldchanges for all genes tested. The genes that are significantly DE are colored.
 
@@ -71,8 +79,18 @@ res_lps_tb <- res_lps %>%
 
 Select significant genes:
 ```{r}
-sig_pbs <- res_pbs_tb %>%dplyr::filter(padj < padj.cutoff & abs(log2FoldChange) >= lfc.cutoff)
-sig_lps <- res_lps_tb %>% dplyr::filter(padj < padj.cutoff & abs(log2FoldChange) >= lfc.cutoff)
+sig_pbs <- res_pbs_tb %>% 
+           dplyr::filter(padj < padj.cutoff & abs(log2FoldChange) >= lfc.cutoff)
+sig_lps <- res_lps_tb %>% 
+           dplyr::filter(padj < padj.cutoff & abs(log2FoldChange) >= lfc.cutoff)
+```
+
+```{r}
+knitr::kable(head(sig_pbs))
+```
+
+```{r}
+knitr::kable(head(sig_lps))
 ```
 
 Intriguingly, the number of significant genes is almost twice more in the comparison with LPS compared to PBS-treated data.

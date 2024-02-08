@@ -4,32 +4,32 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Noramlization and Quality control | Omics Data Analysis</title>
+  <title>Chapter 3 Normalization and Quality control | Omics Data Analysis</title>
   <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
   <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 Noramlization and Quality control | Omics Data Analysis" />
+  <meta property="og:title" content="Chapter 3 Normalization and Quality control | Omics Data Analysis" />
   <meta property="og:type" content="book" />
-  
+  <meta property="og:image" content="/docs/images/course_logo_v2.png" />
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Noramlization and Quality control | Omics Data Analysis" />
+  <meta name="twitter:title" content="Chapter 3 Normalization and Quality control | Omics Data Analysis" />
   
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
-  
+  <meta name="twitter:image" content="/docs/images/course_logo_v2.png" />
 
 <meta name="author" content="Dmitrii Smirnov" />
 
 
-<meta name="date" content="2024-02-07" />
+<meta name="date" content="2024-02-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -58,6 +58,8 @@ set in the _output.yml file.</p>" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
 <style type="text/css">
@@ -143,7 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Omics Data Analysis course</a></li>
+<li class="toc-logo"><a href="./"><img src="images/course_logo_v2.png"></a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
@@ -157,14 +159,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-table-importing"><i class="fa fa-check"></i><b>2.1</b> Count table importing</a></li>
 <li class="chapter" data-level="2.2" data-path="input-dataset.html"><a href="input-dataset.html#deseq2-object"><i class="fa fa-check"></i><b>2.2</b> DESeq2 object</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Noramlization and Quality control</a>
+<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Normalization and Quality control</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="cross.html"><a href="cross.html#normalization"><i class="fa fa-check"></i><b>3.1</b> Normalization</a></li>
 <li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#quality-control"><i class="fa fa-check"></i><b>3.2</b> Quality control</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2.1</b> Principal Component Analysis (PCA)</a></li>
+<li class="chapter" data-level="3.2.2" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.2.2</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.3</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a></li>
 <li class="chapter" data-level="5" data-path="gene-annotation.html"><a href="gene-annotation.html"><i class="fa fa-check"></i><b>5</b> Gene annotation</a></li>
@@ -175,8 +177,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7" data-path="functional-analysis.html"><a href="functional-analysis.html"><i class="fa fa-check"></i><b>7</b> Functional analysis</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-ontology-go-analysis"><i class="fa fa-check"></i><b>7.1</b> Gene Ontology (GO) analysis</a></li>
-<li class="chapter" data-level="7.2" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-set-enrichment-analysis-gsea"><i class="fa fa-check"></i><b>7.2</b> Gene-Set Enrichment Analysis (GSEA)</a></li>
-<li class="chapter" data-level="7.3" data-path="functional-analysis.html"><a href="functional-analysis.html#pathway-analysis"><i class="fa fa-check"></i><b>7.3</b> Pathway analysis</a></li>
+<li class="chapter" data-level="7.2" data-path="functional-analysis.html"><a href="functional-analysis.html#pathway-analysis"><i class="fa fa-check"></i><b>7.2</b> Pathway analysis</a></li>
+<li class="chapter" data-level="7.3" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-set-enrichment-analysis-gsea"><i class="fa fa-check"></i><b>7.3</b> Gene-Set Enrichment Analysis (GSEA)</a></li>
 <li class="chapter" data-level="7.4" data-path="functional-analysis.html"><a href="functional-analysis.html#msigdb-enrichment-analysis"><i class="fa fa-check"></i><b>7.4</b> mSigDb enrichment analysis</a></li>
 </ul></li>
 <li class="part"><span><b>Lecture 9: Transcriptome</b></span></li>
@@ -205,7 +207,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="cross" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">Chapter 3</span> Noramlization and Quality control<a href="cross.html#cross" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<h1><span class="header-section-number">Chapter 3</span> Normalization and Quality control<a href="cross.html#cross" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="normalization" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Normalization<a href="cross.html#normalization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The next step is to normalize the count data in order to be able to make fair gene comparisons between samples.</p>
@@ -271,9 +273,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="_main_files/figure-html/pca-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>By default the function <code>plotPCA.custom</code> uses the top 500 most variable genes. You can change this by adding the ntop argument and specifying how many genes you want to use to draw the plot.</p>
 </div>
-</div>
-<div id="correlation-heatmap-pca" class="section level2 hasAnchor" number="3.3">
-<h2><span class="header-section-number">3.3</span> Correlation Heatmap (PCA)<a href="cross.html#correlation-heatmap-pca" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="correlation-heatmap-pca" class="section level3 hasAnchor" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Correlation Heatmap (PCA)<a href="cross.html#correlation-heatmap-pca" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The heatmap displays the correlation of gene expression for all pairwise combinations of samples in the dataset. Since the majority of genes are not differentially expressed, samples generally have high correlations with each other (values higher than 0.80). Samples below 0.80 may indicate an outlier in your data and/or sample contamination.</p>
 <p>Extract the rlog matrix from the object:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="cross.html#cb19-1" tabindex="-1"></a>rld_mat <span class="ot">&lt;-</span> <span class="fu">assay</span>(rld)</span></code></pre></div>
@@ -284,6 +285,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="cross.html#cb21-1" tabindex="-1"></a><span class="fu">pheatmap</span>(rld_cor, <span class="at">annotation =</span> meta[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])</span></code></pre></div>
 <p><img src="_main_files/figure-html/heatmap1-1.png" width="576" style="display: block; margin: auto;" /></p>
 
+</div>
 </div>
 </div>
             </section>

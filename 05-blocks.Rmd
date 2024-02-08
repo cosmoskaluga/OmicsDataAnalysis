@@ -7,23 +7,25 @@ library(EnhancedVolcano)
 ```
 
 ```{r volcano, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
-EnhancedVolcano(ad.df,
-        lab = ad.df$SYMBOL, 
+EnhancedVolcano(res_pbs_tb,
+        lab = res_pbs_tb$SYMBOL, 
         x = 'log2FoldChange',
         y = 'padj', 
         title = 'KO vs Control, PBS',
         subtitle = NULL,
         pCutoff = 0.05, 
         FCcutoff = 0.58)
+
+EnhancedVolcano(res_lps_tb,
+        lab = res_lps_tb$SYMBOL, 
+        x = 'log2FoldChange',
+        y = 'padj', 
+        title = 'KO vs Control, LPS',
+        subtitle = NULL,
+        pCutoff = 0.05, 
+        FCcutoff = 0.58)
 ```
 
-```{r}
-
-```
-
-```{r}
-
-```
 
 
 

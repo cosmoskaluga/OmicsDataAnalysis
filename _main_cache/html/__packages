@@ -19,3 +19,5 @@ org.Mm.eg.db
 ggrepel
 EnhancedVolcano
 msigdbr
+reactable
+enrichplot

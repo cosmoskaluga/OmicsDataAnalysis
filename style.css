@@ -108,3 +108,20 @@ div.rstudio-tip, div.tip, div.gotcha, div.design, div.hat{
 div.design {
   background-image: url("images/Question_mark.png");
 }
+
+/*--- LOGO ---*/
+.toc-logo {
+  width: 200px !important;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.toc-logo img {
+  max-width: 100%;
+  margin-bottom: 10px;
+}
+
+.summary > li:first-child {
+  height: auto !important; 
+}
+

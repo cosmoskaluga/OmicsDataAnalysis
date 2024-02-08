@@ -15,8 +15,8 @@ visualization
 volcano-plot
 functional-analysis
 gene-ontology-go-analysis
-gene-set-enrichment-analysis-gsea
 pathway-analysis
+gene-set-enrichment-analysis-gsea
 msigdb-enrichment-analysis
 transcriptome-de-novo-assembly
 lipidomics-data-analysis

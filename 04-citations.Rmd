@@ -1,8 +1,14 @@
-# Gene annotation 
+# Gene annotation
 
-```{r}
+Gene features in both input and DE tables are represented with their ENSEMBL identifiers, but it would be also useful to obtain an information about corresponding gene names, ENTREZ IDs and other types of description.
+
+To perform Gene ID conversion we will use mouse genome annotation from `org.Mm.eg.db` package
+
+```{r, results='hide', message=FALSE, warning=FALSE}
 library(org.Mm.eg.db)
 ```
+
+Use `select()` function to convert ENSEMBL IDs to gene names ("SYMBOL") and Entrez identifiers ("ENTREZID")
 
 ```{r}
 mm <- org.Mm.eg.db
@@ -13,10 +19,46 @@ map <- select(mm,
               keytype = "ENSEMBL")
 ```
 
-```{r}
-ad.df <- left_join(res_pbs_tb, map, by = c("gene" = "ENSEMBL"))
-```
+You could also notice warning `'select()' returned 1:many mapping between keys and columns`, meaning that some genes have non-unique mapping between IDs. For example, Zfp969 genes has multiple ENSEMBL annotations:
 
 ```{r}
-ad.df <- ad.df[!duplicated(ad.df$gene),]
+filter(map, SYMBOL == 'Zfp969')$ENSEMBL
+```
+
+In addition, ENSMUSG00000078898 was also mapped to multiple gene names:
+
+```{r}
+filter(map, ENSEMBL == 'ENSMUSG00000078898')$SYMBOL
+```
+
+First, we will combine DE result tables with the obtained gene annotation:
+
+```{r}
+res_pbs_tb <- left_join(res_pbs_tb, map, by = c("gene" = "ENSEMBL"))
+res_lps_tb <- left_join(res_lps_tb, map, by = c("gene" = "ENSEMBL"))
+```
+
+Now DESeq2 output tables have two additional columns:
+
+```{r}
+paged_table(head(res_pbs_tb))
+```
+
+Next, we will get rid of duplicated ENSEMBL IDs:
+```{r}
+res_pbs_tb <- res_pbs_tb[!duplicated(res_pbs_tb$gene),]
+res_lps_tb <- res_lps_tb[!duplicated(res_lps_tb$gene),]
+```
+
+Check if the number of genes in the output tables for both comparisons is equal:
+
+```{r}
+nrow(res_pbs_tb) == nrow(res_lps_tb)
+```
+
+Finally, get the annotation only for the differentially expressed genes:
+
+```{r}
+sig_pbs <- res_pbs_tb %>% filter(gene %in% sig_pbs$gene)
+sig_lps <- res_lps_tb %>% filter(gene %in% sig_lps$gene)
 ```

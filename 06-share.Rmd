@@ -3,17 +3,123 @@
 
 ## Gene Ontology (GO) analysis
 ```{r}
+ego_pbs <- enrichGO(gene = sig_pbs$gene,
+                                universe = res_pbs_tb$gene, 
+                                keyType = "ENSEMBL",
+                                OrgDb = org.Mm.eg.db, 
+                                ont = "BP",
+                                pAdjustMethod = "BH", 
+                                pvalueCutoff = 0.05)
 
+ego_lps <- enrichGO(gene = sig_lps$gene,
+                                universe = res_lps_tb$gene, 
+                                keyType = "ENSEMBL",
+                                OrgDb = org.Mm.eg.db, 
+                                ont = "BP",
+                                pAdjustMethod = "BH", 
+                                pvalueCutoff = 0.05)
 ```
 
-## Gene-Set Enrichment Analysis (GSEA)
 ```{r}
-
+barplot(ego_pbs)
+barplot(ego_lps)
 ```
 
 ## Pathway analysis
-```{r}
 
+```{r}
+ekegg_pbs <- enrichKEGG(gene = na.omit(sig_pbs$ENTREZID),
+                    organism = 'mmu',
+                    pvalueCutoff = 0.05,
+                    universe=na.omit(res_pbs_tb$ENTREZID))
+
+ekegg_lps <- enrichKEGG(gene = na.omit(sig_lps$ENTREZID),
+                    organism = 'mmu',
+                    pvalueCutoff = 0.05,
+                    universe=na.omit(res_lps_tb$ENTREZID))
+```
+
+
+```{r}
+library(enrichplot)
+```
+
+
+```{r}
+ekegg_pbs@result$Description <- sub(" - Mus musculus .(house mouse).", "", ekegg_pbs@result$Description)
+ekegg_lps@result$Description <- sub(" - Mus musculus .(house mouse).", "", ekegg_lps@result$Description)
+```
+
+```{r}
+ups_pbs <- upsetplot(ekegg_pbs)
+ups_lps <- upsetplot(ekegg_lps)
+```
+
+```{r upset1, cache = TRUE, fig.width = 10, fig.height = 4.5, fig.align = "center"}
+ups_pbs
+```
+
+```{r upset2, cache = TRUE, fig.width = 10, fig.height = 4.5, fig.align = "center"}
+ups_lps
+```
+
+## Gene-Set Enrichment Analysis (GSEA)
+
+```{r}
+pbs_filtered <- filter(res_pbs_tb, ENTREZID != "NA")
+lps_filtered <- filter(res_lps_tb, ENTREZID != "NA")
+```
+
+```{r}
+foldchanges.pbs <- pbs_filtered$log2FoldChange
+names(foldchanges.pbs) <- as.character(pbs_filtered$ENTREZID)
+
+foldchanges.lps <- lps_filtered$log2FoldChange
+names(foldchanges.lps) <- as.character(lps_filtered$ENTREZID)
+```
+
+```{r}
+foldchanges.pbs <- sort(foldchanges.pbs, decreasing = TRUE)
+foldchanges.lps <- sort(foldchanges.lps, decreasing = TRUE)
+```
+
+```{r}
+gseaKEGG.pbs <- gseKEGG(geneList = foldchanges.pbs,              
+                    pAdjustMethod = "fdr",
+                    organism = "mmu", 
+                    nPerm = 2000, 
+                    minGSSize = 10, 
+                    pvalueCutoff = 0.05, 
+                    verbose = FALSE, 
+                    seed = TRUE)
+
+
+gseaKEGG.lps <- gseKEGG(geneList = foldchanges.lps,              
+                    pAdjustMethod = "fdr",
+                    organism = "mmu", 
+                    nPerm = 2000, 
+                    minGSSize = 10, 
+                    pvalueCutoff = 0.05, 
+                    verbose = FALSE, 
+                    seed = TRUE)
+```
+```{r}
+gseaKEGG.pbs@result$Description <- sub(" - Mus musculus .(house mouse).", "", gseaKEGG.pbs@result$Description)
+gseaKEGG.lps@result$Description <- sub(" - Mus musculus .(house mouse).", "", gseaKEGG.lps@result$Description)
+```
+
+
+```{r}
+paged_table(gseaKEGG.pbs@result)
+```
+
+```{r}
+paged_table(gseaKEGG.lps@result)
+```
+
+```{r gseaplot2, cache = TRUE, fig.width = 9.5, fig.height = 5.5, fig.align = "center"}
+gseaplot2(gseaKEGG.pbs, geneSetID = c(15, 23, 29), pvalue_table = TRUE,
+          color = c("#E495A5", "#86B875", "#7DB0DD"), ES_geom = "dot")
 ```
 
 ## mSigDb enrichment analysis
@@ -33,6 +139,11 @@ msig_h <- msigdbr(species = "mouse", category = "H")
 msigdbr_t2g <- msig_h %>%
   dplyr::distinct(gs_name, ensembl_gene) %>%
   as.data.frame()
+```
+
+```{r}
+hallmarks.pbs <- enricher(gene = sig_pbs$gene, TERM2GENE = msigdbr_t2g)
+hallmarks.lps <- enricher(gene = sig_lps$gene, TERM2GENE = msigdbr_t2g)
 ```
 
 ```{r hallmarks_pbs, cache = TRUE, fig.width = 7, fig.height = 5.5, fig.align = "center"}

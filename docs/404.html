@@ -12,7 +12,7 @@ set in the _output.yml file.</p>" />
 
   <meta property="og:title" content="Page not found | Omics Data Analysis" />
   <meta property="og:type" content="book" />
-  
+  <meta property="og:image" content="/docs/images/course_logo_v2.png" />
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
@@ -24,12 +24,12 @@ set in the _output.yml file.</p>" />
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
-  
+  <meta name="twitter:image" content="/docs/images/course_logo_v2.png" />
 
 <meta name="author" content="Dmitrii Smirnov" />
 
 
-<meta name="date" content="2024-02-07" />
+<meta name="date" content="2024-02-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -58,6 +58,8 @@ set in the _output.yml file.</p>" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
 <style type="text/css">
@@ -143,7 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Omics Data Analysis course</a></li>
+<li class="toc-logo"><a href="./"><img src="images/course_logo_v2.png"></a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
@@ -157,14 +159,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-table-importing"><i class="fa fa-check"></i><b>2.1</b> Count table importing</a></li>
 <li class="chapter" data-level="2.2" data-path="input-dataset.html"><a href="input-dataset.html#deseq2-object"><i class="fa fa-check"></i><b>2.2</b> DESeq2 object</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Noramlization and Quality control</a>
+<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Normalization and Quality control</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="cross.html"><a href="cross.html#normalization"><i class="fa fa-check"></i><b>3.1</b> Normalization</a></li>
 <li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#quality-control"><i class="fa fa-check"></i><b>3.2</b> Quality control</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2.1</b> Principal Component Analysis (PCA)</a></li>
+<li class="chapter" data-level="3.2.2" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.2.2</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.3</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a></li>
 <li class="chapter" data-level="5" data-path="gene-annotation.html"><a href="gene-annotation.html"><i class="fa fa-check"></i><b>5</b> Gene annotation</a></li>
@@ -175,8 +177,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7" data-path="functional-analysis.html"><a href="functional-analysis.html"><i class="fa fa-check"></i><b>7</b> Functional analysis</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-ontology-go-analysis"><i class="fa fa-check"></i><b>7.1</b> Gene Ontology (GO) analysis</a></li>
-<li class="chapter" data-level="7.2" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-set-enrichment-analysis-gsea"><i class="fa fa-check"></i><b>7.2</b> Gene-Set Enrichment Analysis (GSEA)</a></li>
-<li class="chapter" data-level="7.3" data-path="functional-analysis.html"><a href="functional-analysis.html#pathway-analysis"><i class="fa fa-check"></i><b>7.3</b> Pathway analysis</a></li>
+<li class="chapter" data-level="7.2" data-path="functional-analysis.html"><a href="functional-analysis.html#pathway-analysis"><i class="fa fa-check"></i><b>7.2</b> Pathway analysis</a></li>
+<li class="chapter" data-level="7.3" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-set-enrichment-analysis-gsea"><i class="fa fa-check"></i><b>7.3</b> Gene-Set Enrichment Analysis (GSEA)</a></li>
 <li class="chapter" data-level="7.4" data-path="functional-analysis.html"><a href="functional-analysis.html#msigdb-enrichment-analysis"><i class="fa fa-check"></i><b>7.4</b> mSigDb enrichment analysis</a></li>
 </ul></li>
 <li class="part"><span><b>Lecture 9: Transcriptome</b></span></li>
