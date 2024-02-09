@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Dmitrii Smirnov" />
 
 
-<meta name="date" content="2024-02-08" />
+<meta name="date" content="2024-02-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -145,7 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="toc-logo"><a href="./"><img src="images/course_logo_v2.png"></a></li>
+<li class="toc-logo"><a href="./"><img src="images/Logo.png"></a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
@@ -168,11 +168,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2.2" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.2.2</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a></li>
+<li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="differential-testing.html"><a href="differential-testing.html#de-analysis"><i class="fa fa-check"></i><b>4.1</b> DE analysis</a></li>
+<li class="chapter" data-level="4.2" data-path="differential-testing.html"><a href="differential-testing.html#extracting-significant-genes"><i class="fa fa-check"></i><b>4.2</b> Extracting significant genes</a></li>
+<li class="chapter" data-level="4.3" data-path="differential-testing.html"><a href="differential-testing.html#comparison-with-dam-markers"><i class="fa fa-check"></i><b>4.3</b> Comparison with DAM markers</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="gene-annotation.html"><a href="gene-annotation.html"><i class="fa fa-check"></i><b>5</b> Gene annotation</a></li>
 <li class="chapter" data-level="6" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>6</b> Visualization</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="visualization.html"><a href="visualization.html#volcano-plot"><i class="fa fa-check"></i><b>6.1</b> Volcano plot</a></li>
+<li class="chapter" data-level="6.2" data-path="visualization.html"><a href="visualization.html#heatmap-of-significant-genes"><i class="fa fa-check"></i><b>6.2</b> Heatmap of significant genes</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="functional-analysis.html"><a href="functional-analysis.html"><i class="fa fa-check"></i><b>7</b> Functional analysis</a>
 <ul>
@@ -208,27 +214,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="visualization" class="section level1 hasAnchor" number="6">
 <h1><span class="header-section-number">Chapter 6</span> Visualization<a href="visualization.html#visualization" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Once we obtained the lists of differentially expressed genes for each condition, it would be good to make sense of them. This chapter is devoted to the visual representation of DE results, that greatly helps with results interpretation.</p>
 <div id="volcano-plot" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> Volcano plot<a href="visualization.html#volcano-plot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="visualization.html#cb67-1" tabindex="-1"></a><span class="fu">library</span>(EnhancedVolcano)</span></code></pre></div>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="visualization.html#cb68-1" tabindex="-1"></a><span class="fu">EnhancedVolcano</span>(res_pbs_tb,</span>
-<span id="cb68-2"><a href="visualization.html#cb68-2" tabindex="-1"></a>        <span class="at">lab =</span> res_pbs_tb<span class="sc">$</span>SYMBOL, </span>
-<span id="cb68-3"><a href="visualization.html#cb68-3" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&#39;log2FoldChange&#39;</span>,</span>
-<span id="cb68-4"><a href="visualization.html#cb68-4" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">&#39;padj&#39;</span>, </span>
-<span id="cb68-5"><a href="visualization.html#cb68-5" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&#39;KO vs Control, PBS&#39;</span>,</span>
-<span id="cb68-6"><a href="visualization.html#cb68-6" tabindex="-1"></a>        <span class="at">subtitle =</span> <span class="cn">NULL</span>,</span>
-<span id="cb68-7"><a href="visualization.html#cb68-7" tabindex="-1"></a>        <span class="at">pCutoff =</span> <span class="fl">0.05</span>, </span>
-<span id="cb68-8"><a href="visualization.html#cb68-8" tabindex="-1"></a>        <span class="at">FCcutoff =</span> <span class="fl">0.58</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/volcano-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="visualization.html#cb69-1" tabindex="-1"></a><span class="fu">EnhancedVolcano</span>(res_lps_tb,</span>
-<span id="cb69-2"><a href="visualization.html#cb69-2" tabindex="-1"></a>        <span class="at">lab =</span> res_lps_tb<span class="sc">$</span>SYMBOL, </span>
-<span id="cb69-3"><a href="visualization.html#cb69-3" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&#39;log2FoldChange&#39;</span>,</span>
-<span id="cb69-4"><a href="visualization.html#cb69-4" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">&#39;padj&#39;</span>, </span>
-<span id="cb69-5"><a href="visualization.html#cb69-5" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&#39;KO vs Control, LPS&#39;</span>,</span>
-<span id="cb69-6"><a href="visualization.html#cb69-6" tabindex="-1"></a>        <span class="at">subtitle =</span> <span class="cn">NULL</span>,</span>
-<span id="cb69-7"><a href="visualization.html#cb69-7" tabindex="-1"></a>        <span class="at">pCutoff =</span> <span class="fl">0.05</span>, </span>
-<span id="cb69-8"><a href="visualization.html#cb69-8" tabindex="-1"></a>        <span class="at">FCcutoff =</span> <span class="fl">0.58</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/volcano-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p>The most standard way to visualize the obtained gene expression changes is volcano plot. This plot shows the direction of gene expression changes (up- or down-regulated) and also highlight the top DE genes.</p>
+<p>We will utilize <code>EnhancedVolcano</code> library:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="visualization.html#cb69-1" tabindex="-1"></a><span class="fu">library</span>(EnhancedVolcano)</span></code></pre></div>
+<p>The volcano plot requires the information about gene log2(Fold Changes) for X-axis and corresponding adjusted p-values, plotted in Y-axis. In addition, you may specify the column in the DE table that can be used for gene annotation in the plot.</p>
+<p>Code below will execute <code>EnhancedVolcano()</code> function:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="visualization.html#cb70-1" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">EnhancedVolcano</span>(res_pbs_tb,</span>
+<span id="cb70-2"><a href="visualization.html#cb70-2" tabindex="-1"></a>        <span class="at">lab =</span> res_pbs_tb<span class="sc">$</span>SYMBOL, </span>
+<span id="cb70-3"><a href="visualization.html#cb70-3" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&#39;log2FoldChange&#39;</span>,</span>
+<span id="cb70-4"><a href="visualization.html#cb70-4" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">&#39;padj&#39;</span>, </span>
+<span id="cb70-5"><a href="visualization.html#cb70-5" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&#39;KO vs Control, PBS&#39;</span>,</span>
+<span id="cb70-6"><a href="visualization.html#cb70-6" tabindex="-1"></a>        <span class="at">subtitle =</span> <span class="cn">NULL</span>,</span>
+<span id="cb70-7"><a href="visualization.html#cb70-7" tabindex="-1"></a>        <span class="at">pCutoff =</span> <span class="fl">0.05</span>, </span>
+<span id="cb70-8"><a href="visualization.html#cb70-8" tabindex="-1"></a>        <span class="at">FCcutoff =</span> <span class="fl">0.58</span>)</span>
+<span id="cb70-9"><a href="visualization.html#cb70-9" tabindex="-1"></a></span>
+<span id="cb70-10"><a href="visualization.html#cb70-10" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">EnhancedVolcano</span>(res_lps_tb,</span>
+<span id="cb70-11"><a href="visualization.html#cb70-11" tabindex="-1"></a>        <span class="at">lab =</span> res_lps_tb<span class="sc">$</span>SYMBOL, </span>
+<span id="cb70-12"><a href="visualization.html#cb70-12" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&#39;log2FoldChange&#39;</span>,</span>
+<span id="cb70-13"><a href="visualization.html#cb70-13" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">&#39;padj&#39;</span>, </span>
+<span id="cb70-14"><a href="visualization.html#cb70-14" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&#39;KO vs Control, LPS&#39;</span>,</span>
+<span id="cb70-15"><a href="visualization.html#cb70-15" tabindex="-1"></a>        <span class="at">subtitle =</span> <span class="cn">NULL</span>,</span>
+<span id="cb70-16"><a href="visualization.html#cb70-16" tabindex="-1"></a>        <span class="at">pCutoff =</span> <span class="fl">0.05</span>, </span>
+<span id="cb70-17"><a href="visualization.html#cb70-17" tabindex="-1"></a>        <span class="at">FCcutoff =</span> <span class="fl">0.58</span>)</span>
+<span id="cb70-18"><a href="visualization.html#cb70-18" tabindex="-1"></a></span>
+<span id="cb70-19"><a href="visualization.html#cb70-19" tabindex="-1"></a>cowplot<span class="sc">::</span><span class="fu">plot_grid</span>(p1, p2, <span class="at">nrow =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/volcano-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="heatmap-of-significant-genes" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Heatmap of significant genes<a href="visualization.html#heatmap-of-significant-genes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Another way to visualize DE genes and their changes in expression is using heatmap
+We also will extract the normalized values of all the significant genes and plot a heatmap of their expression using <code>pheatmap()</code> function:</p>
+<p>Convert normalized_counts to a data frame and transfer the row names to a new column called “gene”</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="visualization.html#cb71-1" tabindex="-1"></a>normalized_counts <span class="ot">&lt;-</span> <span class="fu">counts</span>(dds_analysis, <span class="at">normalized =</span> T) <span class="sc">%&gt;%</span></span>
+<span id="cb71-2"><a href="visualization.html#cb71-2" tabindex="-1"></a>                <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb71-3"><a href="visualization.html#cb71-3" tabindex="-1"></a>                <span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">&quot;gene&quot;</span>)</span></code></pre></div>
+<p>Extract normalized expression for significant genes:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="visualization.html#cb72-1" tabindex="-1"></a>norm_sig_pbs <span class="ot">&lt;-</span> normalized_counts <span class="sc">%&gt;%</span></span>
+<span id="cb72-2"><a href="visualization.html#cb72-2" tabindex="-1"></a>                <span class="fu">filter</span>(gene <span class="sc">%in%</span> sig_pbs<span class="sc">$</span>gene) <span class="sc">%&gt;%</span> <span class="fu">column_to_rownames</span>(<span class="st">&#39;gene&#39;</span>)</span>
+<span id="cb72-3"><a href="visualization.html#cb72-3" tabindex="-1"></a></span>
+<span id="cb72-4"><a href="visualization.html#cb72-4" tabindex="-1"></a>norm_sig_lps <span class="ot">&lt;-</span> normalized_counts <span class="sc">%&gt;%</span></span>
+<span id="cb72-5"><a href="visualization.html#cb72-5" tabindex="-1"></a>                <span class="fu">filter</span>(gene <span class="sc">%in%</span> sig_lps<span class="sc">$</span>gene) <span class="sc">%&gt;%</span> <span class="fu">column_to_rownames</span>(<span class="st">&#39;gene&#39;</span>)</span></code></pre></div>
+<p>Plot the heatmap:</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="visualization.html#cb73-1" tabindex="-1"></a><span class="fu">pheatmap</span>(norm_sig_pbs, </span>
+<span id="cb73-2"><a href="visualization.html#cb73-2" tabindex="-1"></a>                <span class="at">cluster_rows =</span> T,</span>
+<span id="cb73-3"><a href="visualization.html#cb73-3" tabindex="-1"></a>                <span class="at">show_rownames =</span> F,</span>
+<span id="cb73-4"><a href="visualization.html#cb73-4" tabindex="-1"></a>                <span class="at">annotation =</span> meta[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)],</span>
+<span id="cb73-5"><a href="visualization.html#cb73-5" tabindex="-1"></a>                <span class="at">border_color =</span> <span class="cn">NA</span>,</span>
+<span id="cb73-6"><a href="visualization.html#cb73-6" tabindex="-1"></a>                <span class="at">fontsize =</span> <span class="dv">10</span>,</span>
+<span id="cb73-7"><a href="visualization.html#cb73-7" tabindex="-1"></a>                <span class="at">scale =</span> <span class="st">&quot;row&quot;</span>,</span>
+<span id="cb73-8"><a href="visualization.html#cb73-8" tabindex="-1"></a>                <span class="at">fontsize_row =</span> <span class="dv">10</span>,</span>
+<span id="cb73-9"><a href="visualization.html#cb73-9" tabindex="-1"></a>                <span class="at">height =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/pheatmap-1.png" width="480" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

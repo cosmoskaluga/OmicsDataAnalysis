@@ -1,9 +1,12 @@
 # Differential testing
-All the steps of differential expression analysis can be done with a single call of the function `DESeq()`.
+
+Before the differential expression analysis we will combine $Genotype$ and $Treatment$ factors into one column, to create four groups for the design formula:
 
 ```{r}
 meta$Factors <- paste(meta$Genotype, meta$Treatment, sep = '_')
 ```
+
+Now re-create the DESeqDataSet object, but this time with a design formula consisting of $~Factors$:
 
 ```{r}
 dds_factors <- DESeqDataSetFromMatrix(countData = round(data[,-c(1)]), 
@@ -11,26 +14,36 @@ dds_factors <- DESeqDataSetFromMatrix(countData = round(data[,-c(1)]),
                                       design = ~ Factors)
 ```
 
+## DE analysis
+
+All the steps of differential expression analysis can be done with a single call of the function `DESeq()`:
+
 ```{r}
 dds_analysis <- DESeq(dds_factors)
 ```
-Plot dispertion estimates:
+
+Plot dispersion estimates:
+
 ```{r dispest, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
 plotDispEsts(dds_analysis)
 ```
+
 To tell DESeq2 which groups we wish to compare, we supply the contrasts we would like to make using the contrast argument.
+
 ```{r}
 contrast_pbs <- c("Factors", "KO_PBS", "Control_PBS")
 contrast_lps <- c("Factors", "KO_LPS", "Control_LPS")
 ```
 
-To build our results table we will use the results() function. 
+To build our results table we will use the results() function.
+
 ```{r}
 res_unshrunken_pbs <- results(dds_analysis, contrast=contrast_pbs, alpha = 0.05)
 res_unshrunken_lps <- results(dds_analysis, contrast=contrast_lps, alpha = 0.05)
 ```
 
 To generate more accurate log2 fold change estimates, DESeq2 allows for the shrinkage of the log2 fold changes estimates toward zero when the information for a gene is low.
+
 ```{r}
 res_pbs <- lfcShrink(dds_analysis, 
                      contrast=contrast_pbs, 
@@ -41,17 +54,19 @@ res_lps <- lfcShrink(dds_analysis,
                      res=res_unshrunken_lps, 
                      type='normal')
 ```
+
 To illustrate the effect of log2 foldchange shrinkage we will use the MA plot. The MA plot shows the mean of the normalized counts versus the log2 foldchanges for all genes tested. The genes that are significantly DE are colored.
 
 ```{r ma_shrunken, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
 plotMA(res_pbs, ylim=c(-3,5))
 ```
 
-:::design
+::: design
 **Task 1**: Plot the unshrunken results and save the plot as pdf. Are there any differences between unshrunken and shrunken results? Provide a brief explanation.
 :::
 
 Check the results summary for PBS and LPS comparisons:
+
 ```{r}
 summary(res_pbs, alpha = 0.05)
 ```
@@ -59,13 +74,18 @@ summary(res_pbs, alpha = 0.05)
 ```{r}
 summary(res_lps, alpha = 0.05)
 ```
-Now we are ready to extract significant differentially expressed genes. We will define significant genes as those satisfying the |FDR p-value < 0.05| and |log2(Fold Change)| > 0.58:
+
+Now we are ready to extract significant differentially expressed genes. We will define significant genes as those satisfying the \|FDR p-value \< 0.05\| and \|log2(Fold Change)\| \> 0.58:
+
+## Extracting significant genes
+
 ```{r}
 padj.cutoff <- 0.05
 lfc.cutoff <- 0.58
 ```
 
 Convert the results table into a tibble:
+
 ```{r}
 res_pbs_tb <- res_pbs %>% 
               data.frame() %>% 
@@ -78,6 +98,7 @@ res_lps_tb <- res_lps %>%
 ```
 
 Select significant genes:
+
 ```{r}
 sig_pbs <- res_pbs_tb %>% 
            dplyr::filter(padj < padj.cutoff & abs(log2FoldChange) >= lfc.cutoff)
@@ -94,7 +115,16 @@ knitr::kable(head(sig_lps))
 ```
 
 Intriguingly, the number of significant genes is almost twice more in the comparison with LPS compared to PBS-treated data.
+
 ```{r}
 nrow(sig_pbs)
 nrow(sig_lps)
 ```
+
+## Comparison with DAM markers
+
+<img src="docs/images/DAM.jpg"/> **Figure 2**:
+
+::: design
+**Task 2**: Analyze changes in expression of DAM marker genes in the both PBS and LPS comparisons.
+:::

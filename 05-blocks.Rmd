@@ -1,13 +1,23 @@
 # Visualization
 
+Once we obtained the lists of differentially expressed genes for each condition, it would be good to make sense of them. This chapter is devoted to the visual representation of DE results, that greatly helps with results interpretation.
+
 ## Volcano plot
 
-```{r}
+The most standard way to visualize the obtained gene expression changes is volcano plot. This plot shows the direction of gene expression changes (up- or down-regulated) and also highlight the top DE genes.
+
+We will utilize `EnhancedVolcano` library:
+
+```{r, results='hide', message=FALSE, warning=FALSE}
 library(EnhancedVolcano)
 ```
 
-```{r volcano, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
-EnhancedVolcano(res_pbs_tb,
+The volcano plot requires the information about gene log2(Fold Changes) for X-axis and corresponding adjusted p-values, plotted in Y-axis. In addition, you may specify the column in the DE table that can be used for gene annotation in the plot.
+
+Code below will execute `EnhancedVolcano()` function:
+
+```{r volcano, cache = TRUE, fig.width = 10, fig.height = 5.5, fig.align = "center"}
+p1 <- EnhancedVolcano(res_pbs_tb,
         lab = res_pbs_tb$SYMBOL, 
         x = 'log2FoldChange',
         y = 'padj', 
@@ -16,7 +26,7 @@ EnhancedVolcano(res_pbs_tb,
         pCutoff = 0.05, 
         FCcutoff = 0.58)
 
-EnhancedVolcano(res_lps_tb,
+p2 <- EnhancedVolcano(res_lps_tb,
         lab = res_lps_tb$SYMBOL, 
         x = 'log2FoldChange',
         y = 'padj', 
@@ -24,8 +34,41 @@ EnhancedVolcano(res_lps_tb,
         subtitle = NULL,
         pCutoff = 0.05, 
         FCcutoff = 0.58)
+
+cowplot::plot_grid(p1, p2, nrow = 1)
 ```
 
+## Heatmap of significant genes
 
+Another way to visualize DE genes and their changes in expression is using heatmap 
+We also will extract the normalized values of all the significant genes and plot a heatmap of their expression using `pheatmap()` function:
 
+Convert normalized_counts to a data frame and transfer the row names to a new column called "gene"
+```{r}
+normalized_counts <- counts(dds_analysis, normalized = T) %>%
+                data.frame() %>%
+                rownames_to_column(var="gene")
+```
+
+Extract normalized expression for significant genes:
+```{r}
+norm_sig_pbs <- normalized_counts %>%
+                filter(gene %in% sig_pbs$gene) %>% column_to_rownames('gene')
+
+norm_sig_lps <- normalized_counts %>%
+                filter(gene %in% sig_lps$gene) %>% column_to_rownames('gene')
+```
+
+Plot the heatmap:
+```{r pheatmap, cache = TRUE, fig.width = 5, fig.height = 7, fig.align = "center"}
+pheatmap(norm_sig_pbs, 
+                cluster_rows = T,
+                show_rownames = F,
+                annotation = meta[,c(1,2)],
+                border_color = NA,
+                fontsize = 10,
+                scale = "row",
+                fontsize_row = 10,
+                height = 10)
+```
 

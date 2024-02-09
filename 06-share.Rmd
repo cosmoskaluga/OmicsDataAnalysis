@@ -1,7 +1,13 @@
 # Functional analysis
 
+The main idea of the functional analysis is to connect observed changes in gene expression with associated altered cellular pathways and biological functions. Below we will try the most well-known methods allowing to gain some insight into biological interpretation of the obtained DE results.
 
 ## Gene Ontology (GO) analysis
+
+Gene Ontology analysis is probably the most popular and widely-used method.
+
+A one-sided Fisher's exact test (or hypergeometric test) is typically used for over-representation analysis:
+
 ```{r}
 ego_pbs <- enrichGO(gene = sig_pbs$gene,
                                 universe = res_pbs_tb$gene, 
@@ -20,9 +26,8 @@ ego_lps <- enrichGO(gene = sig_lps$gene,
                                 pvalueCutoff = 0.05)
 ```
 
-```{r}
-print(barplot(ego_pbs))
-print(barplot(ego_lps))
+```{r go_bp, cache = TRUE, fig.width = 10, fig.height = 4.5, fig.align = "center"}
+cowplot::plot_grid(barplot(ego_pbs), barplot(ego_lps), nrow = 1)
 ```
 
 ## Pathway analysis
@@ -39,16 +44,18 @@ ekegg_lps <- enrichKEGG(gene = na.omit(sig_lps$ENTREZID),
                     universe=na.omit(res_lps_tb$ENTREZID))
 ```
 
-
 ```{r}
 library(enrichplot)
 ```
 
+Since recently, the description of KEGG pathways in the `clusterProfiler` output data include the part related to a species name, which is `- Mus musculus .(house mouse).` in this case. This annoying text complicates visualization of the enriched pathways, so we will get rid of it:
 
 ```{r}
 ekegg_pbs@result$Description <- sub(" - Mus musculus .(house mouse).", "", ekegg_pbs@result$Description)
 ekegg_lps@result$Description <- sub(" - Mus musculus .(house mouse).", "", ekegg_lps@result$Description)
 ```
+
+Another (and a little bit more complex) way to visualize pathway enrichment results is to use upsetplots, showing co-occurring DE gene sets in respect to the altered pathways they associated with:
 
 ```{r}
 ups_pbs <- upsetplot(ekegg_pbs)
@@ -56,7 +63,7 @@ ups_lps <- upsetplot(ekegg_lps)
 ```
 
 ```{r upset1, cache = TRUE, fig.width = 10, fig.height = 4.5, fig.align = "center"}
-print(ups_pbs)
+ups_pbs
 ```
 
 ```{r upset2, cache = TRUE, fig.width = 10, fig.height = 4.5, fig.align = "center"}
@@ -65,10 +72,21 @@ ups_lps
 
 ## Gene-Set Enrichment Analysis (GSEA)
 
+Unlike hypergeometric distribution based methods, GSEA works in the assumption that even small and not significant, but coordinated changes in gene expression can have impact on cellular pathways. Therefore, GSEA uses statistics of **all** the genes in a dataset, taking log2 Fold Changes as an input.
+
+
+<img src="docs/images/gsea_enrichment_plot.jpg"/> 
+
+**Figure 3**: The general principle of GSEA. The figure was taken from Subramanian et al., (2005) <https://doi.org/10.1073/pnas.0506580102>
+
+Since GSEA interpretation in `clusterProfiler` rely on ENTREZ IDs, we will filter out genes not annotated in ENTREZ:
+
 ```{r}
 pbs_filtered <- filter(res_pbs_tb, ENTREZID != "NA")
 lps_filtered <- filter(res_lps_tb, ENTREZID != "NA")
 ```
+
+Select gene log2(Fold Changes) and assign ENTREZ IDs as names of the vectors:
 
 ```{r}
 foldchanges.pbs <- pbs_filtered$log2FoldChange
@@ -78,10 +96,14 @@ foldchanges.lps <- lps_filtered$log2FoldChange
 names(foldchanges.lps) <- as.character(lps_filtered$ENTREZID)
 ```
 
+Sort fold changes:
+
 ```{r}
 foldchanges.pbs <- sort(foldchanges.pbs, decreasing = TRUE)
 foldchanges.lps <- sort(foldchanges.lps, decreasing = TRUE)
 ```
+
+Now, we can run `gseKEGG()` function with sorted fold changes as input and using default parameters
 
 ```{r}
 gseaKEGG.pbs <- gseKEGG(geneList = foldchanges.pbs,              
@@ -103,11 +125,15 @@ gseaKEGG.lps <- gseKEGG(geneList = foldchanges.lps,
                     verbose = FALSE, 
                     seed = TRUE)
 ```
+
+Remove the species name in the pathway description again:
+
 ```{r}
 gseaKEGG.pbs@result$Description <- sub(" - Mus musculus .(house mouse).", "", gseaKEGG.pbs@result$Description)
 gseaKEGG.lps@result$Description <- sub(" - Mus musculus .(house mouse).", "", gseaKEGG.lps@result$Description)
 ```
 
+Check the results for both comparisons:
 
 ```{r}
 paged_table(gseaKEGG.pbs@result)
@@ -117,12 +143,17 @@ paged_table(gseaKEGG.pbs@result)
 paged_table(gseaKEGG.lps@result)
 ```
 
+Apart from the adjusted p-values, enrichment score is another important characteristic of the altered pathways, reflecting the degree of which gene sets are over-represented at the top or at the bottom of the input ranked gene lists. You may find the corresponding values in enrichmentScore column of `gseaKEGG.pbs` and `gseaKEGG.lps` tables.
+
+Below is a GSEA plot for three manually selected enriched pathway from the PBS comparison:
+
 ```{r gseaplot2, cache = TRUE, fig.width = 9.5, fig.height = 5.5, fig.align = "center"}
 gseaplot2(gseaKEGG.pbs, geneSetID = c(15, 23, 29), pvalue_table = TRUE,
           color = c("#E495A5", "#86B875", "#7DB0DD"), ES_geom = "dot")
 ```
 
 ## mSigDb enrichment analysis
+
 ```{r}
 library(msigdbr)
 ```

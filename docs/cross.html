@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Dmitrii Smirnov" />
 
 
-<meta name="date" content="2024-02-08" />
+<meta name="date" content="2024-02-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -145,7 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="toc-logo"><a href="./"><img src="images/course_logo_v2.png"></a></li>
+<li class="toc-logo"><a href="./"><img src="images/Logo.png"></a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
@@ -168,11 +168,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2.2" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.2.2</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a></li>
+<li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="differential-testing.html"><a href="differential-testing.html#de-analysis"><i class="fa fa-check"></i><b>4.1</b> DE analysis</a></li>
+<li class="chapter" data-level="4.2" data-path="differential-testing.html"><a href="differential-testing.html#extracting-significant-genes"><i class="fa fa-check"></i><b>4.2</b> Extracting significant genes</a></li>
+<li class="chapter" data-level="4.3" data-path="differential-testing.html"><a href="differential-testing.html#comparison-with-dam-markers"><i class="fa fa-check"></i><b>4.3</b> Comparison with DAM markers</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="gene-annotation.html"><a href="gene-annotation.html"><i class="fa fa-check"></i><b>5</b> Gene annotation</a></li>
 <li class="chapter" data-level="6" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>6</b> Visualization</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="visualization.html"><a href="visualization.html#volcano-plot"><i class="fa fa-check"></i><b>6.1</b> Volcano plot</a></li>
+<li class="chapter" data-level="6.2" data-path="visualization.html"><a href="visualization.html#heatmap-of-significant-genes"><i class="fa fa-check"></i><b>6.2</b> Heatmap of significant genes</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="functional-analysis.html"><a href="functional-analysis.html"><i class="fa fa-check"></i><b>7</b> Functional analysis</a>
 <ul>
@@ -211,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="normalization" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Normalization<a href="cross.html#normalization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The next step is to normalize the count data in order to be able to make fair gene comparisons between samples.</p>
-<p>To perform the median of ratios method of normalization, <code>DESeq2</code> has a single <code>estimateSizeFactors()</code> function that will generate size factors for us. We will use the function in the example below, but in a typical RNA-seq analysis this step is automatically performed by the <code>DESeq()</code> function, which we will see later.</p>
+<p>To perform the median of ratios method of normalization<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, <code>DESeq2</code> has a single <code>estimateSizeFactors()</code> function that will generate size factors for us. We will use the function in the example below, but in a typical RNA-seq analysis this step is automatically performed by the <code>DESeq()</code> function, which we will see later.</p>
 <p>Perform normalization:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="cross.html#cb12-1" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">estimateSizeFactors</span>(dds)</span></code></pre></div>
 <p>We can take a look at the normalization factor applied to each sample:</p>
@@ -222,14 +228,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       1.0500173       0.9531096</code></pre>
 <p>Now, to retrieve the normalized counts matrix from dds, use the <code>counts()</code> function and add the argument <code>normalized=TRUE</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="cross.html#cb15-1" tabindex="-1"></a>normalized_counts <span class="ot">&lt;-</span> <span class="fu">counts</span>(dds, <span class="at">normalized=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>These normalized counts are useful for the QC and visualization purposes, but the step with <code>estimateSizeFactors()</code> is done automatically by <code>DESeq2</code> during differential expression analysis.</p>
 </div>
 <div id="quality-control" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Quality control<a href="cross.html#quality-control" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Next, we perform QC checks on the count data to help us ensure that the samples/replicates look good.</p>
 <p>To explore the similarity of our samples, we will be performing sample-level QC using Principal Component Analysis (PCA) and hierarchical clustering methods.</p>
-<p>When using these unsupervised clustering methods, log2-transformation of the normalized counts improves the distances/clustering for visualization. <code>DESeq2</code> uses a regularized log transform (rlog) of the normalized counts for sample-level QC as it moderates the variance across the mean, improving the clustering.</p>
+<p>When using these unsupervised clustering methods, transformation of the normalized counts may improve the distances/clustering for visualization. First, let’s try the most simple method of log2 transformation and plot counts of the two first KO_PBS replicates as a scatter plot:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="cross.html#cb16-1" tabindex="-1"></a>nts <span class="ot">&lt;-</span> <span class="fu">log2</span>(<span class="fu">assay</span>(dds, <span class="at">normalized =</span> <span class="cn">TRUE</span>)<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb16-2"><a href="cross.html#cb16-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">as.data.frame</span>(nts), <span class="fu">aes</span>(<span class="at">x =</span> KO_PBS_642, <span class="at">y =</span> KO_PBS_641)) <span class="sc">+</span> </span>
+<span id="cb16-3"><a href="cross.html#cb16-3" tabindex="-1"></a>    <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb16-4"><a href="cross.html#cb16-4" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&#39;log2(x+1) transformation&#39;</span>)<span class="sc">+</span></span>
+<span id="cb16-5"><a href="cross.html#cb16-5" tabindex="-1"></a>    <span class="fu">theme_dose</span>(<span class="dv">16</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/transformation1-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Above you can see a nice example of heteroscedasticity in the data, illustrating the dependence of the variance on the mean count value. Instead, <code>DESeq2</code> uses a regularized log transform (rlog) of the normalized counts for sample-level QC as it moderates the variance across the mean, improving the clustering.</p>
 <p>Perform rlog-transformation:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="cross.html#cb16-1" tabindex="-1"></a>rld <span class="ot">&lt;-</span> <span class="fu">rlog</span>(dds, <span class="at">blind =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="cross.html#cb17-1" tabindex="-1"></a>rld <span class="ot">&lt;-</span> <span class="fu">rlog</span>(dds, <span class="at">blind =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>And this is how data looks like after rlog transformation:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="cross.html#cb18-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">as.data.frame</span>(<span class="fu">assay</span>(rld)), <span class="fu">aes</span>(<span class="at">x =</span> KO_PBS_642, <span class="at">y =</span> KO_PBS_641)) <span class="sc">+</span> </span>
+<span id="cb18-2"><a href="cross.html#cb18-2" tabindex="-1"></a>            <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb18-3"><a href="cross.html#cb18-3" tabindex="-1"></a>            <span class="fu">ggtitle</span>(<span class="st">&#39;rlog transformation&#39;</span>)<span class="sc">+</span></span>
+<span id="cb18-4"><a href="cross.html#cb18-4" tabindex="-1"></a>            <span class="fu">theme_dose</span>(<span class="dv">16</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/transformation_rlog-1.png" width="480" style="display: block; margin: auto;" /></p>
 <div id="principal-component-analysis-pca" class="section level3 hasAnchor" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Principal Component Analysis (PCA)<a href="cross.html#principal-component-analysis-pca" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>PCA is a technique used to emphasize variation and bring out strong patterns in a dataset (dimensionality reduction).</p>
@@ -237,56 +257,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>DESeq2 has a built-in function for plotting PCA plots, that uses ggplot2. It takes the rlog object as an input directly.</p>
 <p>The function <code>plotPCA</code> requires two arguments as input: an rlog object and the intgroup (the column in our metadata that we are interested in).</p>
 <p>Below we will create a custom function to plot PCA:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="cross.html#cb17-1" tabindex="-1"></a>plotPCA.mystyle <span class="ot">&lt;-</span> <span class="cf">function</span> (object, <span class="at">ntop =</span> <span class="dv">2400</span>, <span class="at">returnData =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb17-2"><a href="cross.html#cb17-2" tabindex="-1"></a>{</span>
-<span id="cb17-3"><a href="cross.html#cb17-3" tabindex="-1"></a>    font.size <span class="ot">&lt;-</span> <span class="dv">18</span></span>
-<span id="cb17-4"><a href="cross.html#cb17-4" tabindex="-1"></a>    rv <span class="ot">&lt;-</span> <span class="fu">rowVars</span>(<span class="fu">assay</span>(object))</span>
-<span id="cb17-5"><a href="cross.html#cb17-5" tabindex="-1"></a>    r <span class="ot">&lt;-</span> <span class="fu">assay</span>(object)</span>
-<span id="cb17-6"><a href="cross.html#cb17-6" tabindex="-1"></a>    select <span class="ot">&lt;-</span> <span class="fu">order</span>(rv, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="fu">seq_len</span>(<span class="fu">min</span>(ntop,</span>
-<span id="cb17-7"><a href="cross.html#cb17-7" tabindex="-1"></a>        <span class="fu">length</span>(rv)))]</span>
-<span id="cb17-8"><a href="cross.html#cb17-8" tabindex="-1"></a>    pca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(<span class="fu">t</span>(<span class="fu">assay</span>(object)[select, ]))</span>
-<span id="cb17-9"><a href="cross.html#cb17-9" tabindex="-1"></a>    percentVar <span class="ot">&lt;-</span> pca<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fu">sum</span>(pca<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb17-10"><a href="cross.html#cb17-10" tabindex="-1"></a>    </span>
-<span id="cb17-11"><a href="cross.html#cb17-11" tabindex="-1"></a>    d1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">PC1 =</span> pca<span class="sc">$</span>x[, <span class="dv">1</span>], <span class="at">PC2 =</span> pca<span class="sc">$</span>x[, <span class="dv">2</span>], </span>
-<span id="cb17-12"><a href="cross.html#cb17-12" tabindex="-1"></a>                     <span class="at">Genotype =</span> meta<span class="sc">$</span>Genotype, </span>
-<span id="cb17-13"><a href="cross.html#cb17-13" tabindex="-1"></a>                     <span class="at">Treatment =</span> meta<span class="sc">$</span>Treatment,  </span>
-<span id="cb17-14"><a href="cross.html#cb17-14" tabindex="-1"></a>                     <span class="at">name =</span> <span class="fu">colnames</span>(object))</span>
-<span id="cb17-15"><a href="cross.html#cb17-15" tabindex="-1"></a></span>
-<span id="cb17-16"><a href="cross.html#cb17-16" tabindex="-1"></a>    <span class="cf">if</span> (returnData) {</span>
-<span id="cb17-17"><a href="cross.html#cb17-17" tabindex="-1"></a>        <span class="fu">attr</span>(d, <span class="st">&quot;percentVar&quot;</span>) <span class="ot">&lt;-</span> percentVar[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
-<span id="cb17-18"><a href="cross.html#cb17-18" tabindex="-1"></a>        <span class="fu">return</span>(d)</span>
-<span id="cb17-19"><a href="cross.html#cb17-19" tabindex="-1"></a>    }</span>
-<span id="cb17-20"><a href="cross.html#cb17-20" tabindex="-1"></a>    </span>
-<span id="cb17-21"><a href="cross.html#cb17-21" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="at">data =</span> d1, <span class="fu">aes_string</span>(<span class="at">x =</span> <span class="st">&quot;PC1&quot;</span>, <span class="at">y =</span> <span class="st">&quot;PC2&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb17-22"><a href="cross.html#cb17-22" tabindex="-1"></a>        <span class="fu">geom_point</span>(<span class="fu">aes_string</span>(<span class="at">color =</span> <span class="st">&quot;Genotype&quot;</span>, <span class="at">shape =</span> <span class="st">&quot;Treatment&quot;</span>), <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span> </span>
-<span id="cb17-23"><a href="cross.html#cb17-23" tabindex="-1"></a>        <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>, <span class="fu">round</span>(percentVar[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>), <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> </span>
-<span id="cb17-24"><a href="cross.html#cb17-24" tabindex="-1"></a>        <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>, <span class="fu">round</span>(percentVar[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span>), <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb17-25"><a href="cross.html#cb17-25" tabindex="-1"></a>        <span class="fu">theme_dose</span>(<span class="at">font.size =</span> font.size)<span class="sc">+</span> <span class="co">#+ geom_label_repel(aes(label = colnames(data)), label.size = 0.1, box.padding = 0.2)</span></span>
-<span id="cb17-26"><a href="cross.html#cb17-26" tabindex="-1"></a>        <span class="fu">theme</span>(</span>
-<span id="cb17-27"><a href="cross.html#cb17-27" tabindex="-1"></a>              <span class="at">legend.key =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>), </span>
-<span id="cb17-28"><a href="cross.html#cb17-28" tabindex="-1"></a>              <span class="at">legend.title=</span> <span class="fu">element_blank</span>(), </span>
-<span id="cb17-29"><a href="cross.html#cb17-29" tabindex="-1"></a>              <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span>font.size<span class="dv">-2</span>)</span>
-<span id="cb17-30"><a href="cross.html#cb17-30" tabindex="-1"></a>        )</span>
-<span id="cb17-31"><a href="cross.html#cb17-31" tabindex="-1"></a>} </span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="cross.html#cb19-1" tabindex="-1"></a>plotPCA.mystyle <span class="ot">&lt;-</span> <span class="cf">function</span> (object, <span class="at">ntop =</span> <span class="dv">2400</span>, <span class="at">returnData =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-2"><a href="cross.html#cb19-2" tabindex="-1"></a>{</span>
+<span id="cb19-3"><a href="cross.html#cb19-3" tabindex="-1"></a>    font.size <span class="ot">&lt;-</span> <span class="dv">18</span></span>
+<span id="cb19-4"><a href="cross.html#cb19-4" tabindex="-1"></a>    rv <span class="ot">&lt;-</span> <span class="fu">rowVars</span>(<span class="fu">assay</span>(object))</span>
+<span id="cb19-5"><a href="cross.html#cb19-5" tabindex="-1"></a>    r <span class="ot">&lt;-</span> <span class="fu">assay</span>(object)</span>
+<span id="cb19-6"><a href="cross.html#cb19-6" tabindex="-1"></a>    select <span class="ot">&lt;-</span> <span class="fu">order</span>(rv, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="fu">seq_len</span>(<span class="fu">min</span>(ntop,</span>
+<span id="cb19-7"><a href="cross.html#cb19-7" tabindex="-1"></a>        <span class="fu">length</span>(rv)))]</span>
+<span id="cb19-8"><a href="cross.html#cb19-8" tabindex="-1"></a>    pca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(<span class="fu">t</span>(<span class="fu">assay</span>(object)[select, ]))</span>
+<span id="cb19-9"><a href="cross.html#cb19-9" tabindex="-1"></a>    percentVar <span class="ot">&lt;-</span> pca<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fu">sum</span>(pca<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb19-10"><a href="cross.html#cb19-10" tabindex="-1"></a>    </span>
+<span id="cb19-11"><a href="cross.html#cb19-11" tabindex="-1"></a>    d1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">PC1 =</span> pca<span class="sc">$</span>x[, <span class="dv">1</span>], <span class="at">PC2 =</span> pca<span class="sc">$</span>x[, <span class="dv">2</span>], </span>
+<span id="cb19-12"><a href="cross.html#cb19-12" tabindex="-1"></a>                     <span class="at">Genotype =</span> meta<span class="sc">$</span>Genotype, </span>
+<span id="cb19-13"><a href="cross.html#cb19-13" tabindex="-1"></a>                     <span class="at">Treatment =</span> meta<span class="sc">$</span>Treatment,  </span>
+<span id="cb19-14"><a href="cross.html#cb19-14" tabindex="-1"></a>                     <span class="at">name =</span> <span class="fu">colnames</span>(object))</span>
+<span id="cb19-15"><a href="cross.html#cb19-15" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="cross.html#cb19-16" tabindex="-1"></a>    <span class="cf">if</span> (returnData) {</span>
+<span id="cb19-17"><a href="cross.html#cb19-17" tabindex="-1"></a>        <span class="fu">attr</span>(d, <span class="st">&quot;percentVar&quot;</span>) <span class="ot">&lt;-</span> percentVar[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb19-18"><a href="cross.html#cb19-18" tabindex="-1"></a>        <span class="fu">return</span>(d)</span>
+<span id="cb19-19"><a href="cross.html#cb19-19" tabindex="-1"></a>    }</span>
+<span id="cb19-20"><a href="cross.html#cb19-20" tabindex="-1"></a>    </span>
+<span id="cb19-21"><a href="cross.html#cb19-21" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="at">data =</span> d1, <span class="fu">aes_string</span>(<span class="at">x =</span> <span class="st">&quot;PC1&quot;</span>, <span class="at">y =</span> <span class="st">&quot;PC2&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb19-22"><a href="cross.html#cb19-22" tabindex="-1"></a>        <span class="fu">geom_point</span>(<span class="fu">aes_string</span>(<span class="at">color =</span> <span class="st">&quot;Genotype&quot;</span>, <span class="at">shape =</span> <span class="st">&quot;Treatment&quot;</span>), <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span> </span>
+<span id="cb19-23"><a href="cross.html#cb19-23" tabindex="-1"></a>        <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>, <span class="fu">round</span>(percentVar[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>), <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb19-24"><a href="cross.html#cb19-24" tabindex="-1"></a>        <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>, <span class="fu">round</span>(percentVar[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span>), <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb19-25"><a href="cross.html#cb19-25" tabindex="-1"></a>        <span class="fu">theme_dose</span>(<span class="at">font.size =</span> font.size)<span class="sc">+</span> <span class="co">#+ geom_label_repel(aes(label = colnames(data)), label.size = 0.1, box.padding = 0.2)</span></span>
+<span id="cb19-26"><a href="cross.html#cb19-26" tabindex="-1"></a>        <span class="fu">theme</span>(</span>
+<span id="cb19-27"><a href="cross.html#cb19-27" tabindex="-1"></a>              <span class="at">legend.key =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>), </span>
+<span id="cb19-28"><a href="cross.html#cb19-28" tabindex="-1"></a>              <span class="at">legend.title=</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb19-29"><a href="cross.html#cb19-29" tabindex="-1"></a>              <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span>font.size<span class="dv">-2</span>)</span>
+<span id="cb19-30"><a href="cross.html#cb19-30" tabindex="-1"></a>        )</span>
+<span id="cb19-31"><a href="cross.html#cb19-31" tabindex="-1"></a>} </span></code></pre></div>
 <p>Plot PCA graph:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="cross.html#cb18-1" tabindex="-1"></a><span class="fu">plotPCA.mystyle</span>(rld)</span></code></pre></div>
-<p><img src="_main_files/figure-html/pca-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="cross.html#cb20-1" tabindex="-1"></a><span class="fu">plotPCA.mystyle</span>(rld)</span></code></pre></div>
+<p><img src="_main_files/figure-html/pca-1.png" width="624" style="display: block; margin: auto;" /></p>
 <p>By default the function <code>plotPCA.custom</code> uses the top 500 most variable genes. You can change this by adding the ntop argument and specifying how many genes you want to use to draw the plot.</p>
 </div>
 <div id="correlation-heatmap-pca" class="section level3 hasAnchor" number="3.2.2">
 <h3><span class="header-section-number">3.2.2</span> Correlation Heatmap (PCA)<a href="cross.html#correlation-heatmap-pca" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The heatmap displays the correlation of gene expression for all pairwise combinations of samples in the dataset. Since the majority of genes are not differentially expressed, samples generally have high correlations with each other (values higher than 0.80). Samples below 0.80 may indicate an outlier in your data and/or sample contamination.</p>
 <p>Extract the rlog matrix from the object:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="cross.html#cb19-1" tabindex="-1"></a>rld_mat <span class="ot">&lt;-</span> <span class="fu">assay</span>(rld)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="cross.html#cb21-1" tabindex="-1"></a>rld_mat <span class="ot">&lt;-</span> <span class="fu">assay</span>(rld)</span></code></pre></div>
 <p>Since there is no built-in function for heatmaps in <code>DESeq2</code> we will be using the <code>pheatmap()</code> function from the <code>pheatmap</code> package. This function requires a matrix/dataframe of numeric values as input, and so the first thing we need to is retrieve that information from the rld object:</p>
 <p>Then we need to compute the pairwise correlation values for samples. We can do this using the cor() function:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="cross.html#cb20-1" tabindex="-1"></a>rld_cor <span class="ot">&lt;-</span> <span class="fu">cor</span>(rld_mat)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="cross.html#cb22-1" tabindex="-1"></a>rld_cor <span class="ot">&lt;-</span> <span class="fu">cor</span>(rld_mat)</span></code></pre></div>
 <p>Plot the correlation values as a heatmap:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="cross.html#cb21-1" tabindex="-1"></a><span class="fu">pheatmap</span>(rld_cor, <span class="at">annotation =</span> meta[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/heatmap1-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="cross.html#cb23-1" tabindex="-1"></a><span class="fu">pheatmap</span>(rld_cor, <span class="at">annotation =</span> meta[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])</span></code></pre></div>
+<p><img src="_main_files/figure-html/heatmap1-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>If you forgot how this method works you may check the lecture slides or watch this video: <iframe width="560" height="315" src="https://www.youtube.com/embed/UFB993xufUU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><a href="cross.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

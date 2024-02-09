@@ -10,9 +10,13 @@ quality-control
 principal-component-analysis-pca
 correlation-heatmap-pca
 differential-testing
+de-analysis
+extracting-significant-genes
+comparison-with-dam-markers
 gene-annotation
 visualization
 volcano-plot
+heatmap-of-significant-genes
 functional-analysis
 gene-ontology-go-analysis
 pathway-analysis

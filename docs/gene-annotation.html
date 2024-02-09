@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Dmitrii Smirnov" />
 
 
-<meta name="date" content="2024-02-08" />
+<meta name="date" content="2024-02-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -145,7 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="toc-logo"><a href="./"><img src="images/course_logo_v2.png"></a></li>
+<li class="toc-logo"><a href="./"><img src="images/Logo.png"></a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
@@ -168,11 +168,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2.2" data-path="cross.html"><a href="cross.html#correlation-heatmap-pca"><i class="fa fa-check"></i><b>3.2.2</b> Correlation Heatmap (PCA)</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a></li>
+<li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="differential-testing.html"><a href="differential-testing.html#de-analysis"><i class="fa fa-check"></i><b>4.1</b> DE analysis</a></li>
+<li class="chapter" data-level="4.2" data-path="differential-testing.html"><a href="differential-testing.html#extracting-significant-genes"><i class="fa fa-check"></i><b>4.2</b> Extracting significant genes</a></li>
+<li class="chapter" data-level="4.3" data-path="differential-testing.html"><a href="differential-testing.html#comparison-with-dam-markers"><i class="fa fa-check"></i><b>4.3</b> Comparison with DAM markers</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="gene-annotation.html"><a href="gene-annotation.html"><i class="fa fa-check"></i><b>5</b> Gene annotation</a></li>
 <li class="chapter" data-level="6" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>6</b> Visualization</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="visualization.html"><a href="visualization.html#volcano-plot"><i class="fa fa-check"></i><b>6.1</b> Volcano plot</a></li>
+<li class="chapter" data-level="6.2" data-path="visualization.html"><a href="visualization.html#heatmap-of-significant-genes"><i class="fa fa-check"></i><b>6.2</b> Heatmap of significant genes</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="functional-analysis.html"><a href="functional-analysis.html"><i class="fa fa-check"></i><b>7</b> Functional analysis</a>
 <ul>
@@ -210,40 +216,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 5</span> Gene annotation<a href="gene-annotation.html#gene-annotation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Gene features in both input and DE tables are represented with their ENSEMBL identifiers, but it would be also useful to obtain an information about corresponding gene names, ENTREZ IDs and other types of description.</p>
 <p>To perform Gene ID conversion we will use mouse genome annotation from <code>org.Mm.eg.db</code> package</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="gene-annotation.html#cb54-1" tabindex="-1"></a><span class="fu">library</span>(org.Mm.eg.db)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="gene-annotation.html#cb56-1" tabindex="-1"></a><span class="fu">library</span>(org.Mm.eg.db)</span></code></pre></div>
 <p>Use <code>select()</code> function to convert ENSEMBL IDs to gene names (“SYMBOL”) and Entrez identifiers (“ENTREZID”)</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="gene-annotation.html#cb55-1" tabindex="-1"></a>mm <span class="ot">&lt;-</span> org.Mm.eg.db</span>
-<span id="cb55-2"><a href="gene-annotation.html#cb55-2" tabindex="-1"></a>my.symbols <span class="ot">&lt;-</span> res_pbs_tb<span class="sc">$</span>gene</span>
-<span id="cb55-3"><a href="gene-annotation.html#cb55-3" tabindex="-1"></a>map <span class="ot">&lt;-</span> <span class="fu">select</span>(mm, </span>
-<span id="cb55-4"><a href="gene-annotation.html#cb55-4" tabindex="-1"></a>              <span class="at">keys =</span> my.symbols,</span>
-<span id="cb55-5"><a href="gene-annotation.html#cb55-5" tabindex="-1"></a>              <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;ENTREZID&quot;</span>, <span class="st">&quot;SYMBOL&quot;</span>, <span class="st">&quot;ENSEMBL&quot;</span>),</span>
-<span id="cb55-6"><a href="gene-annotation.html#cb55-6" tabindex="-1"></a>              <span class="at">keytype =</span> <span class="st">&quot;ENSEMBL&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="gene-annotation.html#cb57-1" tabindex="-1"></a>mm <span class="ot">&lt;-</span> org.Mm.eg.db</span>
+<span id="cb57-2"><a href="gene-annotation.html#cb57-2" tabindex="-1"></a>my.symbols <span class="ot">&lt;-</span> res_pbs_tb<span class="sc">$</span>gene</span>
+<span id="cb57-3"><a href="gene-annotation.html#cb57-3" tabindex="-1"></a>map <span class="ot">&lt;-</span> <span class="fu">select</span>(mm, </span>
+<span id="cb57-4"><a href="gene-annotation.html#cb57-4" tabindex="-1"></a>              <span class="at">keys =</span> my.symbols,</span>
+<span id="cb57-5"><a href="gene-annotation.html#cb57-5" tabindex="-1"></a>              <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;ENTREZID&quot;</span>, <span class="st">&quot;SYMBOL&quot;</span>, <span class="st">&quot;ENSEMBL&quot;</span>),</span>
+<span id="cb57-6"><a href="gene-annotation.html#cb57-6" tabindex="-1"></a>              <span class="at">keytype =</span> <span class="st">&quot;ENSEMBL&quot;</span>)</span></code></pre></div>
 <pre><code>## &#39;select()&#39; returned 1:many mapping between keys and columns</code></pre>
 <p>You could also notice warning <code>'select()' returned 1:many mapping between keys and columns</code>, meaning that some genes have non-unique mapping between IDs. For example, Zfp969 genes has multiple ENSEMBL annotations:</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="gene-annotation.html#cb57-1" tabindex="-1"></a><span class="fu">filter</span>(map, SYMBOL <span class="sc">==</span> <span class="st">&#39;Zfp969&#39;</span>)<span class="sc">$</span>ENSEMBL</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="gene-annotation.html#cb59-1" tabindex="-1"></a><span class="fu">filter</span>(map, SYMBOL <span class="sc">==</span> <span class="st">&#39;Zfp969&#39;</span>)<span class="sc">$</span>ENSEMBL</span></code></pre></div>
 <pre><code>## [1] &quot;ENSMUSG00000078898&quot; &quot;ENSMUSG00000095545&quot; &quot;ENSMUSG00000089756&quot; &quot;ENSMUSG00000095199&quot;</code></pre>
 <p>In addition, ENSMUSG00000078898 was also mapped to multiple gene names:</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="gene-annotation.html#cb59-1" tabindex="-1"></a><span class="fu">filter</span>(map, ENSEMBL <span class="sc">==</span> <span class="st">&#39;ENSMUSG00000078898&#39;</span>)<span class="sc">$</span>SYMBOL</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="gene-annotation.html#cb61-1" tabindex="-1"></a><span class="fu">filter</span>(map, ENSEMBL <span class="sc">==</span> <span class="st">&#39;ENSMUSG00000078898&#39;</span>)<span class="sc">$</span>SYMBOL</span></code></pre></div>
 <pre><code>## [1] &quot;Zfp968&quot; &quot;Zfp969&quot;</code></pre>
 <p>First, we will combine DE result tables with the obtained gene annotation:</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="gene-annotation.html#cb61-1" tabindex="-1"></a>res_pbs_tb <span class="ot">&lt;-</span> <span class="fu">left_join</span>(res_pbs_tb, map, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;gene&quot;</span> <span class="ot">=</span> <span class="st">&quot;ENSEMBL&quot;</span>))</span>
-<span id="cb61-2"><a href="gene-annotation.html#cb61-2" tabindex="-1"></a>res_lps_tb <span class="ot">&lt;-</span> <span class="fu">left_join</span>(res_lps_tb, map, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;gene&quot;</span> <span class="ot">=</span> <span class="st">&quot;ENSEMBL&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="gene-annotation.html#cb63-1" tabindex="-1"></a>res_pbs_tb <span class="ot">&lt;-</span> <span class="fu">left_join</span>(res_pbs_tb, map, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;gene&quot;</span> <span class="ot">=</span> <span class="st">&quot;ENSEMBL&quot;</span>))</span>
+<span id="cb63-2"><a href="gene-annotation.html#cb63-2" tabindex="-1"></a>res_lps_tb <span class="ot">&lt;-</span> <span class="fu">left_join</span>(res_lps_tb, map, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;gene&quot;</span> <span class="ot">=</span> <span class="st">&quot;ENSEMBL&quot;</span>))</span></code></pre></div>
 <p>Now DESeq2 output tables have two additional columns:</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="gene-annotation.html#cb62-1" tabindex="-1"></a><span class="fu">paged_table</span>(<span class="fu">head</span>(res_pbs_tb))</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="gene-annotation.html#cb64-1" tabindex="-1"></a><span class="fu">paged_table</span>(<span class="fu">head</span>(res_pbs_tb))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["gene"],"name":[1],"type":["chr"],"align":["left"]},{"label":["baseMean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["log2FoldChange"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["lfcSE"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["stat"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["pvalue"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["ENTREZID"],"name":[8],"type":["chr"],"align":["left"]},{"label":["SYMBOL"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"ENSMUSG00000051951","2":"2.199116","3":"0.29951123","4":"0.5564302","5":"0.96542415","6":"0.3343324","7":"NA","8":"497097","9":"Xkr4"},{"1":"ENSMUSG00000103377","2":"1.543252","3":"0.00000000","4":"0.4451206","5":"0.00000000","6":"1.0000000","7":"NA","8":"NA","9":"NA"},{"1":"ENSMUSG00000103147","2":"3.357070","3":"-0.07256912","4":"0.6653427","5":"-0.11122577","6":"0.9114373","7":"NA","8":"664792","9":"Gm7341"},{"1":"ENSMUSG00000102331","2":"2.149170","3":"0.00000000","4":"0.5917878","5":"0.00000000","6":"1.0000000","7":"NA","8":"NA","9":"NA"},{"1":"ENSMUSG00000102269","2":"3.156919","3":"0.75156077","4":"0.6858484","5":"1.06781491","6":"0.2856040","7":"NA","8":"NA","9":"NA"},{"1":"ENSMUSG00000098104","2":"66.394760","3":"-0.02473573","4":"0.3279314","5":"-0.07569335","6":"0.9396631","7":"0.9780998","8":"NA","9":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Next, we will get rid of duplicated ENSEMBL IDs:</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="gene-annotation.html#cb63-1" tabindex="-1"></a>res_pbs_tb <span class="ot">&lt;-</span> res_pbs_tb[<span class="sc">!</span><span class="fu">duplicated</span>(res_pbs_tb<span class="sc">$</span>gene),]</span>
-<span id="cb63-2"><a href="gene-annotation.html#cb63-2" tabindex="-1"></a>res_lps_tb <span class="ot">&lt;-</span> res_lps_tb[<span class="sc">!</span><span class="fu">duplicated</span>(res_lps_tb<span class="sc">$</span>gene),]</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="gene-annotation.html#cb65-1" tabindex="-1"></a>res_pbs_tb <span class="ot">&lt;-</span> res_pbs_tb[<span class="sc">!</span><span class="fu">duplicated</span>(res_pbs_tb<span class="sc">$</span>gene),]</span>
+<span id="cb65-2"><a href="gene-annotation.html#cb65-2" tabindex="-1"></a>res_lps_tb <span class="ot">&lt;-</span> res_lps_tb[<span class="sc">!</span><span class="fu">duplicated</span>(res_lps_tb<span class="sc">$</span>gene),]</span></code></pre></div>
 <p>Check if the number of genes in the output tables for both comparisons is equal:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="gene-annotation.html#cb64-1" tabindex="-1"></a><span class="fu">nrow</span>(res_pbs_tb) <span class="sc">==</span> <span class="fu">nrow</span>(res_lps_tb)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="gene-annotation.html#cb66-1" tabindex="-1"></a><span class="fu">nrow</span>(res_pbs_tb) <span class="sc">==</span> <span class="fu">nrow</span>(res_lps_tb)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>Finally, get the annotation only for the differentially expressed genes:</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="gene-annotation.html#cb66-1" tabindex="-1"></a>sig_pbs <span class="ot">&lt;-</span> res_pbs_tb <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gene <span class="sc">%in%</span> sig_pbs<span class="sc">$</span>gene)</span>
-<span id="cb66-2"><a href="gene-annotation.html#cb66-2" tabindex="-1"></a>sig_lps <span class="ot">&lt;-</span> res_lps_tb <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gene <span class="sc">%in%</span> sig_lps<span class="sc">$</span>gene)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="gene-annotation.html#cb68-1" tabindex="-1"></a>sig_pbs <span class="ot">&lt;-</span> res_pbs_tb <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gene <span class="sc">%in%</span> sig_pbs<span class="sc">$</span>gene)</span>
+<span id="cb68-2"><a href="gene-annotation.html#cb68-2" tabindex="-1"></a>sig_lps <span class="ot">&lt;-</span> res_lps_tb <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gene <span class="sc">%in%</span> sig_lps<span class="sc">$</span>gene)</span></code></pre></div>
 
 </div>
             </section>
