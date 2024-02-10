@@ -79,14 +79,14 @@ Unlike hypergeometric distribution based methods, GSEA works in the assumption t
 
 **Figure 3**: The general principle of GSEA. The figure was taken from Subramanian et al., (2005) <https://doi.org/10.1073/pnas.0506580102>
 
-Since GSEA interpretation in `clusterProfiler` rely on ENTREZ IDs, we will filter out genes not annotated in ENTREZ:
+Since GSEA interpretation in `clusterProfiler` rely on NCBI ENTREZ IDs, we will filter out genes not annotated in ENTREZ:
 
 ```{r}
 pbs_filtered <- filter(res_pbs_tb, ENTREZID != "NA")
 lps_filtered <- filter(res_lps_tb, ENTREZID != "NA")
 ```
 
-Select gene log2(Fold Changes) and assign ENTREZ IDs as names of the vectors:
+Select gene log2(Fold Changes) and assign NCBI ENTREZ IDs as names of the vectors:
 
 ```{r}
 foldchanges.pbs <- pbs_filtered$log2FoldChange
@@ -152,35 +152,82 @@ gseaplot2(gseaKEGG.pbs, geneSetID = c(15, 23, 29), pvalue_table = TRUE,
           color = c("#E495A5", "#86B875", "#7DB0DD"), ES_geom = "dot")
 ```
 
-## mSigDb enrichment analysis
+## Gene Set Enrichment Analysis with mSigDB
+In the section above we used GO terms and KEGG pathways to perform enrichment analyses, but sometimes it is needed to compare gene expression changes against other gene sets, such as signatures or markers of the various diseases and biological processes. A possible solution is to use Molecular Signatures Database (mSigDB) represents the curated lists of gene sets, divided in 9 main collections:
 
+* H: Hallmark gene sets
+
+* C1: Positional gene sets
+
+* C2: Curated gene sets
+
+* C3: Motif gene sets
+
+* C4: Computational gene sets
+
+* C5: Gene Ontology gene sets
+
+* C6: Oncogenic signatures gene sets
+
+* C7: Immunologic signatures
+
+* C8: Cell type signatures
+
+In R this database is already available through the `msigdbr` package:
 ```{r}
 library(msigdbr)
 ```
 
-```{r}
-all_gene_sets = msigdbr(species = "Mus musculus")
-```
-
+While mSigDB contains annotated gene sets for many species (you can get a list of them with `msigdbr_show_species()`), we will specify 'mouse' to retrieve mouse-related sets for the Hallmark gene sets:
 ```{r}
 msig_h <- msigdbr(species = "mouse", category = "H")
 ```
 
+Next, prepare an input reference table for enrichment analysis:
 ```{r}
 msigdbr_t2g <- msig_h %>%
   dplyr::distinct(gs_name, ensembl_gene) %>%
   as.data.frame()
 ```
 
+This table consist of two columns, one for gene set names (specific terms) and another one for the corresponding ENSEMBL IDs:
+```{r}
+paged_table(head(msigdbr_t2g))
+```
+Run the over-presentation analysis on significant genes with prepared term-to-gene table using `enricher()` function:
 ```{r}
 hallmarks.pbs <- enricher(gene = sig_pbs$gene, TERM2GENE = msigdbr_t2g)
 hallmarks.lps <- enricher(gene = sig_lps$gene, TERM2GENE = msigdbr_t2g)
 ```
 
+Visualize the obtained enriched terms for PBS comparison:
 ```{r hallmarks_pbs, cache = TRUE, fig.width = 7, fig.height = 5.5, fig.align = "center"}
 dotplot(hallmarks.pbs)
 ```
 
+... and for LPS comparison:
 ```{r hallmarks_lps, cache = TRUE, fig.width = 7, fig.height = 5.5, fig.align = "center"}
 dotplot(hallmarks.lps)
 ```
+
+To run the GSEA analysis with mSigDB terms we must select NCBI ENTREZ IDs instead of ENSEMBL ones:
+```{r}
+msigdbr_t2g <- msig_h %>%
+  dplyr::distinct(gs_name, entrez_gene)
+```
+
+Now execute `GSEA` function with `foldchanges.pbs` gene list and re-generated term-to-gene annotation:
+```{r}
+gsea_h_pbs <- GSEA(foldchanges.pbs, TERM2GENE = msigdbr_t2g)
+```
+
+Check out the enriched terms:
+```{r}
+paged_table(head(gsea_h_pbs))
+```
+An essential part of DE analysis is the validation of the obtained gene expression changes with custom gene sets, identified by other researches in similar experiments. Here we will use previously described enrichment methods to compare our changes against a list of DAM metabolites.
+
+::: design
+**Task 4**: Perform GSEA on `foldchanges.pbs` and `foldchanges.lps` lists using DAM-related genes as an argument for `TERM2GENE = ...` in `GSEA()` function (1.5 point).
+:::
+

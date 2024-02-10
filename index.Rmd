@@ -1,6 +1,6 @@
 ---
 title: "Omics Data Analysis"
-author: "Dmitrii Smirnov"
+author: "Dmitrii Smirnov, Skolkovo Institute of Science and Technology"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
@@ -8,9 +8,7 @@ bibliography: [book.bib, packages.bib]
 # url: your book url like https://bookdown.org/yihui/bookdown
 # cover-image: path to the social sharing image like images/cover.jpg
 description: |
-  This is a minimal example of using the bookdown package to write a book.
-  The HTML output format for this example is bookdown::gitbook,
-  set in the _output.yml file.
+  This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech.
 link-citations: yes
 cover-image: docs/images/course_logo_v2.png
 github-repo: rstudio/bookdown-demo

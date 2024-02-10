@@ -5,31 +5,25 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 8 Transcriptome de novo assembly | Omics Data Analysis</title>
-  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
-The HTML output format for this example is bookdown::gitbook,
-set in the _output.yml file.</p>" />
-  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
+  <meta name="description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 8 Transcriptome de novo assembly | Omics Data Analysis" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="/docs/images/course_logo_v2.png" />
-  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
-The HTML output format for this example is bookdown::gitbook,
-set in the _output.yml file.</p>" />
+  <meta property="og:description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 8 Transcriptome de novo assembly | Omics Data Analysis" />
   
-  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
-The HTML output format for this example is bookdown::gitbook,
-set in the _output.yml file.</p>" />
+  <meta name="twitter:description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
   <meta name="twitter:image" content="/docs/images/course_logo_v2.png" />
 
-<meta name="author" content="Dmitrii Smirnov" />
+<meta name="author" content="Dmitrii Smirnov, Skolkovo Institute of Science and Technology" />
 
 
-<meta name="date" content="2024-02-09" />
+<meta name="date" content="2024-02-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -100,7 +94,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
+code span.bu { } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -113,7 +107,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -127,10 +121,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<style type="text/css">
-  
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -172,20 +162,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="4.1" data-path="differential-testing.html"><a href="differential-testing.html#de-analysis"><i class="fa fa-check"></i><b>4.1</b> DE analysis</a></li>
 <li class="chapter" data-level="4.2" data-path="differential-testing.html"><a href="differential-testing.html#extracting-significant-genes"><i class="fa fa-check"></i><b>4.2</b> Extracting significant genes</a></li>
-<li class="chapter" data-level="4.3" data-path="differential-testing.html"><a href="differential-testing.html#comparison-with-dam-markers"><i class="fa fa-check"></i><b>4.3</b> Comparison with DAM markers</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="gene-annotation.html"><a href="gene-annotation.html"><i class="fa fa-check"></i><b>5</b> Gene annotation</a></li>
 <li class="chapter" data-level="6" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>6</b> Visualization</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="visualization.html"><a href="visualization.html#volcano-plot"><i class="fa fa-check"></i><b>6.1</b> Volcano plot</a></li>
 <li class="chapter" data-level="6.2" data-path="visualization.html"><a href="visualization.html#heatmap-of-significant-genes"><i class="fa fa-check"></i><b>6.2</b> Heatmap of significant genes</a></li>
+<li class="chapter" data-level="6.3" data-path="visualization.html"><a href="visualization.html#comparison-with-dam-markers"><i class="fa fa-check"></i><b>6.3</b> Comparison with DAM markers</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="functional-analysis.html"><a href="functional-analysis.html"><i class="fa fa-check"></i><b>7</b> Functional analysis</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-ontology-go-analysis"><i class="fa fa-check"></i><b>7.1</b> Gene Ontology (GO) analysis</a></li>
 <li class="chapter" data-level="7.2" data-path="functional-analysis.html"><a href="functional-analysis.html#pathway-analysis"><i class="fa fa-check"></i><b>7.2</b> Pathway analysis</a></li>
 <li class="chapter" data-level="7.3" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-set-enrichment-analysis-gsea"><i class="fa fa-check"></i><b>7.3</b> Gene-Set Enrichment Analysis (GSEA)</a></li>
-<li class="chapter" data-level="7.4" data-path="functional-analysis.html"><a href="functional-analysis.html#msigdb-enrichment-analysis"><i class="fa fa-check"></i><b>7.4</b> mSigDb enrichment analysis</a></li>
+<li class="chapter" data-level="7.4" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-set-enrichment-analysis-with-msigdb"><i class="fa fa-check"></i><b>7.4</b> Gene Set Enrichment Analysis with mSigDB</a></li>
 </ul></li>
 <li class="part"><span><b>Lecture 9: Transcriptome</b></span></li>
 <li class="chapter" data-level="8" data-path="transcriptome-de-novo-assembly.html"><a href="transcriptome-de-novo-assembly.html"><i class="fa fa-check"></i><b>8</b> Transcriptome de novo assembly</a></li>

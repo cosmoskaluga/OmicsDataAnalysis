@@ -72,3 +72,14 @@ pheatmap(norm_sig_pbs,
                 height = 10)
 ```
 
+## Comparison with DAM markers
+Disease-associated-microglia (DAM) is a microglia type associated with various neurodegeneration diseases (AD, ALS, aging) and characterized by a specific transcriptional program. We will work with DAM signatures described in Deczkowska et al., 2018 (<https://doi.org/10.1016/j.cell.2018.05.003>) and in the Figure 2. This signatures can be divided in three main groups or stages: markers of homeostatic microglia, Stage 2 DAM (independent on TREM2 signaling) signatures and markers of Stage 2 DAM of microglial activation, caused by TREM2 signaling. 
+
+
+<img src="docs/images/DAM.jpg"/> 
+
+**Figure 2**: DAM stages in mouse: homeostatic microglia -> Stage DAM 1 -> Stage DAM 2. Figure was taken from Deczkowska et al., 2018.
+
+::: design
+**Task 3**: Analyze changes in expression of DAM marker genes in the both PBS and LPS comparisons. Plot a heatmap of the DAM signature expression levels (0.5 points) and volcano plots for expression changes in DAM signatures for both comparisons (0.5 points). Do the observed changes in your data correspond to the changes in disease-associated microglia? Provide an explanation (0.5 points).
+:::

@@ -62,7 +62,7 @@ plotMA(res_pbs, ylim=c(-3,5))
 ```
 
 ::: design
-**Task 1**: Plot the unshrunken results and save the plot as pdf. Are there any differences between unshrunken and shrunken results? Provide a brief explanation.
+**Task 1**: Plot the unshrunken results and save the plot as pdf. Are there any differences between unshrunken and shrunken results? Provide a brief explanation (1 point).
 :::
 
 Check the results summary for PBS and LPS comparisons:
@@ -75,9 +75,10 @@ summary(res_pbs, alpha = 0.05)
 summary(res_lps, alpha = 0.05)
 ```
 
-Now we are ready to extract significant differentially expressed genes. We will define significant genes as those satisfying the \|FDR p-value \< 0.05\| and \|log2(Fold Change)\| \> 0.58:
 
 ## Extracting significant genes
+
+Now we are ready to extract significant differentially expressed genes. We will define significant genes as those satisfying the \|FDR p-value \< 0.05\| and \|log2(Fold Change)\| \> 0.58:
 
 ```{r}
 padj.cutoff <- 0.05
@@ -121,10 +122,7 @@ nrow(sig_pbs)
 nrow(sig_lps)
 ```
 
-## Comparison with DAM markers
-
-<img src="docs/images/DAM.jpg"/> **Figure 2**:
-
 ::: design
-**Task 2**: Analyze changes in expression of DAM marker genes in the both PBS and LPS comparisons.
+**Task 2**: Perform DE analysis comparing LPS and PBS profiles: `Control_LPS vs Control_PBS` and `KO_LPS vs KO_PBS`. How many DE genes (FDP P-value < 0.05 and |log2FC|> 0.58) did you obtain for these comparisons (1 point).
 :::
+

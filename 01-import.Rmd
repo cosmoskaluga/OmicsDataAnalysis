@@ -4,8 +4,8 @@
 
 Today we will focus on the differential gene expression analysis to study the gene expression signatures of microglia from accelerated aging mice subjected to PBS (phosphate buffered saline) and LPS (lipopolysaccharides, activated microglia) treatments from Zhang et al., 2022 (<https://doi.org/10.1186/s12974-022-02463-5>). Our dataset includes 2 experimental groups of replicates: Control and KO microglia, where KO group corresponds to to the model of accelerated aging, caused by deficiency of the DNA-repair associated gene Ercc1. One half of the samples in each group we additionally treated with PBS and another half were treated with LPS to achieve pro-inflammatory microglial activation. Raw reads were already preprocessed by the authors of the original study, therefore we can skip a large part devoted to raw read processing and mapping (Figure 1), that you already studied during the previous lecture and start with a table of counts. The input dataset is accessible here:
 
--   Course server: `/home/d.smirnov/homework4/SalmonOutput`
--   Yandex disk: `/home/d.smirnov/homework4/SalmonOutput`
+-   Course server: `/home/d.smirnov/homework4/Data/Data.csv`
+-   Yandex disk: <https://disk.yandex.ru/d/2X3QgYRa5iqcFw>
 
 <img src="docs/images/TitleFigure.png"/> **Figure 1.** DE analysis typical workflow
 
@@ -26,7 +26,7 @@ library(clusterProfiler)
 We will start the analysis with uploading **raw** count data to the R workspace.
 
 ```{r}
-data <- read.csv("../../Data.csv", row.names = 1)
+data <- read.csv("data/Data.csv", row.names = 1)
 ```
 
 The gene expression table has gene names in the rows and samples names in the columns. 'Length' column denotes a length of each annotated gene:

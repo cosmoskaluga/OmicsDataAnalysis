@@ -12,15 +12,15 @@ correlation-heatmap-pca
 differential-testing
 de-analysis
 extracting-significant-genes
-comparison-with-dam-markers
 gene-annotation
 visualization
 volcano-plot
 heatmap-of-significant-genes
+comparison-with-dam-markers
 functional-analysis
 gene-ontology-go-analysis
 pathway-analysis
 gene-set-enrichment-analysis-gsea
-msigdb-enrichment-analysis
+gene-set-enrichment-analysis-with-msigdb
 transcriptome-de-novo-assembly
 lipidomics-data-analysis
