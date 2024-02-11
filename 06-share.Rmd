@@ -6,16 +6,29 @@ The main idea of the functional analysis is to connect observed changes in gene 
 
 Gene Ontology analysis is probably the most popular and widely-used method.
 
-A one-sided Fisher's exact test (or hypergeometric test) is typically used for over-representation analysis:
+The hypergeometric test, that is identical to one-sided Fisher's exact test, is typically used for over-representation analysis and the p-value of the significance is calculated in the following way:
+
+$$ p = 1 - \sum_{i = 0}^{k-1} \frac{\binom{M}{i} \binom{N-M}{n-i}}{\binom{N}{n}} $$
+where 
+
+* $N$ is a total number of genes in the background
+
+* $M$ is a number of genes in the background that are also in the GO category
+
+* $n$ is a total number of DE genes 
+
+* $k$ is number of DE genes that are also in the GO category
+
+While the over-representation analysis can be easily done with many packages in R, the most popular is `ClusterProfiler`. GO analysis with `ClusterProfiler` can be easily done with `enrichGO` function:
 
 ```{r}
-ego_pbs <- enrichGO(gene = sig_pbs$gene,
-                                universe = res_pbs_tb$gene, 
-                                keyType = "ENSEMBL",
-                                OrgDb = org.Mm.eg.db, 
-                                ont = "BP",
-                                pAdjustMethod = "BH", 
-                                pvalueCutoff = 0.05)
+ego_pbs <- enrichGO(gene = sig_pbs$gene, 
+                    universe = res_pbs_tb$gene, 
+                    keyType = "ENSEMBL",
+                    OrgDb = org.Mm.eg.db, 
+                    ont = "BP",
+                    pAdjustMethod = "BH", 
+                    pvalueCutoff = 0.05)
 
 ego_lps <- enrichGO(gene = sig_lps$gene,
                                 universe = res_lps_tb$gene, 
@@ -26,12 +39,13 @@ ego_lps <- enrichGO(gene = sig_lps$gene,
                                 pvalueCutoff = 0.05)
 ```
 
+We will use boxplots to visualize the enriched categories:
 ```{r go_bp, cache = TRUE, fig.width = 10, fig.height = 4.5, fig.align = "center"}
 cowplot::plot_grid(barplot(ego_pbs), barplot(ego_lps), nrow = 1)
 ```
 
 ## Pathway analysis
-
+Over-representation analysis using reference data on KEGG pathways can be done in a similar way, but now we must use `enrichKEGG` function and utilize NCBI ENTREZ IDs as input:
 ```{r}
 ekegg_pbs <- enrichKEGG(gene = na.omit(sig_pbs$ENTREZID),
                     organism = 'mmu',
@@ -228,6 +242,20 @@ paged_table(head(gsea_h_pbs))
 An essential part of DE analysis is the validation of the obtained gene expression changes with custom gene sets, identified by other researches in similar experiments. Here we will use previously described enrichment methods to compare our changes against a list of DAM metabolites.
 
 ::: design
-**Task 4**: Perform GSEA on `foldchanges.pbs` and `foldchanges.lps` lists using DAM-related genes as an argument for `TERM2GENE = ...` in `GSEA()` function (1.5 point).
+**Task 5**: Perform GSEA on `foldchanges.pbs` and `foldchanges.lps` lists using DAM-related genes as an argument for `TERM2GENE = ...` in `GSEA()` function (1.5 point).
+:::
+
+::: design
+**Task 6**: So far we did the enrichment analysis for all the obtained DE genes per comparison, but sometimes it is useful to focus on the specific groups of DE genes. For example, one can split DE gene set into down- or up-regulated subsets and test them with the enrichment methods, but in this task you will be asked to accomplish a more complicated, but, in the same time, more interesting analysis: 
+
+* First, perform clustering of your DE genes (you can use DE set for the comparison you prefer most) to identify groups of genes with similar expression trends. The most straightforward method here is hierarchical clustering, but you can also any other adequate gene clustering methods you like. 
+
+* Next, choose the number of clusters based on some criteria. It can be the Gap-Statistics, the Silhouette or any other appropriate method you like.
+
+* Perform the enrichment analysis (`enrichGO`/`enrichKEGG`) on the groups of genes you like most, two or three groups will be enough. Provide the plots and also comment on the enrichment results obtained.
+
+As it was mentioned, this task is more challenging, but is it close as possible to the real research tasks relevant to the DE results interpretation. 
+
+This task will give you 1 point. Have fun!
 :::
 

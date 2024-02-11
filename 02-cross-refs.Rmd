@@ -73,7 +73,7 @@ The function `plotPCA` requires two arguments as input: an rlog object and the i
 Below we will create a custom function to plot PCA:
 
 ```{r}
-plotPCA.mystyle <- function (object, ntop = 2400, returnData = FALSE)
+plotPCA.mystyle <- function (object, ntop = 500, returnData = FALSE)
 {
     font.size <- 18
     rv <- rowVars(assay(object))
@@ -114,7 +114,11 @@ plotPCA.mystyle(rld)
 
 By default the function `plotPCA.custom` uses the top 500 most variable genes. You can change this by adding the ntop argument and specifying how many genes you want to use to draw the plot.
 
-### Correlation Heatmap (PCA)
+::: design
+**Task 1**: In the example above, we just plotted the graph for PC1 and PC2 values. Please change the function `plotPCA.mystyle` so it can produce score plots for PC1 and PC3. Also, provide an obtained plot and a brief explanation of it. (1 point).
+:::
+
+### Correlation Heatmap 
 
 The heatmap displays the correlation of gene expression for all pairwise combinations of samples in the dataset. Since the majority of genes are not differentially expressed, samples generally have high correlations with each other (values higher than 0.80). Samples below 0.80 may indicate an outlier in your data and/or sample contamination.
 

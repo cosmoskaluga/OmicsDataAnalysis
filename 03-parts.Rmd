@@ -4,15 +4,57 @@ Before the differential expression analysis we will combine $Genotype$ and $Trea
 
 ```{r}
 meta$Factors <- paste(meta$Genotype, meta$Treatment, sep = '_')
+meta$Factors <- factor(meta$Factors, levels = c("Control_PBS", "Control_LPS", "KO_PBS", "KO_LPS"))
 ```
 
-Now re-create the DESeqDataSet object, but this time with a design formula consisting of $~Factors$:
+Now re-create the `DESeqDataSet` object, but this time with a design formula consisting of $~Factors$:
 
 ```{r}
 dds_factors <- DESeqDataSetFromMatrix(countData = round(data[,-c(1)]), 
                                       colData = meta, 
                                       design = ~ Factors)
 ```
+
+Here we have only one factor for design formula, consisting of four different levels (Control_PBS, Control_LPS, KO_PBS, KO_LPS). In terms of linear models, the specified formula can be expressed as
+
+$$expression = \beta_0 + \beta_1 Factor_{Control\_LPS} + \beta_2 Factor_{KO\_PBS} + \beta_3 Factor_{KO\_LPS}$$
+or in matrix notations: 
+
+$$\,
+\begin{pmatrix}
+Y_1\\
+Y_2\\
+\vdots\\
+Y_N
+\end{pmatrix} = 
+\begin{pmatrix}
+1 &x_{11} & x_{12} & x_{13}\\
+1 &x_{21} & x_{22} & x_{23}\\
+\vdots\\
+1 & x_{N1} & x_{N2} & x_{N3}
+\end{pmatrix}
+\begin{pmatrix}
+\beta_0\\
+\beta_1\\
+\beta_2\\
+\beta_3
+\end{pmatrix} +
+\begin{pmatrix}
+\varepsilon_1\\
+\varepsilon_2\\
+\vdots\\
+\varepsilon_N
+\end{pmatrix}
+$$
+
+where $X_{N\times4}$ is the design matrix, $\mathbf{\beta} = (\beta_0, \beta_1, \beta_2, \beta_3)^T$ are estimated coefficients (log2 Fold Changes) and $\mathbf{\varepsilon} = (\varepsilon_1, \varepsilon_2, ..., \varepsilon_N)^T$ are residuals.
+
+
+Let's check the model matrix in dds object:
+```{r}
+model.matrix(design(dds_factors), data = colData(dds_factors))
+```
+
 
 ## DE analysis
 
@@ -55,6 +97,26 @@ res_lps <- lfcShrink(dds_analysis,
                      type='normal')
 ```
 
+Check the DE results for the first comparison with PBS-treated samples:
+```{r}
+knitr::kable(head(res_pbs))
+```
+What are the columns of this table?
+
+* `baseMean` is the mean gene expresion across all the samples in the data
+
+* `log2FoldChange` represents differences for the comparison of interest (estimated $\beta_i$ coefficient)
+
+* `lfcSE`	is an uncertainty of $\beta$ estimate ($\sigma_{\beta_i}$), represented by standard error (SE) for the log2(Fold Change) 
+
+* `stat` is Z-statistic, also can be expressed as $Z = \frac{\beta_i}{\sigma_{\beta_i}}$
+
+* `pvalue` means the raw p-value, derived from Wald Z-test, where $Z \sim N(0, 1)$,
+ used to reject or accept the $H_0: \beta_i = 0$
+
+* `padj` is an adjusted p-value (FDR)
+
+
 To illustrate the effect of log2 foldchange shrinkage we will use the MA plot. The MA plot shows the mean of the normalized counts versus the log2 foldchanges for all genes tested. The genes that are significantly DE are colored.
 
 ```{r ma_shrunken, cache = TRUE, fig.width = 6, fig.height = 5.5, fig.align = "center"}
@@ -62,7 +124,7 @@ plotMA(res_pbs, ylim=c(-3,5))
 ```
 
 ::: design
-**Task 1**: Plot the unshrunken results and save the plot as pdf. Are there any differences between unshrunken and shrunken results? Provide a brief explanation (1 point).
+**Task 2**: Plot the unshrunken results and save the plot as pdf. Are there any differences between unshrunken and shrunken results? Provide a brief explanation (1 point).
 :::
 
 Check the results summary for PBS and LPS comparisons:
@@ -123,6 +185,6 @@ nrow(sig_lps)
 ```
 
 ::: design
-**Task 2**: Perform DE analysis comparing LPS and PBS profiles: `Control_LPS vs Control_PBS` and `KO_LPS vs KO_PBS`. How many DE genes (FDP P-value < 0.05 and |log2FC|> 0.58) did you obtain for these comparisons (1 point).
+**Task 3**: Perform DE analysis comparing LPS and PBS profiles: `Control_LPS vs Control_PBS` and `KO_LPS vs KO_PBS`. How many DE genes (FDP P-value < 0.05 and |log2FC|> 0.58) did you obtain for these comparisons (1 point).
 :::
 

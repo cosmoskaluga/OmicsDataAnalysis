@@ -81,5 +81,5 @@ Disease-associated-microglia (DAM) is a microglia type associated with various n
 **Figure 2**: DAM stages in mouse: homeostatic microglia -> Stage DAM 1 -> Stage DAM 2. Figure was taken from Deczkowska et al., 2018.
 
 ::: design
-**Task 3**: Analyze changes in expression of DAM marker genes in the both PBS and LPS comparisons. Plot a heatmap of the DAM signature expression levels (0.5 points) and volcano plots for expression changes in DAM signatures for both comparisons (0.5 points). Do the observed changes in your data correspond to the changes in disease-associated microglia? Provide an explanation (0.5 points).
+**Task 4**: Analyze changes in expression of DAM marker genes in the both PBS and LPS comparisons. Plot a heatmap of the DAM signature expression levels (0.5 points) and volcano plots for expression changes in DAM signatures for both comparisons (0.5 points). Do the observed changes in your data correspond to the changes in disease-associated microglia? Provide an explanation (0.5 points).
 :::

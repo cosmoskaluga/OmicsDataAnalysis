@@ -8,7 +8,7 @@ cross
 normalization
 quality-control
 principal-component-analysis-pca
-correlation-heatmap-pca
+correlation-heatmap
 differential-testing
 de-analysis
 extracting-significant-genes
