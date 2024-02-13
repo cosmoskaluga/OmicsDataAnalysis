@@ -23,7 +23,7 @@
 <meta name="author" content="Dmitrii Smirnov, Skolkovo Institute of Science and Technology" />
 
 
-<meta name="date" content="2024-02-11" />
+<meta name="date" content="2024-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -261,23 +261,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-12"><a href="cross.html#cb19-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Genotype =</span> meta<span class="sc">$</span>Genotype, </span>
 <span id="cb19-13"><a href="cross.html#cb19-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Treatment =</span> meta<span class="sc">$</span>Treatment,  </span>
 <span id="cb19-14"><a href="cross.html#cb19-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">name =</span> <span class="fu">colnames</span>(object))</span>
-<span id="cb19-15"><a href="cross.html#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-16"><a href="cross.html#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (returnData) {</span>
-<span id="cb19-17"><a href="cross.html#cb19-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">attr</span>(d, <span class="st">&quot;percentVar&quot;</span>) <span class="ot">&lt;-</span> percentVar[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
-<span id="cb19-18"><a href="cross.html#cb19-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(d)</span>
-<span id="cb19-19"><a href="cross.html#cb19-19" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb19-20"><a href="cross.html#cb19-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-21"><a href="cross.html#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="at">data =</span> d1, <span class="fu">aes_string</span>(<span class="at">x =</span> <span class="st">&quot;PC1&quot;</span>, <span class="at">y =</span> <span class="st">&quot;PC2&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb19-22"><a href="cross.html#cb19-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>(<span class="fu">aes_string</span>(<span class="at">color =</span> <span class="st">&quot;Genotype&quot;</span>, <span class="at">shape =</span> <span class="st">&quot;Treatment&quot;</span>), <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span> </span>
-<span id="cb19-23"><a href="cross.html#cb19-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>, <span class="fu">round</span>(percentVar[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>), <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> </span>
-<span id="cb19-24"><a href="cross.html#cb19-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>, <span class="fu">round</span>(percentVar[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span>), <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb19-25"><a href="cross.html#cb19-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_dose</span>(<span class="at">font.size =</span> font.size)<span class="sc">+</span> <span class="co">#+ geom_label_repel(aes(label = colnames(data)), label.size = 0.1, box.padding = 0.2)</span></span>
-<span id="cb19-26"><a href="cross.html#cb19-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(</span>
-<span id="cb19-27"><a href="cross.html#cb19-27" aria-hidden="true" tabindex="-1"></a>              <span class="at">legend.key =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>), </span>
-<span id="cb19-28"><a href="cross.html#cb19-28" aria-hidden="true" tabindex="-1"></a>              <span class="at">legend.title=</span> <span class="fu">element_blank</span>(), </span>
-<span id="cb19-29"><a href="cross.html#cb19-29" aria-hidden="true" tabindex="-1"></a>              <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span>font.size<span class="dv">-2</span>)</span>
-<span id="cb19-30"><a href="cross.html#cb19-30" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb19-31"><a href="cross.html#cb19-31" aria-hidden="true" tabindex="-1"></a>} </span></code></pre></div>
+<span id="cb19-15"><a href="cross.html#cb19-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-16"><a href="cross.html#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="at">data =</span> d1, <span class="fu">aes_string</span>(<span class="at">x =</span> <span class="st">&quot;PC1&quot;</span>, <span class="at">y =</span> <span class="st">&quot;PC2&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb19-17"><a href="cross.html#cb19-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>(<span class="fu">aes_string</span>(<span class="at">color =</span> <span class="st">&quot;Genotype&quot;</span>, <span class="at">shape =</span> <span class="st">&quot;Treatment&quot;</span>), <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span> </span>
+<span id="cb19-18"><a href="cross.html#cb19-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>, <span class="fu">round</span>(percentVar[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span>), <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb19-19"><a href="cross.html#cb19-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>, <span class="fu">round</span>(percentVar[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span>), <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb19-20"><a href="cross.html#cb19-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_dose</span>(<span class="at">font.size =</span> font.size)<span class="sc">+</span> <span class="co">#+ geom_label_repel(aes(label = colnames(data)), label.size = 0.1, box.padding = 0.2)</span></span>
+<span id="cb19-21"><a href="cross.html#cb19-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(</span>
+<span id="cb19-22"><a href="cross.html#cb19-22" aria-hidden="true" tabindex="-1"></a>              <span class="at">legend.key =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>), </span>
+<span id="cb19-23"><a href="cross.html#cb19-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">legend.title=</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb19-24"><a href="cross.html#cb19-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span>font.size<span class="dv">-2</span>)</span>
+<span id="cb19-25"><a href="cross.html#cb19-25" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb19-26"><a href="cross.html#cb19-26" aria-hidden="true" tabindex="-1"></a>} </span></code></pre></div>
 <p>Plot PCA graph:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="cross.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotPCA.mystyle</span>(rld)</span></code></pre></div>
 <p><img src="_main_files/figure-html/pca-1.png" width="624" style="display: block; margin: auto;" /></p>
