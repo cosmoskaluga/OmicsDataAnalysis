@@ -24,3 +24,4 @@ gene-set-enrichment-analysis-gsea
 gene-set-enrichment-analysis-with-msigdb
 transcriptome-de-novo-assembly
 lipidomics-data-analysis
+session-info

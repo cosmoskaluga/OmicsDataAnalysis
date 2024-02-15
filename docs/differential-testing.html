@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 Differential testing | Omics Data Analysis</title>
   <meta name="description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
-  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 Differential testing | Omics Data Analysis" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Dmitrii Smirnov, Skolkovo Institute of Science and Technology" />
 
 
-<meta name="date" content="2024-02-13" />
+<meta name="date" content="2024-02-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -94,7 +94,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -107,7 +107,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -121,6 +121,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -182,6 +186,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Lecture 13: Lipidomics</b></span></li>
 <li class="chapter" data-level="9" data-path="lipidomics-data-analysis.html"><a href="lipidomics-data-analysis.html"><i class="fa fa-check"></i><b>9</b> Lipidomics Data Analysis</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="part"><span><b>Session info</b></span></li>
+<li class="chapter" data-level="10" data-path="session-info.html"><a href="session-info.html"><i class="fa fa-check"></i><b>10</b> Session Info</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -205,12 +211,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="differential-testing" class="section level1 hasAnchor" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Differential testing<a href="differential-testing.html#differential-testing" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Before the differential expression analysis we will combine <span class="math inline">\(Genotype\)</span> and <span class="math inline">\(Treatment\)</span> factors into one column, to create four groups for the design formula:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="differential-testing.html#cb24-1" aria-hidden="true" tabindex="-1"></a>meta<span class="sc">$</span>Factors <span class="ot">&lt;-</span> <span class="fu">paste</span>(meta<span class="sc">$</span>Genotype, meta<span class="sc">$</span>Treatment, <span class="at">sep =</span> <span class="st">&#39;_&#39;</span>)</span>
-<span id="cb24-2"><a href="differential-testing.html#cb24-2" aria-hidden="true" tabindex="-1"></a>meta<span class="sc">$</span>Factors <span class="ot">&lt;-</span> <span class="fu">factor</span>(meta<span class="sc">$</span>Factors, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Control_PBS&quot;</span>, <span class="st">&quot;Control_LPS&quot;</span>, <span class="st">&quot;KO_PBS&quot;</span>, <span class="st">&quot;KO_LPS&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="differential-testing.html#cb24-1" tabindex="-1"></a>meta<span class="sc">$</span>Factors <span class="ot">&lt;-</span> <span class="fu">paste</span>(meta<span class="sc">$</span>Genotype, meta<span class="sc">$</span>Treatment, <span class="at">sep =</span> <span class="st">&#39;_&#39;</span>)</span>
+<span id="cb24-2"><a href="differential-testing.html#cb24-2" tabindex="-1"></a>meta<span class="sc">$</span>Factors <span class="ot">&lt;-</span> <span class="fu">factor</span>(meta<span class="sc">$</span>Factors, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Control_PBS&quot;</span>, <span class="st">&quot;Control_LPS&quot;</span>, <span class="st">&quot;KO_PBS&quot;</span>, <span class="st">&quot;KO_LPS&quot;</span>))</span></code></pre></div>
 <p>Now re-create the <code>DESeqDataSet</code> object, but this time with a design formula consisting of <span class="math inline">\(~Factors\)</span>:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="differential-testing.html#cb25-1" aria-hidden="true" tabindex="-1"></a>dds_factors <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> <span class="fu">round</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]), </span>
-<span id="cb25-2"><a href="differential-testing.html#cb25-2" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">colData =</span> meta, </span>
-<span id="cb25-3"><a href="differential-testing.html#cb25-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">design =</span> <span class="sc">~</span> Factors)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="differential-testing.html#cb25-1" tabindex="-1"></a>dds_factors <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> <span class="fu">round</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]), </span>
+<span id="cb25-2"><a href="differential-testing.html#cb25-2" tabindex="-1"></a>                                      <span class="at">colData =</span> meta, </span>
+<span id="cb25-3"><a href="differential-testing.html#cb25-3" tabindex="-1"></a>                                      <span class="at">design =</span> <span class="sc">~</span> Factors)</span></code></pre></div>
 <pre><code>## converting counts to integer mode</code></pre>
 <p>Here we have only one factor for design formula, consisting of four different levels (Control_PBS, Control_LPS, KO_PBS, KO_LPS). In terms of linear models, the specified formula can be expressed as</p>
 <p><span class="math display">\[expression = \beta_0 + \beta_1 Factor_{Control\_LPS} + \beta_2 Factor_{KO\_PBS} + \beta_3 Factor_{KO\_LPS}\]</span>
@@ -243,7 +249,7 @@ Y_N
 \]</span></p>
 <p>where <span class="math inline">\(X_{N\times4}\)</span> is the design matrix, <span class="math inline">\(\mathbf{\beta} = (\beta_0, \beta_1, \beta_2, \beta_3)^T\)</span> are estimated coefficients (log2 Fold Changes) and <span class="math inline">\(\mathbf{\varepsilon} = (\varepsilon_1, \varepsilon_2, ..., \varepsilon_N)^T\)</span> are residuals.</p>
 <p>Let’s check the model matrix in dds object:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="differential-testing.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.matrix</span>(<span class="fu">design</span>(dds_factors), <span class="at">data =</span> <span class="fu">colData</span>(dds_factors))</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="differential-testing.html#cb27-1" tabindex="-1"></a><span class="fu">model.matrix</span>(<span class="fu">design</span>(dds_factors), <span class="at">data =</span> <span class="fu">colData</span>(dds_factors))</span></code></pre></div>
 <pre><code>##                 (Intercept) FactorsControl_LPS FactorsKO_PBS FactorsKO_LPS
 ## KO_PBS_642                1                  0             1             0
 ## KO_PBS_641                1                  0             1             0
@@ -265,7 +271,7 @@ Y_N
 <div id="de-analysis" class="section level2 hasAnchor" number="4.1">
 <h2><span class="header-section-number">4.1</span> DE analysis<a href="differential-testing.html#de-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>All the steps of differential expression analysis can be done with a single call of the function <code>DESeq()</code>:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="differential-testing.html#cb29-1" aria-hidden="true" tabindex="-1"></a>dds_analysis <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds_factors)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="differential-testing.html#cb29-1" tabindex="-1"></a>dds_analysis <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds_factors)</span></code></pre></div>
 <pre><code>## estimating size factors</code></pre>
 <pre><code>## estimating dispersions</code></pre>
 <pre><code>## gene-wise dispersion estimates</code></pre>
@@ -273,35 +279,35 @@ Y_N
 <pre><code>## final dispersion estimates</code></pre>
 <pre><code>## fitting model and testing</code></pre>
 <p>Plot dispersion estimates:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="differential-testing.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotDispEsts</span>(dds_analysis)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="differential-testing.html#cb36-1" tabindex="-1"></a><span class="fu">plotDispEsts</span>(dds_analysis)</span></code></pre></div>
 <p><img src="_main_files/figure-html/dispest-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>To tell DESeq2 which groups we wish to compare, we supply the contrasts we would like to make using the contrast argument.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="differential-testing.html#cb37-1" aria-hidden="true" tabindex="-1"></a>contrast_pbs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Factors&quot;</span>, <span class="st">&quot;KO_PBS&quot;</span>, <span class="st">&quot;Control_PBS&quot;</span>)</span>
-<span id="cb37-2"><a href="differential-testing.html#cb37-2" aria-hidden="true" tabindex="-1"></a>contrast_lps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Factors&quot;</span>, <span class="st">&quot;KO_LPS&quot;</span>, <span class="st">&quot;Control_LPS&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="differential-testing.html#cb37-1" tabindex="-1"></a>contrast_pbs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Factors&quot;</span>, <span class="st">&quot;KO_PBS&quot;</span>, <span class="st">&quot;Control_PBS&quot;</span>)</span>
+<span id="cb37-2"><a href="differential-testing.html#cb37-2" tabindex="-1"></a>contrast_lps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Factors&quot;</span>, <span class="st">&quot;KO_LPS&quot;</span>, <span class="st">&quot;Control_LPS&quot;</span>)</span></code></pre></div>
 <p>To build our results table we will use the results() function.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="differential-testing.html#cb38-1" aria-hidden="true" tabindex="-1"></a>res_unshrunken_pbs <span class="ot">&lt;-</span> <span class="fu">results</span>(dds_analysis, <span class="at">contrast=</span>contrast_pbs, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span>
-<span id="cb38-2"><a href="differential-testing.html#cb38-2" aria-hidden="true" tabindex="-1"></a>res_unshrunken_lps <span class="ot">&lt;-</span> <span class="fu">results</span>(dds_analysis, <span class="at">contrast=</span>contrast_lps, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="differential-testing.html#cb38-1" tabindex="-1"></a>res_unshrunken_pbs <span class="ot">&lt;-</span> <span class="fu">results</span>(dds_analysis, <span class="at">contrast=</span>contrast_pbs, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span>
+<span id="cb38-2"><a href="differential-testing.html#cb38-2" tabindex="-1"></a>res_unshrunken_lps <span class="ot">&lt;-</span> <span class="fu">results</span>(dds_analysis, <span class="at">contrast=</span>contrast_lps, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span></code></pre></div>
 <p>To generate more accurate log2 fold change estimates, DESeq2 allows for the shrinkage of the log2 fold changes estimates toward zero when the information for a gene is low.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="differential-testing.html#cb39-1" aria-hidden="true" tabindex="-1"></a>res_pbs <span class="ot">&lt;-</span> <span class="fu">lfcShrink</span>(dds_analysis, </span>
-<span id="cb39-2"><a href="differential-testing.html#cb39-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">contrast=</span>contrast_pbs, </span>
-<span id="cb39-3"><a href="differential-testing.html#cb39-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">res=</span>res_unshrunken_pbs, </span>
-<span id="cb39-4"><a href="differential-testing.html#cb39-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type=</span><span class="st">&#39;normal&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="differential-testing.html#cb39-1" tabindex="-1"></a>res_pbs <span class="ot">&lt;-</span> <span class="fu">lfcShrink</span>(dds_analysis, </span>
+<span id="cb39-2"><a href="differential-testing.html#cb39-2" tabindex="-1"></a>                     <span class="at">contrast=</span>contrast_pbs, </span>
+<span id="cb39-3"><a href="differential-testing.html#cb39-3" tabindex="-1"></a>                     <span class="at">res=</span>res_unshrunken_pbs, </span>
+<span id="cb39-4"><a href="differential-testing.html#cb39-4" tabindex="-1"></a>                     <span class="at">type=</span><span class="st">&#39;normal&#39;</span>)</span></code></pre></div>
 <pre><code>## using &#39;normal&#39; for LFC shrinkage, the Normal prior from Love et al (2014).
 ## 
 ## Note that type=&#39;apeglm&#39; and type=&#39;ashr&#39; have shown to have less bias than type=&#39;normal&#39;.
 ## See ?lfcShrink for more details on shrinkage type, and the DESeq2 vignette.
 ## Reference: https://doi.org/10.1093/bioinformatics/bty895</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="differential-testing.html#cb41-1" aria-hidden="true" tabindex="-1"></a>res_lps <span class="ot">&lt;-</span> <span class="fu">lfcShrink</span>(dds_analysis, </span>
-<span id="cb41-2"><a href="differential-testing.html#cb41-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">contrast=</span>contrast_lps, </span>
-<span id="cb41-3"><a href="differential-testing.html#cb41-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">res=</span>res_unshrunken_lps, </span>
-<span id="cb41-4"><a href="differential-testing.html#cb41-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type=</span><span class="st">&#39;normal&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="differential-testing.html#cb41-1" tabindex="-1"></a>res_lps <span class="ot">&lt;-</span> <span class="fu">lfcShrink</span>(dds_analysis, </span>
+<span id="cb41-2"><a href="differential-testing.html#cb41-2" tabindex="-1"></a>                     <span class="at">contrast=</span>contrast_lps, </span>
+<span id="cb41-3"><a href="differential-testing.html#cb41-3" tabindex="-1"></a>                     <span class="at">res=</span>res_unshrunken_lps, </span>
+<span id="cb41-4"><a href="differential-testing.html#cb41-4" tabindex="-1"></a>                     <span class="at">type=</span><span class="st">&#39;normal&#39;</span>)</span></code></pre></div>
 <pre><code>## using &#39;normal&#39; for LFC shrinkage, the Normal prior from Love et al (2014).
 ## 
 ## Note that type=&#39;apeglm&#39; and type=&#39;ashr&#39; have shown to have less bias than type=&#39;normal&#39;.
 ## See ?lfcShrink for more details on shrinkage type, and the DESeq2 vignette.
 ## Reference: https://doi.org/10.1093/bioinformatics/bty895</code></pre>
 <p>Check the DE results for the first comparison with PBS-treated samples:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="differential-testing.html#cb43-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(res_pbs))</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="differential-testing.html#cb43-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(res_pbs))</span></code></pre></div>
 <table>
 <colgroup>
 <col width="22%" />
@@ -391,13 +397,13 @@ used to reject or accept the <span class="math inline">\(H_0: \beta_i = 0\)</spa
 <li><p><code>padj</code> is an adjusted p-value (FDR)</p></li>
 </ul>
 <p>To illustrate the effect of log2 foldchange shrinkage we will use the MA plot. The MA plot shows the mean of the normalized counts versus the log2 foldchanges for all genes tested. The genes that are significantly DE are colored.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="differential-testing.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotMA</span>(res_pbs, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="differential-testing.html#cb44-1" tabindex="-1"></a><span class="fu">plotMA</span>(res_pbs, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">5</span>))</span></code></pre></div>
 <p><img src="_main_files/figure-html/ma_shrunken-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="design">
 <p><strong>Task 2</strong>: Plot the unshrunken results and save the plot as pdf. Are there any differences between unshrunken and shrunken results? Provide a brief explanation (1 point).</p>
 </div>
 <p>Check the results summary for PBS and LPS comparisons:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="differential-testing.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res_pbs, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="differential-testing.html#cb45-1" tabindex="-1"></a><span class="fu">summary</span>(res_pbs, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span></code></pre></div>
 <pre><code>## 
 ## out of 22783 with nonzero total read count
 ## adjusted p-value &lt; 0.05
@@ -408,7 +414,7 @@ used to reject or accept the <span class="math inline">\(H_0: \beta_i = 0\)</spa
 ## (mean count &lt; 4)
 ## [1] see &#39;cooksCutoff&#39; argument of ?results
 ## [2] see &#39;independentFiltering&#39; argument of ?results</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="differential-testing.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res_lps, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="differential-testing.html#cb47-1" tabindex="-1"></a><span class="fu">summary</span>(res_lps, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span></code></pre></div>
 <pre><code>## 
 ## out of 22783 with nonzero total read count
 ## adjusted p-value &lt; 0.05
@@ -423,23 +429,23 @@ used to reject or accept the <span class="math inline">\(H_0: \beta_i = 0\)</spa
 <div id="extracting-significant-genes" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Extracting significant genes<a href="differential-testing.html#extracting-significant-genes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Now we are ready to extract significant differentially expressed genes. We will define significant genes as those satisfying the |FDR p-value &lt; 0.05| and |log2(Fold Change)| &gt; 0.58:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="differential-testing.html#cb49-1" aria-hidden="true" tabindex="-1"></a>padj.cutoff <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
-<span id="cb49-2"><a href="differential-testing.html#cb49-2" aria-hidden="true" tabindex="-1"></a>lfc.cutoff <span class="ot">&lt;-</span> <span class="fl">0.58</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="differential-testing.html#cb49-1" tabindex="-1"></a>padj.cutoff <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb49-2"><a href="differential-testing.html#cb49-2" tabindex="-1"></a>lfc.cutoff <span class="ot">&lt;-</span> <span class="fl">0.58</span></span></code></pre></div>
 <p>Convert the results table into a tibble:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="differential-testing.html#cb50-1" aria-hidden="true" tabindex="-1"></a>res_pbs_tb <span class="ot">&lt;-</span> res_pbs <span class="sc">%&gt;%</span> </span>
-<span id="cb50-2"><a href="differential-testing.html#cb50-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb50-3"><a href="differential-testing.html#cb50-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">&quot;gene&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb50-4"><a href="differential-testing.html#cb50-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">as_tibble</span>()</span>
-<span id="cb50-5"><a href="differential-testing.html#cb50-5" aria-hidden="true" tabindex="-1"></a>res_lps_tb <span class="ot">&lt;-</span> res_lps <span class="sc">%&gt;%</span> </span>
-<span id="cb50-6"><a href="differential-testing.html#cb50-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb50-7"><a href="differential-testing.html#cb50-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">&quot;gene&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb50-8"><a href="differential-testing.html#cb50-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">as_tibble</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="differential-testing.html#cb50-1" tabindex="-1"></a>res_pbs_tb <span class="ot">&lt;-</span> res_pbs <span class="sc">%&gt;%</span> </span>
+<span id="cb50-2"><a href="differential-testing.html#cb50-2" tabindex="-1"></a>              <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb50-3"><a href="differential-testing.html#cb50-3" tabindex="-1"></a>              <span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">&quot;gene&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-4"><a href="differential-testing.html#cb50-4" tabindex="-1"></a>              <span class="fu">as_tibble</span>()</span>
+<span id="cb50-5"><a href="differential-testing.html#cb50-5" tabindex="-1"></a>res_lps_tb <span class="ot">&lt;-</span> res_lps <span class="sc">%&gt;%</span> </span>
+<span id="cb50-6"><a href="differential-testing.html#cb50-6" tabindex="-1"></a>              <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb50-7"><a href="differential-testing.html#cb50-7" tabindex="-1"></a>              <span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">&quot;gene&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-8"><a href="differential-testing.html#cb50-8" tabindex="-1"></a>              <span class="fu">as_tibble</span>()</span></code></pre></div>
 <p>Select significant genes:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="differential-testing.html#cb51-1" aria-hidden="true" tabindex="-1"></a>sig_pbs <span class="ot">&lt;-</span> res_pbs_tb <span class="sc">%&gt;%</span> </span>
-<span id="cb51-2"><a href="differential-testing.html#cb51-2" aria-hidden="true" tabindex="-1"></a>           dplyr<span class="sc">::</span><span class="fu">filter</span>(padj <span class="sc">&lt;</span> padj.cutoff <span class="sc">&amp;</span> <span class="fu">abs</span>(log2FoldChange) <span class="sc">&gt;=</span> lfc.cutoff)</span>
-<span id="cb51-3"><a href="differential-testing.html#cb51-3" aria-hidden="true" tabindex="-1"></a>sig_lps <span class="ot">&lt;-</span> res_lps_tb <span class="sc">%&gt;%</span> </span>
-<span id="cb51-4"><a href="differential-testing.html#cb51-4" aria-hidden="true" tabindex="-1"></a>           dplyr<span class="sc">::</span><span class="fu">filter</span>(padj <span class="sc">&lt;</span> padj.cutoff <span class="sc">&amp;</span> <span class="fu">abs</span>(log2FoldChange) <span class="sc">&gt;=</span> lfc.cutoff)</span></code></pre></div>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="differential-testing.html#cb52-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(sig_pbs))</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="differential-testing.html#cb51-1" tabindex="-1"></a>sig_pbs <span class="ot">&lt;-</span> res_pbs_tb <span class="sc">%&gt;%</span> </span>
+<span id="cb51-2"><a href="differential-testing.html#cb51-2" tabindex="-1"></a>           dplyr<span class="sc">::</span><span class="fu">filter</span>(padj <span class="sc">&lt;</span> padj.cutoff <span class="sc">&amp;</span> <span class="fu">abs</span>(log2FoldChange) <span class="sc">&gt;=</span> lfc.cutoff)</span>
+<span id="cb51-3"><a href="differential-testing.html#cb51-3" tabindex="-1"></a>sig_lps <span class="ot">&lt;-</span> res_lps_tb <span class="sc">%&gt;%</span> </span>
+<span id="cb51-4"><a href="differential-testing.html#cb51-4" tabindex="-1"></a>           dplyr<span class="sc">::</span><span class="fu">filter</span>(padj <span class="sc">&lt;</span> padj.cutoff <span class="sc">&amp;</span> <span class="fu">abs</span>(log2FoldChange) <span class="sc">&gt;=</span> lfc.cutoff)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="differential-testing.html#cb52-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(sig_pbs))</span></code></pre></div>
 <table style="width:100%;">
 <colgroup>
 <col width="22%" />
@@ -518,7 +524,7 @@ used to reject or accept the <span class="math inline">\(H_0: \beta_i = 0\)</spa
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="differential-testing.html#cb53-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(sig_lps))</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="differential-testing.html#cb53-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(sig_lps))</span></code></pre></div>
 <table>
 <colgroup>
 <col width="22%" />
@@ -598,9 +604,9 @@ used to reject or accept the <span class="math inline">\(H_0: \beta_i = 0\)</spa
 </tbody>
 </table>
 <p>Intriguingly, the number of significant genes is almost twice more in the comparison with LPS compared to PBS-treated data.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="differential-testing.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(sig_pbs)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="differential-testing.html#cb54-1" tabindex="-1"></a><span class="fu">nrow</span>(sig_pbs)</span></code></pre></div>
 <pre><code>## [1] 2039</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="differential-testing.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(sig_lps)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="differential-testing.html#cb56-1" tabindex="-1"></a><span class="fu">nrow</span>(sig_lps)</span></code></pre></div>
 <pre><code>## [1] 4045</code></pre>
 <div class="design">
 <p><strong>Task 3</strong>: Perform DE analysis comparing LPS and PBS profiles: <code>Control_LPS vs Control_PBS</code> and <code>KO_LPS vs KO_PBS</code>. How many DE genes (FDP P-value &lt; 0.05 and |log2FC|&gt; 0.58) did you obtain for these comparisons (1 point).</p>

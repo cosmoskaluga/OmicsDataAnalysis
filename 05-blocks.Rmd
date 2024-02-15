@@ -73,7 +73,7 @@ pheatmap(norm_sig_pbs,
 ```
 
 ## Comparison with DAM markers
-Disease-associated-microglia (DAM) is a microglia type associated with various neurodegeneration diseases (AD, ALS, aging) and characterized by a specific transcriptional program. We will work with DAM signatures described in Deczkowska et al., 2018 (<https://doi.org/10.1016/j.cell.2018.05.003>) and in the Figure 2. This signatures can be divided in three main groups or stages: markers of homeostatic microglia, Stage 2 DAM (independent on TREM2 signaling) signatures and markers of Stage 2 DAM of microglial activation, caused by TREM2 signaling. 
+Disease-associated-microglia (DAM) is a microglia type associated with various neurodegeneration diseases (AD, ALS, aging) and characterized by a specific transcriptional program. We will work with DAM signatures described in Deczkowska et al., 2018 (<https://doi.org/10.1016/j.cell.2018.05.003>) and in the Figure 2. This signatures can be divided in three main groups or stages: markers of homeostatic microglia, Stage 1 DAM (independent on TREM2 signaling) signatures and markers of Stage 2 DAM of microglial activation, caused by TREM2 signaling. 
 
 
 <img src="docs/images/DAM.jpg"/> 

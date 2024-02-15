@@ -62,3 +62,6 @@ For each missing figure/plot - minus 2 points.
 For each missing answer to ❓ - minus 2 points.
 
 For any other mistake - minus 0.2 point.
+
+
+

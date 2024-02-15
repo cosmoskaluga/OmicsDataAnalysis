@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Input dataset | Omics Data Analysis</title>
   <meta name="description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
-  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Input dataset | Omics Data Analysis" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Dmitrii Smirnov, Skolkovo Institute of Science and Technology" />
 
 
-<meta name="date" content="2024-02-13" />
+<meta name="date" content="2024-02-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -94,7 +94,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -107,7 +107,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -121,6 +121,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -182,6 +186,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>Lecture 13: Lipidomics</b></span></li>
 <li class="chapter" data-level="9" data-path="lipidomics-data-analysis.html"><a href="lipidomics-data-analysis.html"><i class="fa fa-check"></i><b>9</b> Lipidomics Data Analysis</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="part"><span><b>Session info</b></span></li>
+<li class="chapter" data-level="10" data-path="session-info.html"><a href="session-info.html"><i class="fa fa-check"></i><b>10</b> Session Info</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -211,34 +217,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p><img src="docs/images/TitleFigure.png"/> <strong>Figure 1.</strong> DE analysis typical workflow</p>
 <p>Import libraries:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="input-dataset.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-2"><a href="input-dataset.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-3"><a href="input-dataset.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
-<span id="cb1-4"><a href="input-dataset.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DOSE)</span>
-<span id="cb1-5"><a href="input-dataset.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span>
-<span id="cb1-6"><a href="input-dataset.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
-<span id="cb1-7"><a href="input-dataset.html#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clusterProfiler)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="input-dataset.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="input-dataset.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="input-dataset.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
+<span id="cb1-4"><a href="input-dataset.html#cb1-4" tabindex="-1"></a><span class="fu">library</span>(DOSE)</span>
+<span id="cb1-5"><a href="input-dataset.html#cb1-5" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span>
+<span id="cb1-6"><a href="input-dataset.html#cb1-6" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb1-7"><a href="input-dataset.html#cb1-7" tabindex="-1"></a><span class="fu">library</span>(clusterProfiler)</span></code></pre></div>
 <div id="count-table-importing" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Count table importing<a href="input-dataset.html#count-table-importing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We will start the analysis with uploading <strong>raw</strong> count data to the R workspace.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="input-dataset.html#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/Data.csv&quot;</span>, <span class="at">row.names =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="input-dataset.html#cb2-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/Data.csv&quot;</span>, <span class="at">row.names =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>The gene expression table has gene names in the rows and samples names in the columns. ‘Length’ column denotes a length of each annotated gene:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="input-dataset.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paged_table</span>(<span class="fu">head</span>(data))</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="input-dataset.html#cb3-1" tabindex="-1"></a><span class="fu">paged_table</span>(<span class="fu">head</span>(data))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Length"],"name":[1],"type":["int"],"align":["right"]},{"label":["KO_PBS_642"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["KO_PBS_641"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["KO_PBS_638"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["KO_LPS_600"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["KO_LPS_194"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["KO_LPS_193"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["Control_PBS_175"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["Control_PBS_171"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Control_PBS_170"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Control_LPS_185"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Control_LPS_184"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Control_LPS_149"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"1070","2":"0","3":"0","4":"0","5":"0","6":"0","7":"0","8":"0","9":"0","10":"0","11":"0","12":"0","13":"0","_rn_":"ENSMUSG00000102693"},{"1":"110","2":"0","3":"0","4":"0","5":"0","6":"0","7":"0","8":"0","9":"0","10":"0","11":"0","12":"0","13":"0","_rn_":"ENSMUSG00000064842"},{"1":"6094","2":"4","3":"0","4":"0","5":"0","6":"0","7":"0","8":"0","9":"0","10":"0","11":"1","12":"10","13":"12","_rn_":"ENSMUSG00000051951"},{"1":"480","2":"0","3":"0","4":"0","5":"0","6":"0","7":"0","8":"0","9":"0","10":"0","11":"0","12":"0","13":"0","_rn_":"ENSMUSG00000102851"},{"1":"2819","2":"0","3":"0","4":"0","5":"4","6":"0","7":"0","8":"0","9":"0","10":"0","11":"12","12":"0","13":"2","_rn_":"ENSMUSG00000103377"},{"1":"2233","2":"0","3":"0","4":"0","5":"0","6":"1","7":"0","8":"0","9":"0","10":"0","11":"0","12":"0","13":"5","_rn_":"ENSMUSG00000104017"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Further we will need a meta table which maps our samples to the corresponding sample groups that we are investigating. Our metadata will include three columns of interest: “Genotype”, “Treatment” and “SampleID”.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="input-dataset.html#cb4-1" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-2"><a href="input-dataset.html#cb4-2" aria-hidden="true" tabindex="-1"></a>        .[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)] <span class="sc">%&gt;%</span> <span class="fu">strsplit</span>(<span class="at">split =</span> <span class="st">&#39;_&#39;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-3"><a href="input-dataset.html#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb4-4"><a href="input-dataset.html#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">t</span>() </span>
-<span id="cb4-5"><a href="input-dataset.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(meta) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data)[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]</span>
-<span id="cb4-6"><a href="input-dataset.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(meta) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Genotype&quot;</span>, <span class="st">&quot;Treatment&quot;</span>, <span class="st">&quot;SampleID&quot;</span>)</span>
-<span id="cb4-7"><a href="input-dataset.html#cb4-7" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(meta)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="input-dataset.html#cb4-1" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="input-dataset.html#cb4-2" tabindex="-1"></a>        .[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)] <span class="sc">%&gt;%</span> <span class="fu">strsplit</span>(<span class="at">split =</span> <span class="st">&#39;_&#39;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="input-dataset.html#cb4-3" tabindex="-1"></a>        <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="input-dataset.html#cb4-4" tabindex="-1"></a>        <span class="fu">t</span>() </span>
+<span id="cb4-5"><a href="input-dataset.html#cb4-5" tabindex="-1"></a><span class="fu">rownames</span>(meta) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data)[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]</span>
+<span id="cb4-6"><a href="input-dataset.html#cb4-6" tabindex="-1"></a><span class="fu">colnames</span>(meta) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Genotype&quot;</span>, <span class="st">&quot;Treatment&quot;</span>, <span class="st">&quot;SampleID&quot;</span>)</span>
+<span id="cb4-7"><a href="input-dataset.html#cb4-7" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(meta)</span></code></pre></div>
 <p>Check the generated meta table:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="input-dataset.html#cb5-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(meta)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="input-dataset.html#cb5-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(meta)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -324,20 +330,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>Another important step is a filtering of the low- and non-expressed genes prior statistical analysis. Such genes contributes to the False Discovery Rate. We will keep only those genes having at least 10 counts in total across experimental replicates.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="input-dataset.html#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="fu">rowSums</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]) <span class="sc">&gt;</span> <span class="dv">10</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="input-dataset.html#cb6-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="fu">rowSums</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]) <span class="sc">&gt;</span> <span class="dv">10</span>, ]</span></code></pre></div>
 </div>
 <div id="deseq2-object" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> DESeq2 object<a href="input-dataset.html#deseq2-object" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Let’s start the main part of the analysis with creating the <code>DESeqDataSet</code> object. To create this object we will need the count matrix and the metadata table as input. We will also need to specify a design formula. The design formula specifies the column(s) in the metadata table and how they should be used in the analysis. For our dataset we only have two column we are interested in, that is <span class="math inline">\(\sim Treatment + Genotype\)</span>. The <span class="math inline">\(Genotype\)</span> is the main factor of interest, therefore it is in the end of the design formula.</p>
 <p>Create DESeq2Dataset object:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="input-dataset.html#cb7-1" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> <span class="fu">round</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]), </span>
-<span id="cb7-2"><a href="input-dataset.html#cb7-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">colData =</span> meta, </span>
-<span id="cb7-3"><a href="input-dataset.html#cb7-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">design =</span> <span class="sc">~</span> Treatment <span class="sc">+</span> Genotype)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="input-dataset.html#cb7-1" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> <span class="fu">round</span>(data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)]), </span>
+<span id="cb7-2"><a href="input-dataset.html#cb7-2" tabindex="-1"></a>                              <span class="at">colData =</span> meta, </span>
+<span id="cb7-3"><a href="input-dataset.html#cb7-3" tabindex="-1"></a>                              <span class="at">design =</span> <span class="sc">~</span> Treatment <span class="sc">+</span> Genotype)</span></code></pre></div>
 <pre><code>## converting counts to integer mode</code></pre>
-<pre><code>## Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in design formula are characters,
-## converting to factors</code></pre>
+<pre><code>## Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in design formula are characters, converting to factors</code></pre>
 <p>Check what is inside the object:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="input-dataset.html#cb10-1" aria-hidden="true" tabindex="-1"></a>dds</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="input-dataset.html#cb10-1" tabindex="-1"></a>dds</span></code></pre></div>
 <pre><code>## class: DESeqDataSet 
 ## dim: 22783 12 
 ## metadata(1): version

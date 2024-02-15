@@ -50,16 +50,40 @@ Over-representation analysis using reference data on KEGG pathways can be done i
 ekegg_pbs <- enrichKEGG(gene = na.omit(sig_pbs$ENTREZID),
                     organism = 'mmu',
                     pvalueCutoff = 0.05,
-                    universe=na.omit(res_pbs_tb$ENTREZID))
+                    universe = na.omit(res_pbs_tb$ENTREZID))
 
 ekegg_lps <- enrichKEGG(gene = na.omit(sig_lps$ENTREZID),
                     organism = 'mmu',
                     pvalueCutoff = 0.05,
-                    universe=na.omit(res_lps_tb$ENTREZID))
+                    universe = na.omit(res_lps_tb$ENTREZID))
 ```
 
-```{r}
-library(enrichplot)
+**Note**: If you work on the course computational cluster, you can encounter the error "No gene can be mapped ...". This issue is incompatibility between the currently installed `clusterProfiler` version and KEGG database. Here we suggest a workaround to avoid this problem:
+
+```{r, eval = FALSE}
+install.packages("/home/d.smirnov/KEGG.db_1.0.tar.gz", 
+                 repos=NULL,
+                 type="source") # run this in terminal
+
+library(KEGG.db)
+
+ekegg_pbs <- enrichKEGG(gene = na.omit(sig_pbs$ENTREZID),
+                    organism = 'mmu',
+                    pvalueCutoff = 0.05,
+                    universe = na.omit(res_pbs_tb$ENTREZID), 
+                    use_internal_data = T)
+
+ekegg_lps <- enrichKEGG(gene = na.omit(sig_lps$ENTREZID),
+                    organism = 'mmu',
+                    pvalueCutoff = 0.05,
+                    universe = na.omit(res_lps_tb$ENTREZID), 
+                    use_internal_data = T)
+
+## Now the output of the enrichKEGG() is generated, but the Description column consist of NAs. 
+## We will add missing pathway names manually from the KEGG.db we just uploaded.
+
+ekegg_pbs@result$Description <- unlist(as.list("KEGG.db"::"KEGGPATHID2NAME")[ekegg_pbs@result$ID])
+ekegg_lps@result$Description <- unlist(as.list("KEGG.db"::"KEGGPATHID2NAME")[ekegg_lps@result$ID])
 ```
 
 Since recently, the description of KEGG pathways in the `clusterProfiler` output data include the part related to a species name, which is `- Mus musculus .(house mouse).` in this case. This annoying text complicates visualization of the enriched pathways, so we will get rid of it:
@@ -72,8 +96,12 @@ ekegg_lps@result$Description <- sub(" - Mus musculus .(house mouse).", "", ekegg
 Another (and a little bit more complex) way to visualize pathway enrichment results is to use upsetplots, showing co-occurring DE gene sets in respect to the altered pathways they associated with:
 
 ```{r}
-ups_pbs <- upsetplot(ekegg_pbs)
-ups_lps <- upsetplot(ekegg_lps)
+library(enrichplot)
+```
+
+```{r}
+ups_pbs <- enrichplot::upsetplot(ekegg_pbs)
+ups_lps <- enrichplot::upsetplot(ekegg_lps)
 ```
 
 ```{r upset1, cache = TRUE, fig.width = 10, fig.height = 4.5, fig.align = "center"}
@@ -140,6 +168,36 @@ gseaKEGG.lps <- gseKEGG(geneList = foldchanges.lps,
                     seed = TRUE)
 ```
 
+**Note**: If you work on the course cluster, you will have an "No gene can be mapped ..." bug again. As before, use `use_internal_data = T` to overcome this:
+
+```{r, eval = FALSE}
+## KEEG.db is already loaded
+
+gseaKEGG.pbs <- gseKEGG(geneList = foldchanges.pbs,              
+                    pAdjustMethod = "fdr",
+                    organism = "mmu", 
+                    nPerm = 2000, 
+                    minGSSize = 10, 
+                    pvalueCutoff = 0.05, 
+                    verbose = FALSE, 
+                    seed = TRUE, 
+                    use_internal_data = T)
+
+
+gseaKEGG.lps <- gseKEGG(geneList = foldchanges.lps,              
+                    pAdjustMethod = "fdr",
+                    organism = "mmu", 
+                    nPerm = 2000, 
+                    minGSSize = 10, 
+                    pvalueCutoff = 0.05, 
+                    verbose = FALSE, 
+                    seed = TRUE, 
+                    use_internal_data = T)
+
+gseaKEGG.pbs@result$Description <- unlist(as.list("KEGG.db"::"KEGGPATHID2NAME")[gseaKEGG.pbs@result$ID])
+gseaKEGG.lps@result$Description <- unlist(as.list("KEGG.db"::"KEGGPATHID2NAME")[gseaKEGG.lps@result$ID])
+```
+
 Remove the species name in the pathway description again:
 
 ```{r}
@@ -162,9 +220,11 @@ Apart from the adjusted p-values, enrichment score is another important characte
 Below is a GSEA plot for three manually selected enriched pathway from the PBS comparison:
 
 ```{r gseaplot2, cache = TRUE, fig.width = 9.5, fig.height = 5.5, fig.align = "center"}
-gseaplot2(gseaKEGG.pbs, geneSetID = c(15, 23, 29), pvalue_table = TRUE,
+enrichplot::gseaplot2(gseaKEGG.pbs, geneSetID = c(15, 23, 29), pvalue_table = TRUE,
           color = c("#E495A5", "#86B875", "#7DB0DD"), ES_geom = "dot")
 ```
+
+Please note, that your enriched pathways could be different from the ones showed in the plot above! 
 
 ## Gene Set Enrichment Analysis with mSigDB
 In the section above we used GO terms and KEGG pathways to perform enrichment analyses, but sometimes it is needed to compare gene expression changes against other gene sets, such as signatures or markers of the various diseases and biological processes. A possible solution is to use Molecular Signatures Database (mSigDB) represents the curated lists of gene sets, divided in 9 main collections:

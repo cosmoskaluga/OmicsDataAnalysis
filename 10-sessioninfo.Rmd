@@ -1,0 +1,7 @@
+# (PART\*) Session info {-}
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
