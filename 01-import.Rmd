@@ -36,6 +36,7 @@ paged_table(head(data))
 ```
 
 Further we will need a meta table which maps our samples to the corresponding sample groups that we are investigating. Our metadata will include three columns of interest: "Genotype", "Treatment" and "SampleID".
+
 ```{r}
 meta <- colnames(data) %>% 
         .[-c(1)] %>% strsplit(split = '_') %>% 
@@ -71,6 +72,7 @@ dds <- DESeqDataSetFromMatrix(countData = round(data[,-c(1)]),
 ```
 
 Check what is inside the object:
+
 ```{r}
 dds
 ```

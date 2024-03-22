@@ -1,0 +1,158 @@
+# Quantification and annotation
+
+## Transcript quantification
+The next step is to quantify transcript abundance. Since we already have a reference transcriptome constructed by Trinity, we can align filtered RNA-seq reads on it and calculate transcript and gene expression levels.
+
+Quantify expression for both transcript and gene levels with Kallisto mode:
+
+```{bash, eval = FALSE}
+align_and_estimate_abundance.pl --SS_lib_type RF --est_method kallisto --transcripts Trinity.filtered.fasta --seqType fq --left data_filtered/<your_number>.R1_val_1.fq.gz --right data_filtered/<your_number>.R2_val_2.fq.gz --output_dir kallisto_output --thread_count 2 --trinity_mode --prep_reference
+```
+
+Apart from `kallisto_output` folder this script will also generate two additional files: `Trinity.filtered.fasta.gene_trans_map` and `Trinity.filtered.fasta.kallisto_idx`. Transcript and gene expression levels will be stored in `kallisto_output/abundance.tsv` and `kallisto_output/abundance.tsv.genes` tables, respectively.
+
+```{bash, eval = FALSE}
+head kallisto_output/abundance.tsv
+
+target_id       length  eff_length      est_counts      tpm
+TRINITY_DN3897_c0_g1_i1 794     537.124 7       4.2194
+TRINITY_DN3897_c1_g1_i1 581     324.353 8       7.98545
+TRINITY_DN3809_c0_g1_i1 283     55.0072 2       11.7717
+TRINITY_DN3844_c0_g1_i1 1149    892.124 24.4812 8.88454
+TRINITY_DN3869_c0_g1_i1 417     162.011 2       3.9968
+TRINITY_DN3869_c0_g2_i1 416     161.011 2       4.02162
+TRINITY_DN3854_c0_g1_i1 487     230.719 1.67628 2.35229
+TRINITY_DN3854_c0_g2_i1 490     233.719 3.32372 4.60423
+TRINITY_DN3891_c0_g1_i1 472     215.852 3       4.49979
+```
+
+## Transcript annotation
+
+While we already evaluated expression of each gene in the assembly, the biological interpretation of the obtained trinity features (represented like TRINITY_DN3897_c0_g1) is still a puzzle. To expand our understanding of what the assembled features are, we will perform several annotation procedures with `TransDecoder` and `Trinotate` tools.
+
+First, create `Trinotate` sqlite database by running the following line
+
+```{bash, eval = FALSE}
+Build_Trinotate_Boilerplate_SQLite_db.pl Trinotate
+```
+
+It will download `uniprot_sprot.pep` (protein sequence information from the SwissProt database) and `Pfam-A.hmm.gz` (protein domains) files.
+
+To perform blast search with uniprot_sprot.pep searches, we should prepare a `BLAST` database:
+
+```{bash, eval = FALSE}
+makeblastdb -in uniprot_sprot.pep -dbtype prot
+```
+
+Prepare Pfam database
+
+```{bash, eval = FALSE}
+gunzip Pfam-A.hmm.gz
+hmmpress Pfam-A.hmm
+```
+
+Run `TransDecoder` to identify the longest open reading frames (ORF) from the assembly file:
+
+```{bash, eval = FALSE}
+TransDecoder.LongOrfs -m 10 -t Trinity.filtered.fasta
+```
+
+❗ The two annotation steps described below will be quite time consuming (several hours each), therefore consider using screen session.
+
+Blast against the SwissProt protein database:
+```{bash, eval = FALSE}
+blastx -query Trinity.filtered.fasta -db uniprot_sprot.pep -num_threads 2 -max_target_seqs 1 -outfmt 6 > blastx.outfmt6
+```
+
+Query a set of the longest obtained ORFs against Swiss-Prot database to search for sequence similarity with known proteins
+
+```{bash, eval = FALSE}
+blastp -query Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep -db uniprot_sprot.pep -num_threads 2 -max_target_seqs 1 -outfmt 6 > blastp.outfmt6
+```
+
+In addition to Blast results perform hmmscan search for protein domains from the Pfam database. Run the following line in a screen session:
+
+```{bash, eval = FALSE}
+hmmsearch --cpu 2 -o /dev/null/ --domtblout hmmsearch.tmp Pfam-A.hmm Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep
+awk 'BEGIN{OFS=FS=" "} NR<=3{print}; NR>3{tmp=$1; $1=$4; $4=tmp; tmp=$2; $2=$5; $5=tmp; print}' hmmsearch.tmp > TrinotatePFAM.out
+```
+
+Once all three searches are done, we can start uploading information to `Trinotate.sqlite` database. First, load assembly .fasta file, `longest_orfs.pep` and `gene_trans_map` file (obtained with align_and_estimate_abundance.pl script during abundance quantification):
+
+```{bash, eval = FALSE}
+Trinotate Trinotate.sqlite init --gene_trans_map Trinity.filtered.fasta.gene_trans_map \
+                                --transcript_fasta Trinity.filtered.fasta \
+                                --transdecoder_pep Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep
+```
+
+Load blastp, blastx and pfam results
+
+```{bash, eval = FALSE}
+Trinotate Trinotate.sqlite LOAD_swissprot_blastp blastp.outfmt6
+Trinotate Trinotate.sqlite LOAD_swissprot_blastx blastx.outfmt6
+Trinotate Trinotate.sqlite LOAD_pfam TrinotatePFAM.out
+```
+
+Finally, generate the report:
+
+```{bash, eval = FALSE}
+Trinotate Trinotate.sqlite report > trinotate_annotation_report.xls
+```
+
+Extract GO annotation terms from the report:
+
+```{bash, eval = FALSE}
+extract_GO_assignments_from_Trinotate_xls.pl  \
+        --Trinotate_xls trinotate_annotation_report.xls \
+        -G --include_ancestral_terms > go_annotations.txt
+```
+
+Explore the obtained go_annotations.txt file
+
+## Integrating expression data and annotation
+
+Generate a map of trinity gene IDs and corresponding annotations
+
+```{bash, eval = FALSE}
+Trinotate_get_feature_name_encoding_attributes.pl \
+                  trinotate_annotation_report.xls  > annot_feature_map.txt
+```
+
+Check `annot_feature_map.txt`:
+
+```{bash, eval = FALSE}
+TRINITY_DN10000_c0_g1   TRINITY_DN10000_c0_g1^VKGC_RAT
+TRINITY_DN10000_c0_g1_i1        TRINITY_DN10000_c0_g1_i1^VKGC_RAT
+TRINITY_DN10000_c1_g1   TRINITY_DN10000_c1_g1^VKGC_DELLE
+TRINITY_DN10000_c1_g1_i1        TRINITY_DN10000_c1_g1_i1^VKGC_DELLE
+TRINITY_DN10001_c0_g2   TRINITY_DN10001_c0_g2^PAR10_HUMAN
+TRINITY_DN10001_c0_g2_i1        TRINITY_DN10001_c0_g2_i1^PAR10_HUMAN
+TRINITY_DN10006_c0_g1   TRINITY_DN10006_c0_g1^NDUBB_CRIGR
+TRINITY_DN10006_c0_g1_i1        TRINITY_DN10006_c0_g1_i1^NDUBB_CRIGR
+TRINITY_DN10006_c0_g1_i2        TRINITY_DN10006_c0_g1_i2^NDUBB_CRIGR
+TRINITY_DN10007_c0_g1   TRINITY_DN10007_c0_g1^MRC1_HUMAN
+```
+
+Update expression matrix with gene names:
+
+```{bash, eval = FALSE}
+/home/d.smirnov/homework5/rename_matrix_feature_identifiers.pl kallisto_output/abundance.tsv.genes \
+                                        annot_feature_map.txt > Trinity_trans.counts.wAnnot.matrix
+```
+
+
+::: design
+**Task 4**: How many genes were annotated?
+:::
+
+::: design
+**Task 5**: What are the top 10 most expressed genes with defined annotation?
+:::
+
+::: design
+**Task 6**: Given the information about the most expressed genes in the dataset, make a guess about the tissue type from which your reads were derived.
+:::
+
+
+
+

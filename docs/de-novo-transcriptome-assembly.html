@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Visualization | Omics Data Analysis</title>
+  <title>Chapter 9 De novo transcriptome assembly | Omics Data Analysis</title>
   <meta name="description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
   <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Visualization | Omics Data Analysis" />
+  <meta property="og:title" content="Chapter 9 De novo transcriptome assembly | Omics Data Analysis" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="/docs/images/course_logo_v2.png" />
   <meta property="og:description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Visualization | Omics Data Analysis" />
+  <meta name="twitter:title" content="Chapter 9 De novo transcriptome assembly | Omics Data Analysis" />
   
   <meta name="twitter:description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
   <meta name="twitter:image" content="/docs/images/course_logo_v2.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="gene-annotation.html"/>
-<link rel="next" href="functional-analysis.html"/>
+<link rel="prev" href="introduction-1.html"/>
+<link rel="next" href="transcriptome-assembly-qc.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -229,71 +229,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="visualization" class="section level1 hasAnchor" number="6">
-<h1><span class="header-section-number">Chapter 6</span> Visualization<a href="visualization.html#visualization" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Once we obtained the lists of differentially expressed genes for each condition, it would be good to make sense of them. This chapter is devoted to the visual representation of DE results, that greatly helps with results interpretation.</p>
-<div id="volcano-plot" class="section level2 hasAnchor" number="6.1">
-<h2><span class="header-section-number">6.1</span> Volcano plot<a href="visualization.html#volcano-plot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The most standard way to visualize the obtained gene expression changes is volcano plot. This plot shows the direction of gene expression changes (up- or down-regulated) and also highlight the top DE genes.</p>
-<p>We will utilize <code>EnhancedVolcano</code> library:</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="visualization.html#cb71-1" tabindex="-1"></a><span class="fu">library</span>(EnhancedVolcano)</span></code></pre></div>
-<p>The volcano plot requires the information about gene log2(Fold Changes) for X-axis and corresponding adjusted p-values, plotted in Y-axis. In addition, you may specify the column in the DE table that can be used for gene annotation in the plot.</p>
-<p>Code below will execute <code>EnhancedVolcano()</code> function:</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="visualization.html#cb72-1" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">EnhancedVolcano</span>(res_pbs_tb,</span>
-<span id="cb72-2"><a href="visualization.html#cb72-2" tabindex="-1"></a>        <span class="at">lab =</span> res_pbs_tb<span class="sc">$</span>SYMBOL, </span>
-<span id="cb72-3"><a href="visualization.html#cb72-3" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&#39;log2FoldChange&#39;</span>,</span>
-<span id="cb72-4"><a href="visualization.html#cb72-4" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">&#39;padj&#39;</span>, </span>
-<span id="cb72-5"><a href="visualization.html#cb72-5" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&#39;KO vs Control, PBS&#39;</span>,</span>
-<span id="cb72-6"><a href="visualization.html#cb72-6" tabindex="-1"></a>        <span class="at">subtitle =</span> <span class="cn">NULL</span>,</span>
-<span id="cb72-7"><a href="visualization.html#cb72-7" tabindex="-1"></a>        <span class="at">pCutoff =</span> <span class="fl">0.05</span>, </span>
-<span id="cb72-8"><a href="visualization.html#cb72-8" tabindex="-1"></a>        <span class="at">FCcutoff =</span> <span class="fl">0.58</span>)</span>
-<span id="cb72-9"><a href="visualization.html#cb72-9" tabindex="-1"></a></span>
-<span id="cb72-10"><a href="visualization.html#cb72-10" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">EnhancedVolcano</span>(res_lps_tb,</span>
-<span id="cb72-11"><a href="visualization.html#cb72-11" tabindex="-1"></a>        <span class="at">lab =</span> res_lps_tb<span class="sc">$</span>SYMBOL, </span>
-<span id="cb72-12"><a href="visualization.html#cb72-12" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&#39;log2FoldChange&#39;</span>,</span>
-<span id="cb72-13"><a href="visualization.html#cb72-13" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">&#39;padj&#39;</span>, </span>
-<span id="cb72-14"><a href="visualization.html#cb72-14" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&#39;KO vs Control, LPS&#39;</span>,</span>
-<span id="cb72-15"><a href="visualization.html#cb72-15" tabindex="-1"></a>        <span class="at">subtitle =</span> <span class="cn">NULL</span>,</span>
-<span id="cb72-16"><a href="visualization.html#cb72-16" tabindex="-1"></a>        <span class="at">pCutoff =</span> <span class="fl">0.05</span>, </span>
-<span id="cb72-17"><a href="visualization.html#cb72-17" tabindex="-1"></a>        <span class="at">FCcutoff =</span> <span class="fl">0.58</span>)</span>
-<span id="cb72-18"><a href="visualization.html#cb72-18" tabindex="-1"></a></span>
-<span id="cb72-19"><a href="visualization.html#cb72-19" tabindex="-1"></a>cowplot<span class="sc">::</span><span class="fu">plot_grid</span>(p1, p2, <span class="at">nrow =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/volcano-1.png" width="960" style="display: block; margin: auto;" /></p>
+<div id="de-novo-transcriptome-assembly" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Chapter 9</span> De novo transcriptome assembly<a href="de-novo-transcriptome-assembly.html#de-novo-transcriptome-assembly" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="read-filtering" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Read filtering<a href="de-novo-transcriptome-assembly.html#read-filtering" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The first step is to remove adapters and low-quality reads from the raw .fastq files. To do this, run TrimGalore tool:</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb121-1"><a href="de-novo-transcriptome-assembly.html#cb121-1" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="at">--cores</span> 2 <span class="at">--paired</span> <span class="at">--gzip</span> <span class="at">--fastqc</span> <span class="at">--fastqc_args</span> <span class="st">&quot;-t 2&quot;</span> <span class="at">--output_dir</span> data_filtered data/<span class="op">&lt;</span>your_number<span class="op">&gt;</span>.R1.fq.gz data/<span class="op">&lt;</span>your_number<span class="op">&gt;</span>.R2.fq.gz</span></code></pre></div>
+<p>where <code>--fastqc</code> argument means that we also want to perform quality assessment of filtered reads via FastQC using two computational cores (as specified by <code>--fastqc_args "-t 2"</code>).</p>
 </div>
-<div id="heatmap-of-significant-genes" class="section level2 hasAnchor" number="6.2">
-<h2><span class="header-section-number">6.2</span> Heatmap of significant genes<a href="visualization.html#heatmap-of-significant-genes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Another way to visualize DE genes and their changes in expression is using heatmap
-We also will extract the normalized values of all the significant genes and plot a heatmap of their expression using <code>pheatmap()</code> function:</p>
-<p>Convert normalized_counts to a data frame and transfer the row names to a new column called “gene”</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="visualization.html#cb73-1" tabindex="-1"></a>normalized_counts <span class="ot">&lt;-</span> <span class="fu">counts</span>(dds_analysis, <span class="at">normalized =</span> T) <span class="sc">%&gt;%</span></span>
-<span id="cb73-2"><a href="visualization.html#cb73-2" tabindex="-1"></a>                <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb73-3"><a href="visualization.html#cb73-3" tabindex="-1"></a>                <span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">&quot;gene&quot;</span>)</span></code></pre></div>
-<p>Extract normalized expression for significant genes:</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="visualization.html#cb74-1" tabindex="-1"></a>norm_sig_pbs <span class="ot">&lt;-</span> normalized_counts <span class="sc">%&gt;%</span></span>
-<span id="cb74-2"><a href="visualization.html#cb74-2" tabindex="-1"></a>                <span class="fu">filter</span>(gene <span class="sc">%in%</span> sig_pbs<span class="sc">$</span>gene) <span class="sc">%&gt;%</span> <span class="fu">column_to_rownames</span>(<span class="st">&#39;gene&#39;</span>)</span>
-<span id="cb74-3"><a href="visualization.html#cb74-3" tabindex="-1"></a></span>
-<span id="cb74-4"><a href="visualization.html#cb74-4" tabindex="-1"></a>norm_sig_lps <span class="ot">&lt;-</span> normalized_counts <span class="sc">%&gt;%</span></span>
-<span id="cb74-5"><a href="visualization.html#cb74-5" tabindex="-1"></a>                <span class="fu">filter</span>(gene <span class="sc">%in%</span> sig_lps<span class="sc">$</span>gene) <span class="sc">%&gt;%</span> <span class="fu">column_to_rownames</span>(<span class="st">&#39;gene&#39;</span>)</span></code></pre></div>
-<p>Plot the heatmap:</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="visualization.html#cb75-1" tabindex="-1"></a><span class="fu">pheatmap</span>(norm_sig_pbs, </span>
-<span id="cb75-2"><a href="visualization.html#cb75-2" tabindex="-1"></a>                <span class="at">cluster_rows =</span> T,</span>
-<span id="cb75-3"><a href="visualization.html#cb75-3" tabindex="-1"></a>                <span class="at">show_rownames =</span> F,</span>
-<span id="cb75-4"><a href="visualization.html#cb75-4" tabindex="-1"></a>                <span class="at">annotation =</span> meta[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)],</span>
-<span id="cb75-5"><a href="visualization.html#cb75-5" tabindex="-1"></a>                <span class="at">border_color =</span> <span class="cn">NA</span>,</span>
-<span id="cb75-6"><a href="visualization.html#cb75-6" tabindex="-1"></a>                <span class="at">fontsize =</span> <span class="dv">10</span>,</span>
-<span id="cb75-7"><a href="visualization.html#cb75-7" tabindex="-1"></a>                <span class="at">scale =</span> <span class="st">&quot;row&quot;</span>,</span>
-<span id="cb75-8"><a href="visualization.html#cb75-8" tabindex="-1"></a>                <span class="at">fontsize_row =</span> <span class="dv">10</span>,</span>
-<span id="cb75-9"><a href="visualization.html#cb75-9" tabindex="-1"></a>                <span class="at">height =</span> <span class="dv">10</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/pheatmap-1.png" width="480" style="display: block; margin: auto;" /></p>
-</div>
-<div id="comparison-with-dam-markers" class="section level2 hasAnchor" number="6.3">
-<h2><span class="header-section-number">6.3</span> Comparison with DAM markers<a href="visualization.html#comparison-with-dam-markers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Disease-associated-microglia (DAM) is a microglia type associated with various neurodegeneration diseases (AD, ALS, aging) and characterized by a specific transcriptional program. We will work with DAM signatures described in Deczkowska et al., 2018 (<a href="https://doi.org/10.1016/j.cell.2018.05.003" class="uri">https://doi.org/10.1016/j.cell.2018.05.003</a>) and in the Figure 2. This signatures can be divided in three main groups or stages: markers of homeostatic microglia, Stage 1 DAM (independent on TREM2 signaling) signatures and markers of Stage 2 DAM of microglial activation, caused by TREM2 signaling.</p>
-<p><img src="docs/images/DAM.jpg"/></p>
-<p><strong>Figure 2</strong>: DAM stages in mouse: homeostatic microglia -&gt; Stage DAM 1 -&gt; Stage DAM 2. Figure was taken from Deczkowska et al., 2018.</p>
-<div class="design">
-<p><strong>Task 4</strong>: Analyze changes in expression of DAM marker genes in the both PBS and LPS comparisons. Plot a heatmap of the DAM signature expression levels (0.5 points) and volcano plots for expression changes in DAM signatures for both comparisons (0.5 points). Do the observed changes in your data correspond to the changes in disease-associated microglia? Provide an explanation (0.5 points).</p>
-</div>
+<div id="run-trinity" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Run trinity<a href="de-novo-transcriptome-assembly.html#run-trinity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This is the most crucial and time consuming step in the analysis. It might take several hours, therefore it make sense to launch Trinity in screen session.</p>
+<p>Create your screen session:</p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb122-1"><a href="de-novo-transcriptome-assembly.html#cb122-1" tabindex="-1"></a><span class="ex">screen</span> <span class="at">-S</span> <span class="op">&lt;</span>session name<span class="op">&gt;</span></span></code></pre></div>
+<p>Run Trinity:</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb123-1"><a href="de-novo-transcriptome-assembly.html#cb123-1" tabindex="-1"></a><span class="ex">Trinity</span> <span class="at">--seqType</span> fq <span class="at">--SS_lib_type</span> RF <span class="at">--max_memory</span> 2G <span class="at">--left</span> data_filtered/<span class="op">&lt;</span>your_number<span class="op">&gt;</span>.R1_val_1.fq.gz <span class="at">--right</span> data_filtered/<span class="op">&lt;</span>your_number<span class="op">&gt;</span>.R2_val_2.fq.gz <span class="at">--CPU</span> 2</span></code></pre></div>
+<p>where <code>--SS_lib_type RF</code> means that the library preparation was done with a first strand protocol (we know that from the original paper).</p>
+<p>Once Trinity run is finished, <code>trinity_out_dir</code> folder will be created. Inside it you will find <code>Trinity.fasta</code> reconstructed assembly and temporary files and folders generated by program during all the stages of assembling.</p>
+<p>Check the <code>Trinity.fasta</code> header:</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb124-1"><a href="de-novo-transcriptome-assembly.html#cb124-1" tabindex="-1"></a><span class="fu">head</span> Trinity.fasta</span></code></pre></div>
+<p>The output should have the following structure:</p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb125-1"><a href="de-novo-transcriptome-assembly.html#cb125-1" tabindex="-1"></a><span class="op">&gt;</span>TRINITY_DN486518_c0_g1_i1 <span class="va">len</span><span class="op">=</span>531 <span class="va">path</span><span class="op">=</span><span class="pp">[</span><span class="ss">0:0</span><span class="pp">-</span><span class="ss">530</span><span class="pp">]</span></span>
+<span id="cb125-2"><a href="de-novo-transcriptome-assembly.html#cb125-2" tabindex="-1"></a><span class="ex">GGGGACGGCTATGCGGCCAGTGTATGAGGAGGAGGAAGGGGAGCAACAAGACGATCATCC</span></span>
+<span id="cb125-3"><a href="de-novo-transcriptome-assembly.html#cb125-3" tabindex="-1"></a><span class="ex">TGTGTTCAAGAACGGCGAACCTGATTACCAAGGCGAATACCTTTCGTGCTTTGAAGAGCC</span></span>
+<span id="cb125-4"><a href="de-novo-transcriptome-assembly.html#cb125-4" tabindex="-1"></a><span class="ex">CAACCTGCTGTACCGCATTTGCAACTCGGAAGACAAAACATGGGCGTTCTATAACGATAG</span></span>
+<span id="cb125-5"><a href="de-novo-transcriptome-assembly.html#cb125-5" tabindex="-1"></a><span class="ex">CCGCATCTACGAGATACATGTGCAGTTTAATTTCGGCAAGAACTCCAAGTTGCAGCCGCT</span></span>
+<span id="cb125-6"><a href="de-novo-transcriptome-assembly.html#cb125-6" tabindex="-1"></a><span class="ex">TGAAAACACCAGCATGTACACGAGGAACTCGGGTGAGCATGTTGCCAGAGTCATTGTATA</span></span>
+<span id="cb125-7"><a href="de-novo-transcriptome-assembly.html#cb125-7" tabindex="-1"></a><span class="ex">CCCTGGCGAAACGGAAATGTTTGTGCAGGGCACCGTTAACGGCTTCACAAGCAAGCTTCG</span></span>
+<span id="cb125-8"><a href="de-novo-transcriptome-assembly.html#cb125-8" tabindex="-1"></a><span class="ex">CGCGATCCCACTTTCTGAGGAGCACCACAAGTGCCGCCAGGCAATCACTTCCGCCATGAT</span></span>
+<span id="cb125-9"><a href="de-novo-transcriptome-assembly.html#cb125-9" tabindex="-1"></a><span class="ex">TGAGGAAGAGGCGAATCAGATTCGGCAGATTGTCGGGGACGCTGCAGACGCCGAGACCGC</span></span>
+<span id="cb125-10"><a href="de-novo-transcriptome-assembly.html#cb125-10" tabindex="-1"></a><span class="ex">ACTGAAGGCGTGCGTTGAGAACAACATTCCGTTCGTCGACCCCGAGTTCCC</span></span></code></pre></div>
 
 </div>
 </div>
@@ -302,8 +267,8 @@ We also will extract the normalized values of all the significant genes and plot
           </div>
         </div>
       </div>
-<a href="gene-annotation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="functional-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="introduction-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="transcriptome-assembly-qc.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -334,7 +299,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/05-blocks.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/08-trinity.Rmd",
 "text": "Edit"
 },
 "history": {

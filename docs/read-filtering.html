@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 Introduction | Omics Data Analysis</title>
+  <title>Chapter 8 Read filtering | Omics Data Analysis</title>
   <meta name="description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
   <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 7 Introduction | Omics Data Analysis" />
+  <meta property="og:title" content="Chapter 8 Read filtering | Omics Data Analysis" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="/docs/images/course_logo_v2.png" />
   <meta property="og:description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Introduction | Omics Data Analysis" />
+  <meta name="twitter:title" content="Chapter 8 Read filtering | Omics Data Analysis" />
   
   <meta name="twitter:description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
   <meta name="twitter:image" content="/docs/images/course_logo_v2.png" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="functional-analysis.html"/>
-<link rel="next" href="de-novo-transcriptome-assembly.html"/>
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="lipidomics-data-analysis.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -183,20 +183,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="7.1" data-path="introduction.html"><a href="introduction.html#set-up-conda-environment"><i class="fa fa-check"></i><b>7.1</b> Set up conda environment</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="de-novo-transcriptome-assembly.html"><a href="de-novo-transcriptome-assembly.html"><i class="fa fa-check"></i><b>8</b> De novo transcriptome assembly</a>
-<ul>
-<li class="chapter" data-level="8.1" data-path="de-novo-transcriptome-assembly.html"><a href="de-novo-transcriptome-assembly.html#read-filtering"><i class="fa fa-check"></i><b>8.1</b> Read filtering</a></li>
-<li class="chapter" data-level="8.2" data-path="de-novo-transcriptome-assembly.html"><a href="de-novo-transcriptome-assembly.html#run-trinity"><i class="fa fa-check"></i><b>8.2</b> Run trinity</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="transcriptome-assembly-qc.html"><a href="transcriptome-assembly-qc.html"><i class="fa fa-check"></i><b>9</b> Transcriptome assembly QC</a>
-<ul>
-<li class="chapter" data-level="9.1" data-path="transcriptome-assembly-qc.html"><a href="transcriptome-assembly-qc.html#obtain-assembly-statistics"><i class="fa fa-check"></i><b>9.1</b> Obtain assembly statistics</a></li>
-</ul></li>
+<li class="chapter" data-level="8" data-path="read-filtering.html"><a href="read-filtering.html"><i class="fa fa-check"></i><b>8</b> Read filtering</a></li>
 <li class="part"><span><b>Lecture 13: Lipidomics</b></span></li>
-<li class="chapter" data-level="10" data-path="lipidomics-data-analysis.html"><a href="lipidomics-data-analysis.html"><i class="fa fa-check"></i><b>10</b> Lipidomics Data Analysis</a></li>
+<li class="chapter" data-level="9" data-path="lipidomics-data-analysis.html"><a href="lipidomics-data-analysis.html"><i class="fa fa-check"></i><b>9</b> Lipidomics Data Analysis</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="part"><span><b>Session info</b></span></li>
-<li class="chapter" data-level="11" data-path="session-info.html"><a href="session-info.html"><i class="fa fa-check"></i><b>11</b> Session Info</a></li>
+<li class="chapter" data-level="10" data-path="session-info.html"><a href="session-info.html"><i class="fa fa-check"></i><b>10</b> Session Info</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -217,28 +209,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="introduction" class="section level1 hasAnchor" number="7">
-<h1><span class="header-section-number">Chapter 7</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><img src="docs/images/rana-amurensis.webp"/></p>
-<p><strong>Figure 2</strong>: <em>Rana Amurensis</em> frog</p>
-<p>During this lesson we will reconstruct transcriptome assembly for Heilongjiang brown frog (<em>Rana amurensis</em>) using RNA-seq data obtained from <a href="https://www.nature.com/articles/s41598-022-24631-6#data-availability" class="uri">https://www.nature.com/articles/s41598-022-24631-6#data-availability</a>. We already downloaded pair-end raw .fastq files and prepared toy datasets for you. Each pair of files (R1 and R2) constists of ~1700000 reads derived from heart, liver or muscle.</p>
-<p>First, choose your invidual dataset in a table here: <code>https://docs.google.com/document/d/1aGLb3qV1N6Yxay0-QjzlTtZWk7JfUZYYd7drZeu7dtk/edit?usp=sharing</code></p>
-<p>Once you decided upon dataset to work with, you can find your paired-end fastq files, named <your_number>.R1.fq.gz and <your_number>.R2.fq.gz in <code>/home/d.smirnov/homework5/data/</code>.❗Please do not copy them to your home directory, in all steps below you should simply specify the correct path to these files.</p>
-<div id="set-up-conda-environment" class="section level2 hasAnchor" number="7.1">
-<h2><span class="header-section-number">7.1</span> Set up conda environment<a href="introduction.html#set-up-conda-environment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Activate trinity environment with all required tools pre-installed.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="introduction.html#cb1-1" tabindex="-1"></a><span class="ex">/opt/anaconda3/bin/conda</span> init </span>
-<span id="cb1-2"><a href="introduction.html#cb1-2" tabindex="-1"></a><span class="ex">conda</span> activate trinity</span></code></pre></div>
+<div id="read-filtering" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Read filtering<a href="read-filtering.html#read-filtering" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The first step is to remove adapters and low-quality reads from the raw .fastq files. To do this, run TrimGalore tool:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="read-filtering.html#cb2-1" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="at">--cores</span> 2 <span class="at">--paired</span> <span class="at">--gzip</span> <span class="at">--fastqc</span> <span class="at">--fastqc_args</span> <span class="st">&quot;-t 2&quot;</span> <span class="at">--output_dir</span> data_filtered data/<span class="op">&lt;</span>your_number<span class="op">&gt;</span>.R1.fq.gz data/<span class="op">&lt;</span>your_number<span class="op">&gt;</span>.R2.fq.gz</span></code></pre></div>
+<p>where <code>--fastqc</code> argument means that we also want to perform quality assessment of filtered reads via FastQC using two computational cores (as specified by <code>--fastqc_args "-t 2"</code>).</p>
+
+
 
 </div>
-</div>
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="functional-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="de-novo-transcriptome-assembly.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="lipidomics-data-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -269,7 +258,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/07-transcriptome.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/08-trinity.Rmd",
 "text": "Edit"
 },
 "history": {

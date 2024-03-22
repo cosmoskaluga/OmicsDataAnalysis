@@ -1,4 +1,41 @@
-# (PART\*) Lecture 9: Transcriptome {-}
+# (PART\*) Lecture 9: Transcriptome {.unnumbered}
 
-# Transcriptome de novo assembly
-To be added.
+# Introduction
+
+<img src="docs/images/rana-amurensis.webp"/> 
+
+**Figure 2**: *Rana Amurensis* frog
+
+During this lesson we will reconstruct transcriptome assembly for Heilongjiang brown frog (*Rana amurensis*) using RNA-seq data obtained from <https://www.nature.com/articles/s41598-022-24631-6#data-availability>. We already downloaded pair-end raw .fastq files and prepared toy datasets for you. Each pair of files (R1 and R2) constists of \~1700000 reads derived from heart, liver or muscle.
+
+First, choose your invidual dataset in a table here: `https://docs.google.com/document/d/1aGLb3qV1N6Yxay0-QjzlTtZWk7JfUZYYd7drZeu7dtk/edit?usp=sharing`
+
+Once you decided upon dataset to work with, you can find your paired-end fastq files, named <your_number>.R1.fq.gz and <your_number>.R2.fq.gz in `/home/d.smirnov/homework5/data/`.❗Please do not copy them to your home directory, in all steps below you should simply specify the correct path to these files.
+
+## Assignment and grading
+When you complete all the tasks please upload to Canvas:
+
+Report with answers and explanations.
+
+Your code (txt/pdf/markdown or something else readable)
+
+How it will be graded:
+
+The maximum is 3.5 points.
+
+For missing step - minus 5 points.
+
+If the report/code is missing - 0 points.
+
+For each missing answer to ❓ - minus 2 points.
+
+For any other mistake - minus 0.2 point.
+
+## Set up conda environment
+
+Activate trinity environment with all required tools pre-installed.
+
+```{bash, eval = FALSE}
+/opt/anaconda3/bin/conda init 
+conda activate trinity
+```

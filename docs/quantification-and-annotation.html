@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Quantification and annotation | Omics Data Analysis</title>
+  <meta name="description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
+  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Quantification and annotation | Omics Data Analysis" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="/docs/images/course_logo_v2.png" />
+  <meta property="og:description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Quantification and annotation | Omics Data Analysis" />
+  
+  <meta name="twitter:description" content="This is a collection of seminars and homeworks for the Omics Data Analysis course at Skoltech." />
+  <meta name="twitter:image" content="/docs/images/course_logo_v2.png" />
+
+<meta name="author" content="Dmitrii Smirnov, Skolkovo Institute of Science and Technology" />
+
+
+<meta name="date" content="2024-03-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="transcriptome-assembly-qc.html"/>
+<link rel="next" href="lipidomics-data-analysis.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="toc-logo"><a href="./"><img src="images/Logo.png"></a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#how-to-deal-with-r"><i class="fa fa-check"></i><b>1.1</b> How to deal with R</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#assignment-and-grading"><i class="fa fa-check"></i><b>1.2</b> Assignment and grading</a></li>
+</ul></li>
+<li class="part"><span><b>Lecture 4: DE analysis</b></span></li>
+<li class="chapter" data-level="2" data-path="input-dataset.html"><a href="input-dataset.html"><i class="fa fa-check"></i><b>2</b> Input dataset</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="input-dataset.html"><a href="input-dataset.html#count-table-importing"><i class="fa fa-check"></i><b>2.1</b> Count table importing</a></li>
+<li class="chapter" data-level="2.2" data-path="input-dataset.html"><a href="input-dataset.html#deseq2-object"><i class="fa fa-check"></i><b>2.2</b> DESeq2 object</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Normalization and Quality control</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="cross.html"><a href="cross.html#normalization"><i class="fa fa-check"></i><b>3.1</b> Normalization</a></li>
+<li class="chapter" data-level="3.2" data-path="cross.html"><a href="cross.html#quality-control"><i class="fa fa-check"></i><b>3.2</b> Quality control</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="cross.html"><a href="cross.html#principal-component-analysis-pca"><i class="fa fa-check"></i><b>3.2.1</b> Principal Component Analysis (PCA)</a></li>
+<li class="chapter" data-level="3.2.2" data-path="cross.html"><a href="cross.html#correlation-heatmap"><i class="fa fa-check"></i><b>3.2.2</b> Correlation Heatmap</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="differential-testing.html"><a href="differential-testing.html"><i class="fa fa-check"></i><b>4</b> Differential testing</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="differential-testing.html"><a href="differential-testing.html#de-analysis"><i class="fa fa-check"></i><b>4.1</b> DE analysis</a></li>
+<li class="chapter" data-level="4.2" data-path="differential-testing.html"><a href="differential-testing.html#extracting-significant-genes"><i class="fa fa-check"></i><b>4.2</b> Extracting significant genes</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="gene-annotation.html"><a href="gene-annotation.html"><i class="fa fa-check"></i><b>5</b> Gene annotation</a></li>
+<li class="chapter" data-level="6" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>6</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="visualization.html"><a href="visualization.html#volcano-plot"><i class="fa fa-check"></i><b>6.1</b> Volcano plot</a></li>
+<li class="chapter" data-level="6.2" data-path="visualization.html"><a href="visualization.html#heatmap-of-significant-genes"><i class="fa fa-check"></i><b>6.2</b> Heatmap of significant genes</a></li>
+<li class="chapter" data-level="6.3" data-path="visualization.html"><a href="visualization.html#comparison-with-dam-markers"><i class="fa fa-check"></i><b>6.3</b> Comparison with DAM markers</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="functional-analysis.html"><a href="functional-analysis.html"><i class="fa fa-check"></i><b>7</b> Functional analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-ontology-go-analysis"><i class="fa fa-check"></i><b>7.1</b> Gene Ontology (GO) analysis</a></li>
+<li class="chapter" data-level="7.2" data-path="functional-analysis.html"><a href="functional-analysis.html#pathway-analysis"><i class="fa fa-check"></i><b>7.2</b> Pathway analysis</a></li>
+<li class="chapter" data-level="7.3" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-set-enrichment-analysis-gsea"><i class="fa fa-check"></i><b>7.3</b> Gene-Set Enrichment Analysis (GSEA)</a></li>
+<li class="chapter" data-level="7.4" data-path="functional-analysis.html"><a href="functional-analysis.html#gene-set-enrichment-analysis-with-msigdb"><i class="fa fa-check"></i><b>7.4</b> Gene Set Enrichment Analysis with mSigDB</a></li>
+</ul></li>
+<li class="part"><span><b>Lecture 9: Transcriptome</b></span></li>
+<li class="chapter" data-level="8" data-path="introduction-1.html"><a href="introduction-1.html"><i class="fa fa-check"></i><b>8</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="introduction-1.html"><a href="introduction-1.html#assignment-and-grading-1"><i class="fa fa-check"></i><b>8.1</b> Assignment and grading</a></li>
+<li class="chapter" data-level="8.2" data-path="introduction-1.html"><a href="introduction-1.html#set-up-conda-environment"><i class="fa fa-check"></i><b>8.2</b> Set up conda environment</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="de-novo-transcriptome-assembly.html"><a href="de-novo-transcriptome-assembly.html"><i class="fa fa-check"></i><b>9</b> De novo transcriptome assembly</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="de-novo-transcriptome-assembly.html"><a href="de-novo-transcriptome-assembly.html#read-filtering"><i class="fa fa-check"></i><b>9.1</b> Read filtering</a></li>
+<li class="chapter" data-level="9.2" data-path="de-novo-transcriptome-assembly.html"><a href="de-novo-transcriptome-assembly.html#run-trinity"><i class="fa fa-check"></i><b>9.2</b> Run trinity</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="transcriptome-assembly-qc.html"><a href="transcriptome-assembly-qc.html"><i class="fa fa-check"></i><b>10</b> Transcriptome assembly QC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="transcriptome-assembly-qc.html"><a href="transcriptome-assembly-qc.html#obtain-assembly-statistics"><i class="fa fa-check"></i><b>10.1</b> Obtain assembly statistics</a></li>
+<li class="chapter" data-level="10.2" data-path="transcriptome-assembly-qc.html"><a href="transcriptome-assembly-qc.html#transcript-filtering"><i class="fa fa-check"></i><b>10.2</b> Transcript filtering</a></li>
+<li class="chapter" data-level="10.3" data-path="transcriptome-assembly-qc.html"><a href="transcriptome-assembly-qc.html#assembly-completeness-with-gvolante"><i class="fa fa-check"></i><b>10.3</b> Assembly completeness with gVolante</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="quantification-and-annotation.html"><a href="quantification-and-annotation.html"><i class="fa fa-check"></i><b>11</b> Quantification and annotation</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="quantification-and-annotation.html"><a href="quantification-and-annotation.html#transcript-quantification"><i class="fa fa-check"></i><b>11.1</b> Transcript quantification</a></li>
+<li class="chapter" data-level="11.2" data-path="quantification-and-annotation.html"><a href="quantification-and-annotation.html#transcript-annotation"><i class="fa fa-check"></i><b>11.2</b> Transcript annotation</a></li>
+<li class="chapter" data-level="11.3" data-path="quantification-and-annotation.html"><a href="quantification-and-annotation.html#integrating-expression-data-and-annotation"><i class="fa fa-check"></i><b>11.3</b> Integrating expression data and annotation</a></li>
+</ul></li>
+<li class="part"><span><b>Lecture 13: Lipidomics</b></span></li>
+<li class="chapter" data-level="12" data-path="lipidomics-data-analysis.html"><a href="lipidomics-data-analysis.html"><i class="fa fa-check"></i><b>12</b> Lipidomics Data Analysis</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="part"><span><b>Session info</b></span></li>
+<li class="chapter" data-level="13" data-path="session-info.html"><a href="session-info.html"><i class="fa fa-check"></i><b>13</b> Session Info</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Omics Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="quantification-and-annotation" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Quantification and annotation<a href="quantification-and-annotation.html#quantification-and-annotation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="transcript-quantification" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> Transcript quantification<a href="quantification-and-annotation.html#transcript-quantification" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The next step is to quantify transcript abundance. Since we already have a reference transcriptome constructed by Trinity, we can align filtered RNA-seq reads on it and calculate transcript and gene expression levels.</p>
+<p>Quantify expression for both transcript and gene levels with Kallisto mode:</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb130-1"><a href="quantification-and-annotation.html#cb130-1" tabindex="-1"></a><span class="ex">align_and_estimate_abundance.pl</span> <span class="at">--SS_lib_type</span> RF <span class="at">--est_method</span> kallisto <span class="at">--transcripts</span> Trinity.filtered.fasta <span class="at">--seqType</span> fq <span class="at">--left</span> data_filtered/<span class="op">&lt;</span>your_number<span class="op">&gt;</span>.R1_val_1.fq.gz <span class="at">--right</span> data_filtered/<span class="op">&lt;</span>your_number<span class="op">&gt;</span>.R2_val_2.fq.gz <span class="at">--output_dir</span> kallisto_output <span class="at">--thread_count</span> 2 <span class="at">--trinity_mode</span> <span class="at">--prep_reference</span></span></code></pre></div>
+<p>Apart from <code>kallisto_output</code> folder this script will also generate two additional files: <code>Trinity.filtered.fasta.gene_trans_map</code> and <code>Trinity.filtered.fasta.kallisto_idx</code>. Transcript and gene expression levels will be stored in <code>kallisto_output/abundance.tsv</code> and <code>kallisto_output/abundance.tsv.genes</code> tables, respectively.</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb131-1"><a href="quantification-and-annotation.html#cb131-1" tabindex="-1"></a><span class="fu">head</span> kallisto_output/abundance.tsv</span>
+<span id="cb131-2"><a href="quantification-and-annotation.html#cb131-2" tabindex="-1"></a></span>
+<span id="cb131-3"><a href="quantification-and-annotation.html#cb131-3" tabindex="-1"></a><span class="ex">target_id</span>       length  eff_length      est_counts      tpm</span>
+<span id="cb131-4"><a href="quantification-and-annotation.html#cb131-4" tabindex="-1"></a><span class="ex">TRINITY_DN3897_c0_g1_i1</span> 794     537.124 7       4.2194</span>
+<span id="cb131-5"><a href="quantification-and-annotation.html#cb131-5" tabindex="-1"></a><span class="ex">TRINITY_DN3897_c1_g1_i1</span> 581     324.353 8       7.98545</span>
+<span id="cb131-6"><a href="quantification-and-annotation.html#cb131-6" tabindex="-1"></a><span class="ex">TRINITY_DN3809_c0_g1_i1</span> 283     55.0072 2       11.7717</span>
+<span id="cb131-7"><a href="quantification-and-annotation.html#cb131-7" tabindex="-1"></a><span class="ex">TRINITY_DN3844_c0_g1_i1</span> 1149    892.124 24.4812 8.88454</span>
+<span id="cb131-8"><a href="quantification-and-annotation.html#cb131-8" tabindex="-1"></a><span class="ex">TRINITY_DN3869_c0_g1_i1</span> 417     162.011 2       3.9968</span>
+<span id="cb131-9"><a href="quantification-and-annotation.html#cb131-9" tabindex="-1"></a><span class="ex">TRINITY_DN3869_c0_g2_i1</span> 416     161.011 2       4.02162</span>
+<span id="cb131-10"><a href="quantification-and-annotation.html#cb131-10" tabindex="-1"></a><span class="ex">TRINITY_DN3854_c0_g1_i1</span> 487     230.719 1.67628 2.35229</span>
+<span id="cb131-11"><a href="quantification-and-annotation.html#cb131-11" tabindex="-1"></a><span class="ex">TRINITY_DN3854_c0_g2_i1</span> 490     233.719 3.32372 4.60423</span>
+<span id="cb131-12"><a href="quantification-and-annotation.html#cb131-12" tabindex="-1"></a><span class="ex">TRINITY_DN3891_c0_g1_i1</span> 472     215.852 3       4.49979</span></code></pre></div>
+</div>
+<div id="transcript-annotation" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> Transcript annotation<a href="quantification-and-annotation.html#transcript-annotation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>While we already evaluated expression of each gene in the assembly, the biological interpretation of the obtained trinity features (represented like TRINITY_DN3897_c0_g1) is still a puzzle. To expand our understanding of what the assembled features are, we will perform several annotation procedures with <code>TransDecoder</code> and <code>Trinotate</code> tools.</p>
+<p>First, create <code>Trinotate</code> sqlite database by running the following line</p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb132-1"><a href="quantification-and-annotation.html#cb132-1" tabindex="-1"></a><span class="ex">Build_Trinotate_Boilerplate_SQLite_db.pl</span> Trinotate</span></code></pre></div>
+<p>It will download <code>uniprot_sprot.pep</code> (protein sequence information from the SwissProt database) and <code>Pfam-A.hmm.gz</code> (protein domains) files.</p>
+<p>To perform blast search with uniprot_sprot.pep searches, we should prepare a <code>BLAST</code> database:</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb133-1"><a href="quantification-and-annotation.html#cb133-1" tabindex="-1"></a><span class="ex">makeblastdb</span> <span class="at">-in</span> uniprot_sprot.pep <span class="at">-dbtype</span> prot</span></code></pre></div>
+<p>Prepare Pfam database</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb134-1"><a href="quantification-and-annotation.html#cb134-1" tabindex="-1"></a><span class="fu">gunzip</span> Pfam-A.hmm.gz</span>
+<span id="cb134-2"><a href="quantification-and-annotation.html#cb134-2" tabindex="-1"></a><span class="ex">hmmpress</span> Pfam-A.hmm</span></code></pre></div>
+<p>Run <code>TransDecoder</code> to identify the longest open reading frames (ORF) from the assembly file:</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb135-1"><a href="quantification-and-annotation.html#cb135-1" tabindex="-1"></a><span class="ex">TransDecoder.LongOrfs</span> <span class="at">-m</span> 10 <span class="at">-t</span> Trinity.filtered.fasta</span></code></pre></div>
+<p>❗ The two annotation steps described below will be quite time consuming (several hours each), therefore consider using screen session.</p>
+<p>Blast against the SwissProt protein database:</p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb136-1"><a href="quantification-and-annotation.html#cb136-1" tabindex="-1"></a><span class="ex">blastx</span> <span class="at">-query</span> Trinity.filtered.fasta <span class="at">-db</span> uniprot_sprot.pep <span class="at">-num_threads</span> 2 <span class="at">-max_target_seqs</span> 1 <span class="at">-outfmt</span> 6 <span class="op">&gt;</span> blastx.outfmt6</span></code></pre></div>
+<p>Query a set of the longest obtained ORFs against Swiss-Prot database to search for sequence similarity with known proteins</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb137-1"><a href="quantification-and-annotation.html#cb137-1" tabindex="-1"></a><span class="ex">blastp</span> <span class="at">-query</span> Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep <span class="at">-db</span> uniprot_sprot.pep <span class="at">-num_threads</span> 2 <span class="at">-max_target_seqs</span> 1 <span class="at">-outfmt</span> 6 <span class="op">&gt;</span> blastp.outfmt6</span></code></pre></div>
+<p>In addition to Blast results perform hmmscan search for protein domains from the Pfam database. Run the following line in a screen session:</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb138-1"><a href="quantification-and-annotation.html#cb138-1" tabindex="-1"></a><span class="ex">hmmsearch</span> <span class="at">--cpu</span> 2 <span class="at">-o</span> /dev/null/ <span class="at">--domtblout</span> hmmsearch.tmp Pfam-A.hmm Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep</span>
+<span id="cb138-2"><a href="quantification-and-annotation.html#cb138-2" tabindex="-1"></a><span class="fu">awk</span> <span class="st">&#39;BEGIN{OFS=FS=&quot; &quot;} NR&lt;=3{print}; NR&gt;3{tmp=$1; $1=$4; $4=tmp; tmp=$2; $2=$5; $5=tmp; print}&#39;</span> hmmsearch.tmp <span class="op">&gt;</span> TrinotatePFAM.out</span></code></pre></div>
+<p>Once all three searches are done, we can start uploading information to <code>Trinotate.sqlite</code> database. First, load assembly .fasta file, <code>longest_orfs.pep</code> and <code>gene_trans_map</code> file (obtained with align_and_estimate_abundance.pl script during abundance quantification):</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb139-1"><a href="quantification-and-annotation.html#cb139-1" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite init <span class="at">--gene_trans_map</span> Trinity.filtered.fasta.gene_trans_map <span class="dt">\</span></span>
+<span id="cb139-2"><a href="quantification-and-annotation.html#cb139-2" tabindex="-1"></a>                                <span class="at">--transcript_fasta</span> Trinity.filtered.fasta <span class="dt">\</span></span>
+<span id="cb139-3"><a href="quantification-and-annotation.html#cb139-3" tabindex="-1"></a>                                <span class="at">--transdecoder_pep</span> Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep</span></code></pre></div>
+<p>Load blastp, blastx and pfam results</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb140-1"><a href="quantification-and-annotation.html#cb140-1" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite LOAD_swissprot_blastp blastp.outfmt6</span>
+<span id="cb140-2"><a href="quantification-and-annotation.html#cb140-2" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite LOAD_swissprot_blastx blastx.outfmt6</span>
+<span id="cb140-3"><a href="quantification-and-annotation.html#cb140-3" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite LOAD_pfam TrinotatePFAM.out</span></code></pre></div>
+<p>Finally, generate the report:</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb141-1"><a href="quantification-and-annotation.html#cb141-1" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite report <span class="op">&gt;</span> trinotate_annotation_report.xls</span></code></pre></div>
+<p>Extract GO annotation terms from the report:</p>
+<div class="sourceCode" id="cb142"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb142-1"><a href="quantification-and-annotation.html#cb142-1" tabindex="-1"></a><span class="ex">extract_GO_assignments_from_Trinotate_xls.pl</span>  <span class="dt">\</span></span>
+<span id="cb142-2"><a href="quantification-and-annotation.html#cb142-2" tabindex="-1"></a>        <span class="at">--Trinotate_xls</span> trinotate_annotation_report.xls <span class="dt">\</span></span>
+<span id="cb142-3"><a href="quantification-and-annotation.html#cb142-3" tabindex="-1"></a>        <span class="at">-G</span> <span class="at">--include_ancestral_terms</span> <span class="op">&gt;</span> go_annotations.txt</span></code></pre></div>
+<p>Explore the obtained go_annotations.txt file</p>
+</div>
+<div id="integrating-expression-data-and-annotation" class="section level2 hasAnchor" number="11.3">
+<h2><span class="header-section-number">11.3</span> Integrating expression data and annotation<a href="quantification-and-annotation.html#integrating-expression-data-and-annotation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Generate a map of trinity gene IDs and corresponding annotations</p>
+<div class="sourceCode" id="cb143"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb143-1"><a href="quantification-and-annotation.html#cb143-1" tabindex="-1"></a><span class="ex">Trinotate_get_feature_name_encoding_attributes.pl</span> <span class="dt">\</span></span>
+<span id="cb143-2"><a href="quantification-and-annotation.html#cb143-2" tabindex="-1"></a>                  trinotate_annotation_report.xls  <span class="op">&gt;</span> annot_feature_map.txt</span></code></pre></div>
+<p>Check <code>annot_feature_map.txt</code>:</p>
+<div class="sourceCode" id="cb144"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb144-1"><a href="quantification-and-annotation.html#cb144-1" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c0_g1</span>   TRINITY_DN10000_c0_g1^VKGC_RAT</span>
+<span id="cb144-2"><a href="quantification-and-annotation.html#cb144-2" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c0_g1_i1</span>        TRINITY_DN10000_c0_g1_i1^VKGC_RAT</span>
+<span id="cb144-3"><a href="quantification-and-annotation.html#cb144-3" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c1_g1</span>   TRINITY_DN10000_c1_g1^VKGC_DELLE</span>
+<span id="cb144-4"><a href="quantification-and-annotation.html#cb144-4" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c1_g1_i1</span>        TRINITY_DN10000_c1_g1_i1^VKGC_DELLE</span>
+<span id="cb144-5"><a href="quantification-and-annotation.html#cb144-5" tabindex="-1"></a><span class="ex">TRINITY_DN10001_c0_g2</span>   TRINITY_DN10001_c0_g2^PAR10_HUMAN</span>
+<span id="cb144-6"><a href="quantification-and-annotation.html#cb144-6" tabindex="-1"></a><span class="ex">TRINITY_DN10001_c0_g2_i1</span>        TRINITY_DN10001_c0_g2_i1^PAR10_HUMAN</span>
+<span id="cb144-7"><a href="quantification-and-annotation.html#cb144-7" tabindex="-1"></a><span class="ex">TRINITY_DN10006_c0_g1</span>   TRINITY_DN10006_c0_g1^NDUBB_CRIGR</span>
+<span id="cb144-8"><a href="quantification-and-annotation.html#cb144-8" tabindex="-1"></a><span class="ex">TRINITY_DN10006_c0_g1_i1</span>        TRINITY_DN10006_c0_g1_i1^NDUBB_CRIGR</span>
+<span id="cb144-9"><a href="quantification-and-annotation.html#cb144-9" tabindex="-1"></a><span class="ex">TRINITY_DN10006_c0_g1_i2</span>        TRINITY_DN10006_c0_g1_i2^NDUBB_CRIGR</span>
+<span id="cb144-10"><a href="quantification-and-annotation.html#cb144-10" tabindex="-1"></a><span class="ex">TRINITY_DN10007_c0_g1</span>   TRINITY_DN10007_c0_g1^MRC1_HUMAN</span></code></pre></div>
+<p>Update expression matrix with gene names:</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb145-1"><a href="quantification-and-annotation.html#cb145-1" tabindex="-1"></a><span class="ex">/home/d.smirnov/homework5/rename_matrix_feature_identifiers.pl</span> kallisto_output/abundance.tsv.genes <span class="dt">\</span></span>
+<span id="cb145-2"><a href="quantification-and-annotation.html#cb145-2" tabindex="-1"></a>                                        annot_feature_map.txt <span class="op">&gt;</span> Trinity_trans.counts.wAnnot.matrix</span></code></pre></div>
+<div class="design">
+<p><strong>Task 4</strong>: How many genes were annotated?</p>
+</div>
+<div class="design">
+<p><strong>Task 5</strong>: What are the top 10 most expressed genes with defined annotation?</p>
+</div>
+<div class="design">
+<p><strong>Task 6</strong>: Given the information about the most expressed genes in the dataset, make a guess about the tissue type from which your reads were derived.</p>
+</div>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="transcriptome-assembly-qc.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="lipidomics-data-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/10-quantification.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
