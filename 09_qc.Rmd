@@ -8,7 +8,7 @@ TrinityStats.pl Trinity.fasta
 ```
 
 ::: design
-**Task 1**: How many trinity 'genes' and 'transcripts' did you get? (0.5 points).
+**Task 1**: How many trinity 'genes' and 'transcripts' did you get? (1 point).
 :::
 
 ## Transcript filtering
@@ -32,7 +32,7 @@ TrinityStats.pl  Trinity.filtered.fasta
 ```
 
 ::: design
-**Task 2**: How many trinity 'transcripts' were filtered out from the assembly?
+**Task 2**: How many trinity 'transcripts' were filtered out from the assembly? (1 point)
 :::
 
 ## Assembly completeness with gVolante
@@ -47,5 +47,5 @@ Select `Coding/transcribed (nucleotide)` sequence type and `BUSCO v5` as a pipel
 <img src="docs/images/gVolante2.png"/> 
 
 ::: design
-**Task 3**: Report BUSCO scores (*Complete and single-copy*, *Complete and duplicated*, *Fragmented*, or *Missing BUSCOs*) and a number of assembly transcripts that are > 1K in their length.
+**Task 3**: Report BUSCO scores (*Complete and single-copy*, *Complete and duplicated*, *Fragmented*, or *Missing BUSCOs*) and a number of assembly transcripts that are > 1K in their length. (1 points)
 :::

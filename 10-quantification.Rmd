@@ -142,15 +142,15 @@ Update expression matrix with gene names:
 
 
 ::: design
-**Task 4**: How many genes were annotated?
+**Task 4**: How many genes were annotated? (2 points)
 :::
 
 ::: design
-**Task 5**: What are the top 10 most expressed genes with defined annotation?
+**Task 5**: What are the top 10 most expressed genes with defined annotation? (2 points)
 :::
 
 ::: design
-**Task 6**: Given the information about the most expressed genes in the dataset, make a guess about the tissue type from which your reads were derived.
+**Task 6**: Given the information about the most expressed genes in the dataset, make a guess about the tissue type from which your reads were derived. This task won't be graded, but it is obligatory to complete it, also explaining why do you choose a particular tissue type.
 :::
 
 

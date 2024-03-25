@@ -23,7 +23,7 @@
 <meta name="author" content="Dmitrii Smirnov, Skolkovo Institute of Science and Technology" />
 
 
-<meta name="date" content="2024-03-22" />
+<meta name="date" content="2024-03-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -236,7 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Trinity has <code>TrinityStats.pl</code> script to compute basic assembly statistics, including N50 metrics, estimating the ‘length of the shortest contig, for which longer and equal length contigs cover at least 50 % of the assembly’ [1]</p>
 <div class="sourceCode" id="cb126"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb126-1"><a href="transcriptome-assembly-qc.html#cb126-1" tabindex="-1"></a><span class="ex">TrinityStats.pl</span> Trinity.fasta</span></code></pre></div>
 <div class="design">
-<p><strong>Task 1</strong>: How many trinity ‘genes’ and ‘transcripts’ did you get? (0.5 points).</p>
+<p><strong>Task 1</strong>: How many trinity ‘genes’ and ‘transcripts’ did you get? (1 point).</p>
 </div>
 </div>
 <div id="transcript-filtering" class="section level2 hasAnchor" number="10.2">
@@ -249,7 +249,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Run QC script on filtered assembly again</p>
 <div class="sourceCode" id="cb129"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb129-1"><a href="transcriptome-assembly-qc.html#cb129-1" tabindex="-1"></a><span class="ex">TrinityStats.pl</span>  Trinity.filtered.fasta</span></code></pre></div>
 <div class="design">
-<p><strong>Task 2</strong>: How many trinity ‘transcripts’ were filtered out from the assembly?</p>
+<p><strong>Task 2</strong>: How many trinity ‘transcripts’ were filtered out from the assembly? (1 point)</p>
 </div>
 </div>
 <div id="assembly-completeness-with-gvolante" class="section level2 hasAnchor" number="10.3">
@@ -260,7 +260,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Select <code>Coding/transcribed (nucleotide)</code> sequence type and <code>BUSCO v5</code> as a pipeline to use. Select “Tetrapoda” as an ortholog set for <code>BUSCO v5</code>. Then click on <code>Start your analysis</code>.</p>
 <p><img src="docs/images/gVolante2.png"/></p>
 <div class="design">
-<p><strong>Task 3</strong>: Report BUSCO scores (<em>Complete and single-copy</em>, <em>Complete and duplicated</em>, <em>Fragmented</em>, or <em>Missing BUSCOs</em>) and a number of assembly transcripts that are &gt; 1K in their length.</p>
+<p><strong>Task 3</strong>: Report BUSCO scores (<em>Complete and single-copy</em>, <em>Complete and duplicated</em>, <em>Fragmented</em>, or <em>Missing BUSCOs</em>) and a number of assembly transcripts that are &gt; 1K in their length. (1 points)</p>
 </div>
 
 </div>
