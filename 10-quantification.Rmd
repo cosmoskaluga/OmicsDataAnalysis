@@ -73,7 +73,7 @@ blastp -query Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep -db unipr
 In addition to Blast results perform hmmscan search for protein domains from the Pfam database. Run the following line in a screen session:
 
 ```{bash, eval = FALSE}
-hmmsearch --cpu 2 -o /dev/null/ --domtblout hmmsearch.tmp Pfam-A.hmm Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep
+hmmsearch --cpu 2 -o /dev/null --domtblout hmmsearch.tmp Pfam-A.hmm Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep
 awk 'BEGIN{OFS=FS=" "} NR<=3{print}; NR>3{tmp=$1; $1=$4; $4=tmp; tmp=$2; $2=$5; $5=tmp; print}' hmmsearch.tmp > TrinotatePFAM.out
 ```
 
