@@ -21,9 +21,9 @@ Your code (txt/pdf/markdown or something else readable)
 
 How it will be graded:
 
-The maximum is 3.5 points.
+The maximum is 7 points.
 
-For missing step - minus 5 points.
+For missing step - minus 3.5 points.
 
 If the report/code is missing - 0 points.
 
