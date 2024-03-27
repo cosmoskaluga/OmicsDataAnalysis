@@ -77,7 +77,13 @@ hmmsearch --cpu 2 -o /dev/null --domtblout hmmsearch.tmp Pfam-A.hmm Trinity.filt
 awk 'BEGIN{OFS=FS=" "} NR<=3{print}; NR>3{tmp=$1; $1=$4; $4=tmp; tmp=$2; $2=$5; $5=tmp; print}' hmmsearch.tmp > TrinotatePFAM.out
 ```
 
-Once all three searches are done, we can start uploading information to `Trinotate.sqlite` database. First, load assembly .fasta file, `longest_orfs.pep` and `gene_trans_map` file (obtained with align_and_estimate_abundance.pl script during abundance quantification):
+Once all three searches are done, we can start uploading information to `Trinotate.sqlite` database. First, generate a `gene_trans_map` file, linking Trinity unigenes with associated transcripts 
+
+```{bash, eval = FALSE}
+/home/d.smirnov/homework5/get_Trinity_gene_to_trans_map.pl Trinity.filtered.fasta > Trinity.filtered.fasta.gene_trans_map
+```
+
+and then load assembly .fasta file, `longest_orfs.pep` and `gene_trans_map` file into Trinotate sqlite object:
 
 ```{bash, eval = FALSE}
 Trinotate Trinotate.sqlite init --gene_trans_map Trinity.filtered.fasta.gene_trans_map \

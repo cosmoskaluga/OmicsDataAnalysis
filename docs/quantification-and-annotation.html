@@ -23,7 +23,7 @@
 <meta name="author" content="Dmitrii Smirnov, Skolkovo Institute of Science and Technology" />
 
 
-<meta name="date" content="2024-03-26" />
+<meta name="date" content="2024-03-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -271,41 +271,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In addition to Blast results perform hmmscan search for protein domains from the Pfam database. Run the following line in a screen session:</p>
 <div class="sourceCode" id="cb138"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb138-1"><a href="quantification-and-annotation.html#cb138-1" tabindex="-1"></a><span class="ex">hmmsearch</span> <span class="at">--cpu</span> 2 <span class="at">-o</span> /dev/null <span class="at">--domtblout</span> hmmsearch.tmp Pfam-A.hmm Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep</span>
 <span id="cb138-2"><a href="quantification-and-annotation.html#cb138-2" tabindex="-1"></a><span class="fu">awk</span> <span class="st">&#39;BEGIN{OFS=FS=&quot; &quot;} NR&lt;=3{print}; NR&gt;3{tmp=$1; $1=$4; $4=tmp; tmp=$2; $2=$5; $5=tmp; print}&#39;</span> hmmsearch.tmp <span class="op">&gt;</span> TrinotatePFAM.out</span></code></pre></div>
-<p>Once all three searches are done, we can start uploading information to <code>Trinotate.sqlite</code> database. First, load assembly .fasta file, <code>longest_orfs.pep</code> and <code>gene_trans_map</code> file (obtained with align_and_estimate_abundance.pl script during abundance quantification):</p>
-<div class="sourceCode" id="cb139"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb139-1"><a href="quantification-and-annotation.html#cb139-1" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite init <span class="at">--gene_trans_map</span> Trinity.filtered.fasta.gene_trans_map <span class="dt">\</span></span>
-<span id="cb139-2"><a href="quantification-and-annotation.html#cb139-2" tabindex="-1"></a>                                <span class="at">--transcript_fasta</span> Trinity.filtered.fasta <span class="dt">\</span></span>
-<span id="cb139-3"><a href="quantification-and-annotation.html#cb139-3" tabindex="-1"></a>                                <span class="at">--transdecoder_pep</span> Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep</span></code></pre></div>
+<p>Once all three searches are done, we can start uploading information to <code>Trinotate.sqlite</code> database. First, generate a <code>gene_trans_map</code> file, linking Trinity unigenes with associated transcripts</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb139-1"><a href="quantification-and-annotation.html#cb139-1" tabindex="-1"></a><span class="ex">/home/d.smirnov/homework5/get_Trinity_gene_to_trans_map.pl</span> Trinity.filtered.fasta <span class="op">&gt;</span> Trinity.filtered.fasta.gene_trans_map</span></code></pre></div>
+<p>and then load assembly .fasta file, <code>longest_orfs.pep</code> and <code>gene_trans_map</code> file into Trinotate sqlite object:</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb140-1"><a href="quantification-and-annotation.html#cb140-1" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite init <span class="at">--gene_trans_map</span> Trinity.filtered.fasta.gene_trans_map <span class="dt">\</span></span>
+<span id="cb140-2"><a href="quantification-and-annotation.html#cb140-2" tabindex="-1"></a>                                <span class="at">--transcript_fasta</span> Trinity.filtered.fasta <span class="dt">\</span></span>
+<span id="cb140-3"><a href="quantification-and-annotation.html#cb140-3" tabindex="-1"></a>                                <span class="at">--transdecoder_pep</span> Trinity.filtered.fasta.transdecoder_dir/longest_orfs.pep</span></code></pre></div>
 <p>Load blastp, blastx and pfam results</p>
-<div class="sourceCode" id="cb140"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb140-1"><a href="quantification-and-annotation.html#cb140-1" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite LOAD_swissprot_blastp blastp.outfmt6</span>
-<span id="cb140-2"><a href="quantification-and-annotation.html#cb140-2" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite LOAD_swissprot_blastx blastx.outfmt6</span>
-<span id="cb140-3"><a href="quantification-and-annotation.html#cb140-3" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite LOAD_pfam TrinotatePFAM.out</span></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb141-1"><a href="quantification-and-annotation.html#cb141-1" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite LOAD_swissprot_blastp blastp.outfmt6</span>
+<span id="cb141-2"><a href="quantification-and-annotation.html#cb141-2" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite LOAD_swissprot_blastx blastx.outfmt6</span>
+<span id="cb141-3"><a href="quantification-and-annotation.html#cb141-3" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite LOAD_pfam TrinotatePFAM.out</span></code></pre></div>
 <p>Finally, generate the report:</p>
-<div class="sourceCode" id="cb141"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb141-1"><a href="quantification-and-annotation.html#cb141-1" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite report <span class="op">&gt;</span> trinotate_annotation_report.xls</span></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb142-1"><a href="quantification-and-annotation.html#cb142-1" tabindex="-1"></a><span class="ex">Trinotate</span> Trinotate.sqlite report <span class="op">&gt;</span> trinotate_annotation_report.xls</span></code></pre></div>
 <p>Extract GO annotation terms from the report:</p>
-<div class="sourceCode" id="cb142"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb142-1"><a href="quantification-and-annotation.html#cb142-1" tabindex="-1"></a><span class="ex">extract_GO_assignments_from_Trinotate_xls.pl</span>  <span class="dt">\</span></span>
-<span id="cb142-2"><a href="quantification-and-annotation.html#cb142-2" tabindex="-1"></a>        <span class="at">--Trinotate_xls</span> trinotate_annotation_report.xls <span class="dt">\</span></span>
-<span id="cb142-3"><a href="quantification-and-annotation.html#cb142-3" tabindex="-1"></a>        <span class="at">-G</span> <span class="at">--include_ancestral_terms</span> <span class="op">&gt;</span> go_annotations.txt</span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb143-1"><a href="quantification-and-annotation.html#cb143-1" tabindex="-1"></a><span class="ex">extract_GO_assignments_from_Trinotate_xls.pl</span>  <span class="dt">\</span></span>
+<span id="cb143-2"><a href="quantification-and-annotation.html#cb143-2" tabindex="-1"></a>        <span class="at">--Trinotate_xls</span> trinotate_annotation_report.xls <span class="dt">\</span></span>
+<span id="cb143-3"><a href="quantification-and-annotation.html#cb143-3" tabindex="-1"></a>        <span class="at">-G</span> <span class="at">--include_ancestral_terms</span> <span class="op">&gt;</span> go_annotations.txt</span></code></pre></div>
 <p>Explore the obtained go_annotations.txt file</p>
 </div>
 <div id="integrating-expression-data-and-annotation" class="section level2 hasAnchor" number="11.3">
 <h2><span class="header-section-number">11.3</span> Integrating expression data and annotation<a href="quantification-and-annotation.html#integrating-expression-data-and-annotation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Generate a map of trinity gene IDs and corresponding annotations</p>
-<div class="sourceCode" id="cb143"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb143-1"><a href="quantification-and-annotation.html#cb143-1" tabindex="-1"></a><span class="ex">Trinotate_get_feature_name_encoding_attributes.pl</span> <span class="dt">\</span></span>
-<span id="cb143-2"><a href="quantification-and-annotation.html#cb143-2" tabindex="-1"></a>                  trinotate_annotation_report.xls  <span class="op">&gt;</span> annot_feature_map.txt</span></code></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb144-1"><a href="quantification-and-annotation.html#cb144-1" tabindex="-1"></a><span class="ex">Trinotate_get_feature_name_encoding_attributes.pl</span> <span class="dt">\</span></span>
+<span id="cb144-2"><a href="quantification-and-annotation.html#cb144-2" tabindex="-1"></a>                  trinotate_annotation_report.xls  <span class="op">&gt;</span> annot_feature_map.txt</span></code></pre></div>
 <p>Check <code>annot_feature_map.txt</code>:</p>
-<div class="sourceCode" id="cb144"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb144-1"><a href="quantification-and-annotation.html#cb144-1" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c0_g1</span>   TRINITY_DN10000_c0_g1^VKGC_RAT</span>
-<span id="cb144-2"><a href="quantification-and-annotation.html#cb144-2" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c0_g1_i1</span>        TRINITY_DN10000_c0_g1_i1^VKGC_RAT</span>
-<span id="cb144-3"><a href="quantification-and-annotation.html#cb144-3" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c1_g1</span>   TRINITY_DN10000_c1_g1^VKGC_DELLE</span>
-<span id="cb144-4"><a href="quantification-and-annotation.html#cb144-4" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c1_g1_i1</span>        TRINITY_DN10000_c1_g1_i1^VKGC_DELLE</span>
-<span id="cb144-5"><a href="quantification-and-annotation.html#cb144-5" tabindex="-1"></a><span class="ex">TRINITY_DN10001_c0_g2</span>   TRINITY_DN10001_c0_g2^PAR10_HUMAN</span>
-<span id="cb144-6"><a href="quantification-and-annotation.html#cb144-6" tabindex="-1"></a><span class="ex">TRINITY_DN10001_c0_g2_i1</span>        TRINITY_DN10001_c0_g2_i1^PAR10_HUMAN</span>
-<span id="cb144-7"><a href="quantification-and-annotation.html#cb144-7" tabindex="-1"></a><span class="ex">TRINITY_DN10006_c0_g1</span>   TRINITY_DN10006_c0_g1^NDUBB_CRIGR</span>
-<span id="cb144-8"><a href="quantification-and-annotation.html#cb144-8" tabindex="-1"></a><span class="ex">TRINITY_DN10006_c0_g1_i1</span>        TRINITY_DN10006_c0_g1_i1^NDUBB_CRIGR</span>
-<span id="cb144-9"><a href="quantification-and-annotation.html#cb144-9" tabindex="-1"></a><span class="ex">TRINITY_DN10006_c0_g1_i2</span>        TRINITY_DN10006_c0_g1_i2^NDUBB_CRIGR</span>
-<span id="cb144-10"><a href="quantification-and-annotation.html#cb144-10" tabindex="-1"></a><span class="ex">TRINITY_DN10007_c0_g1</span>   TRINITY_DN10007_c0_g1^MRC1_HUMAN</span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb145-1"><a href="quantification-and-annotation.html#cb145-1" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c0_g1</span>   TRINITY_DN10000_c0_g1^VKGC_RAT</span>
+<span id="cb145-2"><a href="quantification-and-annotation.html#cb145-2" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c0_g1_i1</span>        TRINITY_DN10000_c0_g1_i1^VKGC_RAT</span>
+<span id="cb145-3"><a href="quantification-and-annotation.html#cb145-3" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c1_g1</span>   TRINITY_DN10000_c1_g1^VKGC_DELLE</span>
+<span id="cb145-4"><a href="quantification-and-annotation.html#cb145-4" tabindex="-1"></a><span class="ex">TRINITY_DN10000_c1_g1_i1</span>        TRINITY_DN10000_c1_g1_i1^VKGC_DELLE</span>
+<span id="cb145-5"><a href="quantification-and-annotation.html#cb145-5" tabindex="-1"></a><span class="ex">TRINITY_DN10001_c0_g2</span>   TRINITY_DN10001_c0_g2^PAR10_HUMAN</span>
+<span id="cb145-6"><a href="quantification-and-annotation.html#cb145-6" tabindex="-1"></a><span class="ex">TRINITY_DN10001_c0_g2_i1</span>        TRINITY_DN10001_c0_g2_i1^PAR10_HUMAN</span>
+<span id="cb145-7"><a href="quantification-and-annotation.html#cb145-7" tabindex="-1"></a><span class="ex">TRINITY_DN10006_c0_g1</span>   TRINITY_DN10006_c0_g1^NDUBB_CRIGR</span>
+<span id="cb145-8"><a href="quantification-and-annotation.html#cb145-8" tabindex="-1"></a><span class="ex">TRINITY_DN10006_c0_g1_i1</span>        TRINITY_DN10006_c0_g1_i1^NDUBB_CRIGR</span>
+<span id="cb145-9"><a href="quantification-and-annotation.html#cb145-9" tabindex="-1"></a><span class="ex">TRINITY_DN10006_c0_g1_i2</span>        TRINITY_DN10006_c0_g1_i2^NDUBB_CRIGR</span>
+<span id="cb145-10"><a href="quantification-and-annotation.html#cb145-10" tabindex="-1"></a><span class="ex">TRINITY_DN10007_c0_g1</span>   TRINITY_DN10007_c0_g1^MRC1_HUMAN</span></code></pre></div>
 <p>Update expression matrix with gene names:</p>
-<div class="sourceCode" id="cb145"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb145-1"><a href="quantification-and-annotation.html#cb145-1" tabindex="-1"></a><span class="ex">/home/d.smirnov/homework5/rename_matrix_feature_identifiers.pl</span> kallisto_output/abundance.tsv.genes <span class="dt">\</span></span>
-<span id="cb145-2"><a href="quantification-and-annotation.html#cb145-2" tabindex="-1"></a>                                        annot_feature_map.txt <span class="op">&gt;</span> Trinity_trans.counts.wAnnot.matrix</span></code></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb146-1"><a href="quantification-and-annotation.html#cb146-1" tabindex="-1"></a><span class="ex">/home/d.smirnov/homework5/rename_matrix_feature_identifiers.pl</span> kallisto_output/abundance.tsv.genes <span class="dt">\</span></span>
+<span id="cb146-2"><a href="quantification-and-annotation.html#cb146-2" tabindex="-1"></a>                                        annot_feature_map.txt <span class="op">&gt;</span> Trinity_trans.counts.wAnnot.matrix</span></code></pre></div>
 <div class="design">
 <p><strong>Task 4</strong>: How many genes were annotated? (2 points)</p>
 </div>
